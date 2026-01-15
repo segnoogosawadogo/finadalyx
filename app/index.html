@@ -7006,6 +7006,10 @@
                         <h1>Importer des données</h1>
                         <p>Balance comptable SYSCOHADA</p>
                     </div>
+                    <button class="btn btn-danger btn-sm" onclick="resetAllData()" style="background: var(--danger); color: white;">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:16px;height:16px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        Réinitialiser tout
+                    </button>
                 </div>
                 
                 <!-- Section Mes Fichiers -->
@@ -8197,6 +8201,164 @@
                 month: 'short',
                 year: 'numeric'
             });
+        }
+        
+        // Charger automatiquement les fichiers sauvegardés au démarrage
+        async function autoLoadSavedFiles() {
+            if (!currentUser) return;
+            
+            try {
+                // Récupérer les fichiers sauvegardés
+                const { data: savedFiles, error } = await supabaseClient
+                    .from('saved_files')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .order('year', { ascending: false });
+                
+                if (error || !savedFiles || savedFiles.length === 0) return;
+                
+                console.log(`Auto-chargement de ${savedFiles.length} fichier(s) sauvegardé(s)...`);
+                
+                // Charger chaque fichier
+                for (const fileData of savedFiles) {
+                    try {
+                        let arrayBuffer;
+                        
+                        // Si le fichier est en base64
+                        if (fileData.file_data) {
+                            const binaryString = atob(fileData.file_data);
+                            const bytes = new Uint8Array(binaryString.length);
+                            for (let i = 0; i < binaryString.length; i++) {
+                                bytes[i] = binaryString.charCodeAt(i);
+                            }
+                            arrayBuffer = bytes.buffer;
+                        } 
+                        // Si le fichier est dans le storage
+                        else if (fileData.storage_path) {
+                            const { data: storageData, error: downloadError } = await supabaseClient.storage
+                                .from('balance-files')
+                                .download(fileData.storage_path);
+                            
+                            if (downloadError) continue;
+                            arrayBuffer = await storageData.arrayBuffer();
+                        } else {
+                            continue;
+                        }
+                        
+                        // Parser les données
+                        const parsedData = parseOHADABalance(arrayBuffer);
+                        parsedData.year = fileData.year;
+                        
+                        // Stocker
+                        yearsData[fileData.year] = parsedData;
+                        
+                    } catch (err) {
+                        console.error(`Erreur chargement fichier ${fileData.year}:`, err);
+                    }
+                }
+                
+                // Afficher les données si on en a chargé
+                const years = Object.keys(yearsData).sort((a, b) => b - a);
+                if (years.length > 0) {
+                    currentYear = years[0];
+                    window.financialData = yearsData[currentYear];
+                    loadFinancialData(yearsData[currentYear]);
+                    updateYearsBadges();
+                    
+                    // Masquer la zone d'upload et afficher le dashboard
+                    const uploadSection = document.getElementById('uploadSection');
+                    const dashboardContent = document.getElementById('dashboardContent');
+                    if (uploadSection) uploadSection.style.display = 'none';
+                    if (dashboardContent) dashboardContent.style.display = 'block';
+                    
+                    console.log(`${years.length} année(s) chargée(s): ${years.join(', ')}`);
+                }
+                
+            } catch (error) {
+                console.error('Erreur auto-chargement fichiers:', error);
+            }
+        }
+        
+        // Réinitialiser toutes les données
+        async function resetAllData() {
+            if (!confirm('⚠️ Êtes-vous sûr de vouloir réinitialiser toutes les données ?\n\nCela va supprimer :\n- Toutes les données financières chargées\n- Tous les fichiers sauvegardés\n\nCette action est irréversible.')) {
+                return;
+            }
+            
+            try {
+                showNotification('Réinitialisation en cours...', 'info');
+                
+                if (currentUser) {
+                    // Supprimer les données financières
+                    await supabaseClient
+                        .from('financial_data')
+                        .delete()
+                        .eq('user_id', currentUser.id);
+                    
+                    // Supprimer les fichiers sauvegardés
+                    const { data: files } = await supabaseClient
+                        .from('saved_files')
+                        .select('storage_path')
+                        .eq('user_id', currentUser.id);
+                    
+                    // Supprimer du storage
+                    if (files && files.length > 0) {
+                        const paths = files.filter(f => f.storage_path).map(f => f.storage_path);
+                        if (paths.length > 0) {
+                            await supabaseClient.storage
+                                .from('balance-files')
+                                .remove(paths);
+                        }
+                    }
+                    
+                    // Supprimer de la table
+                    await supabaseClient
+                        .from('saved_files')
+                        .delete()
+                        .eq('user_id', currentUser.id);
+                }
+                
+                // Réinitialiser les variables locales
+                yearsData = {};
+                currentYear = null;
+                window.financialData = null;
+                
+                // Réafficher la zone d'upload
+                const uploadSection = document.getElementById('uploadSection');
+                const dashboardContent = document.getElementById('dashboardContent');
+                if (uploadSection) {
+                    uploadSection.style.display = 'flex';
+                    uploadSection.innerHTML = `
+                        <div class="upload-icon-wrapper">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                            </svg>
+                        </div>
+                        <h3 class="upload-title">Déposez votre fichier ici</h3>
+                        <p class="upload-subtitle">ou <span onclick="document.getElementById('fileInput').click()">parcourez</span> pour sélectionner un fichier</p>
+                        <div class="upload-formats">
+                            <span class="format-badge">Balance comptable</span>
+                            <span class="format-badge">Grand livre</span>
+                            <span class="format-badge">.xlsx</span>
+                            <span class="format-badge">.csv</span>
+                        </div>
+                    `;
+                }
+                if (dashboardContent) dashboardContent.style.display = 'none';
+                
+                // Vider les badges d'années
+                const yearsLoaded = document.getElementById('yearsLoaded');
+                if (yearsLoaded) yearsLoaded.innerHTML = '';
+                
+                showNotification('Données réinitialisées avec succès', 'success');
+                
+                // Rafraîchir la liste des fichiers sauvegardés
+                refreshSavedFiles();
+                
+            } catch (error) {
+                console.error('Erreur réinitialisation:', error);
+                showNotification('Erreur: ' + error.message, 'error');
+            }
         }
 
         // ==================== COMPANY LOGO & PROFILE PHOTO ====================
@@ -11153,10 +11315,39 @@ td, th { mso-number-format:"\\@"; }
                 const val = Math.round((n || 0) / 1000000);
                 return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
             };
+            
+            // Récupérer les infos de l'entreprise
+            const companyName = document.getElementById('companyName')?.value || 'Mon Entreprise';
+            const logoPreview = document.getElementById('companyLogoPreview');
+            const logoImg = logoPreview?.querySelector('img');
+            const logoSrc = logoImg?.src || null;
+
+            // Header avec logo
+            let startY = 15;
+            
+            // Ajouter le logo si disponible
+            if (logoSrc && !logoSrc.includes('data:image/svg')) {
+                try {
+                    doc.addImage(logoSrc, 'PNG', 14, 10, 25, 25);
+                    startY = 40;
+                    // Nom de l'entreprise à côté du logo
+                    doc.setFontSize(16);
+                    doc.setTextColor(30, 41, 59);
+                    doc.text(companyName, 45, 20);
+                } catch (e) {
+                    console.log('Logo non ajouté:', e);
+                }
+            } else {
+                // Pas de logo, juste le nom
+                doc.setFontSize(16);
+                doc.setTextColor(30, 41, 59);
+                doc.text(companyName, 14, 15);
+                startY = 25;
+            }
 
             // Header
             doc.setFontSize(20);
-            doc.setTextColor(30, 64, 175);
+            doc.setTextColor(30, 64, 175)
             
             let title = '';
             let tableData = [];
@@ -11228,15 +11419,15 @@ td, th { mso-number-format:"\\@"; }
                 // Trouver l'index de la ligne Résultat Net pour la styliser
                 const resultatNetIndex = pnlRows.findIndex(r => r.total);
 
-                doc.text(title, 14, 22);
+                doc.text(title, 14, startY + 7);
                 doc.setFontSize(10);
                 doc.setTextColor(100);
-                doc.text('Généré par Findalyx - ' + new Date().toLocaleDateString('fr-FR'), 14, 30);
+                doc.text('Généré par Findalyx - ' + new Date().toLocaleDateString('fr-FR'), 14, startY + 15);
 
                 doc.autoTable({
                     head: headers,
                     body: tableData,
-                    startY: 40,
+                    startY: startY + 25,
                     theme: 'striped',
                     headStyles: { fillColor: [30, 64, 175], fontSize: 9 },
                     styles: { fontSize: 9, cellPadding: 3 },
@@ -11274,13 +11465,27 @@ td, th { mso-number-format:"\\@"; }
                 // PDF en mode paysage pour tout mettre sur 1 page
                 const docLandscape = new jsPDF('landscape');
                 
+                // Ajouter le logo si disponible
+                let bilanStartY = 15;
+                if (logoSrc && !logoSrc.includes('data:image/svg')) {
+                    try {
+                        docLandscape.addImage(logoSrc, 'PNG', 14, 8, 20, 20);
+                        docLandscape.setFontSize(14);
+                        docLandscape.setTextColor(30, 41, 59);
+                        docLandscape.text(companyName, 38, 18);
+                        bilanStartY = 32;
+                    } catch (e) {
+                        console.log('Logo non ajouté:', e);
+                    }
+                }
+                
                 title = hasN1 ? `Bilan Comparatif ${yearN1} - ${yearN}` : `Bilan - ${yearN}`;
                 docLandscape.setFontSize(14);
                 docLandscape.setTextColor(30, 64, 175);
-                docLandscape.text(title, 14, 15);
+                docLandscape.text(title, 14, bilanStartY);
                 docLandscape.setFontSize(8);
                 docLandscape.setTextColor(100);
-                docLandscape.text('Généré par Findalyx - ' + new Date().toLocaleDateString('fr-FR'), 14, 21);
+                docLandscape.text('Généré par Findalyx - ' + new Date().toLocaleDateString('fr-FR'), 14, bilanStartY + 6);
 
                 // Style commun pour les tableaux compacts
                 const tableStyles = {
@@ -12236,6 +12441,12 @@ td, th { mso-number-format:"\\@"; }
             
             const data = yearsData[currentYear];
             const companyName = document.getElementById('companyName')?.value || 'Entreprise';
+            
+            // Récupérer le logo de l'entreprise
+            const logoPreview = document.getElementById('companyLogoPreview');
+            const logoImg = logoPreview?.querySelector('img');
+            const logoSrc = logoImg?.src || null;
+            
             const fmtMrd = n => new Intl.NumberFormat('fr-FR', {maximumFractionDigits: 1}).format((n || 0) / 1000000000);
             const fmtM = n => new Intl.NumberFormat('fr-FR', {maximumFractionDigits: 0}).format((n || 0) / 1000000);
             const fmtPct = n => (n || 0).toFixed(1) + '%';
@@ -12262,6 +12473,15 @@ td, th { mso-number-format:"\\@"; }
             // Background gradient effect
             slide.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: '100%', fill: { color: colors.primary } });
             slide.addShape(pptx.ShapeType.rect, { x: 0, y: 4.5, w: '100%', h: 1, fill: { color: colors.secondary } });
+            
+            // Ajouter le logo de l'entreprise si disponible
+            if (logoSrc && !logoSrc.includes('data:image/svg')) {
+                try {
+                    slide.addImage({ data: logoSrc, x: 8, y: 0.3, w: 1.5, h: 1.5 });
+                } catch (e) {
+                    console.log('Logo non ajouté au PPT:', e);
+                }
+            }
             
             slide.addText('FINDALYX', { x: 0.5, y: 1.5, w: 9, h: 0.8, fontSize: 48, bold: true, color: colors.white, fontFace: 'Arial' });
             slide.addText('Rapport d\'Analyse Financière', { x: 0.5, y: 2.3, w: 9, h: 0.5, fontSize: 24, color: 'a5b4fc', fontFace: 'Arial' });
@@ -13241,16 +13461,41 @@ td, th { mso-number-format:"\\@"; }
                         const years = Object.keys(yearsData).sort((a, b) => b - a);
                         if (years.length > 0) {
                             currentYear = years[0];
+                            window.financialData = yearsData[currentYear];
                             loadFinancialData(yearsData[currentYear]);
+                            updateYearsBadges();
+                            
+                            // Masquer la zone d'upload et afficher le dashboard
+                            const uploadSection = document.getElementById('uploadSection');
+                            const dashboardContent = document.getElementById('dashboardContent');
+                            if (uploadSection) uploadSection.style.display = 'none';
+                            if (dashboardContent) dashboardContent.style.display = 'block';
                         }
+                    } else {
+                        // Pas de données financières, essayer de charger depuis les fichiers sauvegardés
+                        await autoLoadSavedFiles();
                     }
                     
-                    if (companiesResult.data[0].name) {
-                        document.getElementById('companyName').value = companiesResult.data[0].name;
+                    // Charger les infos de l'entreprise dans les champs
+                    const company = companiesResult.data[0];
+                    if (company.name) {
+                        const companyNameInput = document.getElementById('companyName');
+                        if (companyNameInput) companyNameInput.value = company.name;
+                    }
+                    if (company.sector) {
+                        const sectorInput = document.getElementById('companySector');
+                        if (sectorInput) sectorInput.value = company.sector;
+                    }
+                    if (company.country) {
+                        const countryInput = document.getElementById('companyCountry');
+                        if (countryInput) countryInput.value = company.country;
+                    }
+                    if (company.registration_number) {
+                        const regInput = document.getElementById('companyRegNumber');
+                        if (regInput) regInput.value = company.registration_number;
                     }
                     
                     // Charger le logo de l'entreprise
-                    const company = companiesResult.data[0];
                     const logoPreview = document.getElementById('companyLogoPreview');
                     const companyNameDisplay = document.getElementById('companyNameDisplay');
                     
@@ -13267,6 +13512,9 @@ td, th { mso-number-format:"\\@"; }
                             logoPreview.classList.add('has-logo');
                         }
                     }
+                } else {
+                    // Pas d'entreprise, essayer de charger depuis les fichiers sauvegardés
+                    await autoLoadSavedFiles();
                 }
                 
                 // Mettre à jour l'année dans la sidebar
