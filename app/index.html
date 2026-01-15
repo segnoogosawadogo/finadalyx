@@ -13447,7 +13447,7 @@ td, th { mso-number-format:"\\@"; }
                 // Process companies and financial data
                 console.log('Companies result:', companiesResult);
                 
-                // Charger les données financières même sans entreprise
+                // Charger les données financières 
                 const { data: financialData, error: finError } = await supabaseClient
                     .from('financial_data')
                     .select('*')
@@ -13457,13 +13457,14 @@ td, th { mso-number-format:"\\@"; }
                 console.log('Financial data from DB:', financialData, 'Error:', finError);
                 
                 if (financialData && financialData.length > 0) {
+                    // Données trouvées dans financial_data - les charger
                     yearsData = {};
                     financialData.forEach(fd => {
                         yearsData[fd.year] = fd.data;
                     });
                     
                     const years = Object.keys(yearsData).sort((a, b) => b - a);
-                    console.log('Years loaded:', years);
+                    console.log('Years loaded from financial_data:', years);
                     
                     if (years.length > 0) {
                         currentYear = years[0];
@@ -13480,9 +13481,77 @@ td, th { mso-number-format:"\\@"; }
                         console.log('Dashboard displayed with data for year:', currentYear);
                     }
                 } else {
-                    // Pas de données financières, essayer de charger depuis les fichiers sauvegardés
-                    console.log('No financial data, trying to load from saved files...');
-                    await autoLoadSavedFiles();
+                    // Pas de données dans financial_data, essayer de charger depuis les fichiers sauvegardés
+                    console.log('No data in financial_data, trying saved_files...');
+                    
+                    const { data: savedFiles } = await supabaseClient
+                        .from('saved_files')
+                        .select('*')
+                        .eq('user_id', currentUser.id)
+                        .order('year', { ascending: false });
+                    
+                    console.log('Saved files found:', savedFiles?.length || 0);
+                    
+                    if (savedFiles && savedFiles.length > 0) {
+                        // Charger automatiquement tous les fichiers sauvegardés
+                        for (const fileData of savedFiles) {
+                            try {
+                                let arrayBuffer;
+                                
+                                if (fileData.file_data) {
+                                    // Fichier en base64
+                                    const binaryString = atob(fileData.file_data);
+                                    const bytes = new Uint8Array(binaryString.length);
+                                    for (let i = 0; i < binaryString.length; i++) {
+                                        bytes[i] = binaryString.charCodeAt(i);
+                                    }
+                                    arrayBuffer = bytes.buffer;
+                                } else if (fileData.storage_path) {
+                                    // Fichier dans le storage
+                                    const { data: storageData, error: downloadError } = await supabaseClient.storage
+                                        .from('balance-files')
+                                        .download(fileData.storage_path);
+                                    
+                                    if (downloadError) {
+                                        console.error('Download error:', downloadError);
+                                        continue;
+                                    }
+                                    arrayBuffer = await storageData.arrayBuffer();
+                                } else {
+                                    continue;
+                                }
+                                
+                                // Parser et stocker
+                                const parsedData = parseOHADABalance(arrayBuffer);
+                                parsedData.year = fileData.year;
+                                yearsData[fileData.year] = parsedData;
+                                
+                                // Sauvegarder dans financial_data pour la prochaine fois
+                                await saveFinancialData(fileData.year, parsedData);
+                                
+                                console.log('Loaded and saved year:', fileData.year);
+                                
+                            } catch (err) {
+                                console.error('Error loading file for year', fileData.year, ':', err);
+                            }
+                        }
+                        
+                        // Afficher les données
+                        const years = Object.keys(yearsData).sort((a, b) => b - a);
+                        if (years.length > 0) {
+                            currentYear = years[0];
+                            window.financialData = yearsData[currentYear];
+                            loadFinancialData(yearsData[currentYear]);
+                            updateYearsBadges();
+                            
+                            const uploadSection = document.getElementById('uploadSection');
+                            const dashboardContent = document.getElementById('dashboardContent');
+                            if (uploadSection) uploadSection.style.display = 'none';
+                            if (dashboardContent) dashboardContent.style.display = 'block';
+                            
+                            console.log('Auto-loaded from saved files, years:', years);
+                        }
+                    }
                 }
                 
                 // Charger les infos de l'entreprise si elles existent
