@@ -486,6 +486,21 @@
             opacity: 1;
         }
 
+        .nav-item-admin {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--slate-200);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.1));
+        }
+
+        .nav-item-admin:hover {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(124, 58, 237, 0.2));
+        }
+
+        .nav-item-admin .nav-icon {
+            color: #8b5cf6;
+        }
+
         .nav-badge {
             margin-left: auto;
             background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
@@ -5427,6 +5442,13 @@
                     </svg>
                     <span>Configuration</span>
                 </div>
+                <!-- Admin link - visible only for admins -->
+                <a href="/admin.html" class="nav-item nav-item-admin" id="adminNavLink" style="display: none; text-decoration: none; color: inherit;">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                    <span>Administration</span>
+                </a>
             </div>
         </nav>
 
@@ -12163,6 +12185,19 @@ td, th { mso-number-format:"\\@"; }
         let userPlan = 'basic';
         let isYearlyBilling = false;
         
+        // Admin emails - only these can see admin link
+        const ADMIN_EMAILS = ['s.sawadogo@findalyx.com', 'sawadgsalif@gmail.com'];
+        
+        // Check if current user is admin
+        function checkAdminAccess() {
+            const adminLink = document.getElementById('adminNavLink');
+            if (adminLink && currentUser && ADMIN_EMAILS.includes(currentUser.email)) {
+                adminLink.style.display = 'flex';
+            } else if (adminLink) {
+                adminLink.style.display = 'none';
+            }
+        }
+        
         // Initialize app
         async function initApp() {
             showLoading(true);
@@ -12181,6 +12216,7 @@ td, th { mso-number-format:"\\@"; }
                 } else if (session) {
                     currentUser = session.user;
                     await loadUserProfile();
+                    checkAdminAccess();
                     showApp();
                 } else {
                     showAuth();
@@ -12200,6 +12236,7 @@ td, th { mso-number-format:"\\@"; }
             if (event === 'SIGNED_IN' && session) {
                 currentUser = session.user;
                 await loadUserProfile();
+                checkAdminAccess();
                 showApp();
             } else if (event === 'SIGNED_OUT') {
                 currentUser = null;
