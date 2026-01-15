@@ -1782,6 +1782,170 @@
             color: var(--blue-700);
         }
 
+        /* ==================== SAVED FILES ==================== */
+        .saved-files-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .saved-files-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--slate-400);
+        }
+
+        .saved-files-empty p {
+            margin-top: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--slate-500);
+        }
+
+        .saved-files-empty span {
+            font-size: 14px;
+            color: var(--slate-400);
+        }
+
+        .saved-file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: var(--slate-50);
+            border: 1px solid var(--slate-200);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .saved-file-item:hover {
+            background: var(--blue-50);
+            border-color: var(--blue-200);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+        }
+
+        .saved-file-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .saved-file-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .saved-file-details {
+            flex: 1;
+        }
+
+        .saved-file-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--slate-800);
+            margin-bottom: 4px;
+        }
+
+        .saved-file-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--slate-500);
+        }
+
+        .saved-file-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .saved-file-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .saved-file-btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: none;
+        }
+
+        .saved-file-btn.load {
+            background: var(--blue-600);
+            color: white;
+        }
+
+        .saved-file-btn.load:hover {
+            background: var(--blue-700);
+        }
+
+        .saved-file-btn.delete {
+            background: var(--slate-100);
+            color: var(--slate-600);
+        }
+
+        .saved-file-btn.delete:hover {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+
+        .save-file-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 12px 16px;
+            background: var(--blue-50);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--slate-600);
+        }
+
+        .save-file-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--blue-600);
+        }
+
+        .saved-file-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .saved-file-loading .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--slate-200);
+            border-top-color: var(--blue-600);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
         /* ==================== STATS GRID ==================== */
         .stats-grid {
             display: grid;
@@ -6743,7 +6907,40 @@
                         <p>Balance comptable SYSCOHADA</p>
                     </div>
                 </div>
+                
+                <!-- Section Mes Fichiers -->
+                <div class="card" style="margin-bottom: 24px;">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="card-title">📁 Mes fichiers sauvegardés</h3>
+                            <p class="card-subtitle">Sélectionnez un fichier déjà importé pour le recharger</p>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" onclick="refreshSavedFiles()">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:16px;height:16px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            Actualiser
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="savedFilesList" class="saved-files-list">
+                            <div class="saved-files-empty">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--slate-300);">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/>
+                                </svg>
+                                <p>Aucun fichier sauvegardé</p>
+                                <span>Importez un fichier ci-dessous pour le sauvegarder</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section Importer nouveau fichier -->
                 <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="card-title">📤 Importer un nouveau fichier</h3>
+                            <p class="card-subtitle">Le fichier sera automatiquement sauvegardé</p>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <div class="upload-section" id="uploadSectionImport" style="margin: 0;">
                             <div class="upload-icon-wrapper">
@@ -6758,6 +6955,10 @@
                                 <span class="format-badge">.xlsx</span>
                                 <span class="format-badge">.xls</span>
                             </div>
+                            <label class="save-file-checkbox">
+                                <input type="checkbox" id="saveFileCheckbox" checked>
+                                <span>Sauvegarder ce fichier pour réutilisation ultérieure</span>
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -7534,9 +7735,10 @@
             `;
 
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = async function(e) {
                 try {
-                    const data = parseOHADABalance(e.target.result);
+                    const arrayBuffer = e.target.result;
+                    const data = parseOHADABalance(arrayBuffer);
                     data.year = year;
                     
                     // Store in multi-year data
@@ -7547,12 +7749,296 @@
                     loadFinancialData(data);
                     updateYearsBadges();
                     updateEvolutionChart();
+                    
+                    // Sauvegarder le fichier si checkbox cochée
+                    const saveCheckbox = document.getElementById('saveFileCheckbox');
+                    if (saveCheckbox && saveCheckbox.checked && currentUser) {
+                        await saveFileToStorage(file, year, arrayBuffer);
+                    }
+                    
+                    // Sauvegarder les données financières
+                    if (currentUser) {
+                        saveFinancialData(year, data);
+                    }
                 } catch (error) {
                     console.error('Erreur:', error);
                     alert('Erreur lors de l\'analyse du fichier: ' + error.message);
                 }
             };
             reader.readAsArrayBuffer(file);
+        }
+
+        // ==================== GESTION DES FICHIERS SAUVEGARDÉS ====================
+        
+        // Sauvegarder un fichier dans Supabase Storage
+        async function saveFileToStorage(file, year, arrayBuffer) {
+            if (!currentUser) return;
+            
+            try {
+                const fileName = `${currentUser.id}/${year}_${file.name}`;
+                const blob = new Blob([arrayBuffer], { type: file.type });
+                
+                // Upload vers Supabase Storage
+                const { data, error } = await supabaseClient.storage
+                    .from('balance-files')
+                    .upload(fileName, blob, {
+                        cacheControl: '3600',
+                        upsert: true
+                    });
+                
+                if (error) {
+                    console.error('Erreur upload:', error);
+                    // Si le bucket n'existe pas, on sauvegarde en base de données
+                    await saveFileMetadata(file.name, year, arrayBuffer);
+                    return;
+                }
+                
+                // Sauvegarder les métadonnées
+                await saveFileMetadata(file.name, year, null, data.path);
+                
+                showNotification('Fichier sauvegardé avec succès', 'success');
+                refreshSavedFiles();
+                
+            } catch (error) {
+                console.error('Erreur sauvegarde fichier:', error);
+                // Fallback: sauvegarder en base
+                await saveFileMetadata(file.name, year, arrayBuffer);
+            }
+        }
+        
+        // Sauvegarder les métadonnées du fichier en base
+        async function saveFileMetadata(fileName, year, fileData = null, storagePath = null) {
+            if (!currentUser) return;
+            
+            try {
+                const metadata = {
+                    user_id: currentUser.id,
+                    file_name: fileName,
+                    year: year,
+                    storage_path: storagePath,
+                    file_size: fileData ? fileData.byteLength : null,
+                    uploaded_at: new Date().toISOString()
+                };
+                
+                // Si pas de storage, on encode le fichier en base64
+                if (fileData && !storagePath) {
+                    // Convertir ArrayBuffer en base64
+                    const base64 = btoa(
+                        new Uint8Array(fileData)
+                            .reduce((data, byte) => data + String.fromCharCode(byte), '')
+                    );
+                    metadata.file_data = base64;
+                }
+                
+                const { error } = await supabaseClient
+                    .from('saved_files')
+                    .upsert(metadata, { 
+                        onConflict: 'user_id,year',
+                        ignoreDuplicates: false 
+                    });
+                
+                if (error) throw error;
+                
+            } catch (error) {
+                console.error('Erreur sauvegarde métadonnées:', error);
+            }
+        }
+        
+        // Charger la liste des fichiers sauvegardés
+        async function refreshSavedFiles() {
+            const container = document.getElementById('savedFilesList');
+            if (!container) return;
+            
+            if (!currentUser) {
+                container.innerHTML = `
+                    <div class="saved-files-empty">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--slate-300);">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                        <p>Connectez-vous pour voir vos fichiers</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="saved-file-loading">
+                    <div class="spinner"></div>
+                </div>
+            `;
+            
+            try {
+                const { data: files, error } = await supabaseClient
+                    .from('saved_files')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .order('year', { ascending: false });
+                
+                if (error) throw error;
+                
+                if (!files || files.length === 0) {
+                    container.innerHTML = `
+                        <div class="saved-files-empty">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--slate-300);">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/>
+                            </svg>
+                            <p>Aucun fichier sauvegardé</p>
+                            <span>Importez un fichier ci-dessous pour le sauvegarder</span>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = files.map(file => `
+                    <div class="saved-file-item" onclick="loadSavedFile('${file.id}')">
+                        <div class="saved-file-info">
+                            <div class="saved-file-icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:24px;height:24px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                            </div>
+                            <div class="saved-file-details">
+                                <div class="saved-file-name">${file.file_name}</div>
+                                <div class="saved-file-meta">
+                                    <span>
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                        Exercice ${file.year}
+                                    </span>
+                                    <span>
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        ${formatDate(file.uploaded_at)}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="saved-file-actions">
+                            <button class="saved-file-btn load" onclick="event.stopPropagation(); loadSavedFile('${file.id}')">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:16px;height:16px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                                Charger
+                            </button>
+                            <button class="saved-file-btn delete" onclick="event.stopPropagation(); deleteSavedFile('${file.id}')">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:16px;height:16px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Erreur chargement fichiers:', error);
+                container.innerHTML = `
+                    <div class="saved-files-empty">
+                        <p>Erreur lors du chargement</p>
+                        <span>${error.message}</span>
+                    </div>
+                `;
+            }
+        }
+        
+        // Charger un fichier sauvegardé
+        async function loadSavedFile(fileId) {
+            try {
+                showNotification('Chargement du fichier...', 'info');
+                
+                const { data: file, error } = await supabaseClient
+                    .from('saved_files')
+                    .select('*')
+                    .eq('id', fileId)
+                    .single();
+                
+                if (error) throw error;
+                
+                let arrayBuffer;
+                
+                // Si le fichier est dans le storage
+                if (file.storage_path) {
+                    const { data, error: downloadError } = await supabaseClient.storage
+                        .from('balance-files')
+                        .download(file.storage_path);
+                    
+                    if (downloadError) throw downloadError;
+                    arrayBuffer = await data.arrayBuffer();
+                } 
+                // Si le fichier est en base64 dans la base
+                else if (file.file_data) {
+                    const binaryString = atob(file.file_data);
+                    const bytes = new Uint8Array(binaryString.length);
+                    for (let i = 0; i < binaryString.length; i++) {
+                        bytes[i] = binaryString.charCodeAt(i);
+                    }
+                    arrayBuffer = bytes.buffer;
+                } else {
+                    throw new Error('Données du fichier non disponibles');
+                }
+                
+                // Parser les données
+                const data = parseOHADABalance(arrayBuffer);
+                data.year = file.year;
+                
+                // Stocker et afficher
+                yearsData[file.year] = data;
+                currentYear = file.year;
+                window.financialData = data;
+                
+                loadFinancialData(data);
+                updateYearsBadges();
+                updateEvolutionChart();
+                
+                // Naviguer vers le dashboard
+                showPage('dashboard');
+                
+                showNotification(`Balance ${file.year} chargée avec succès`, 'success');
+                
+            } catch (error) {
+                console.error('Erreur chargement fichier:', error);
+                showNotification('Erreur: ' + error.message, 'error');
+            }
+        }
+        
+        // Supprimer un fichier sauvegardé
+        async function deleteSavedFile(fileId) {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer ce fichier ?')) return;
+            
+            try {
+                // Récupérer le fichier pour avoir le storage_path
+                const { data: file } = await supabaseClient
+                    .from('saved_files')
+                    .select('storage_path')
+                    .eq('id', fileId)
+                    .single();
+                
+                // Supprimer du storage si existe
+                if (file && file.storage_path) {
+                    await supabaseClient.storage
+                        .from('balance-files')
+                        .remove([file.storage_path]);
+                }
+                
+                // Supprimer de la base
+                const { error } = await supabaseClient
+                    .from('saved_files')
+                    .delete()
+                    .eq('id', fileId);
+                
+                if (error) throw error;
+                
+                showNotification('Fichier supprimé', 'success');
+                refreshSavedFiles();
+                
+            } catch (error) {
+                console.error('Erreur suppression:', error);
+                showNotification('Erreur: ' + error.message, 'error');
+            }
+        }
+        
+        // Formater la date
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('fr-FR', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            });
         }
 
         // Update years badges in the banner
@@ -8428,6 +8914,11 @@
                     pageElement.offsetHeight; // Trigger reflow
                     pageElement.style.animation = 'fadeInUp 0.4s ease-out forwards';
                 }
+            }
+            
+            // Charger les fichiers sauvegardés si on va sur la page import
+            if (page === 'import') {
+                refreshSavedFiles();
             }
         }
 
