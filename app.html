@@ -12202,6 +12202,13 @@ td, th { mso-number-format:"\\@"; }
         async function initApp() {
             showLoading(true);
             
+            // Timeout de sécurité - masquer le loading après 10 secondes max
+            const loadingTimeout = setTimeout(() => {
+                console.warn('Loading timeout - forcing hide');
+                showLoading(false);
+                showAuth();
+            }, 10000);
+            
             try {
                 if (!supabaseClient) {
                     throw new Error('Supabase not initialized');
@@ -12209,6 +12216,8 @@ td, th { mso-number-format:"\\@"; }
                 
                 // Check for existing session
                 const { data: { session }, error } = await supabaseClient.auth.getSession();
+                
+                clearTimeout(loadingTimeout);
                 
                 if (error) {
                     console.error('Session error:', error);
@@ -12223,6 +12232,7 @@ td, th { mso-number-format:"\\@"; }
                 }
             } catch (error) {
                 console.error('Init error:', error);
+                clearTimeout(loadingTimeout);
                 showAuth();
             }
             
@@ -12250,12 +12260,18 @@ td, th { mso-number-format:"\\@"; }
             if (!currentUser) return;
             
             try {
-                // Get profile
-                const { data: profile, error } = await supabaseClient
+                // Get profile with timeout
+                const profilePromise = supabaseClient
                     .from('profiles')
                     .select('*')
                     .eq('id', currentUser.id)
                     .single();
+                
+                const timeoutPromise = new Promise((_, reject) => 
+                    setTimeout(() => reject(new Error('Profile load timeout')), 8000)
+                );
+                
+                const { data: profile, error } = await Promise.race([profilePromise, timeoutPromise]);
                 
                 if (error) throw error;
                 
