@@ -1334,7 +1334,7 @@
         // Admin emails (only these can access admin panel)
         const ADMIN_EMAILS = ['s.sawadogo@findalyx.com', 'sawadgsalif@gmail.com'];
         
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
         let currentUser = null;
         let allUsers = [];
@@ -1344,7 +1344,7 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', async () => {
-            const { data: { session } } = await supabase.auth.getSession();
+            const { data: { session } } = await supabaseClient.auth.getSession();
             
             if (session && ADMIN_EMAILS.includes(session.user.email)) {
                 currentUser = session.user;
@@ -1352,7 +1352,7 @@
                 loadData();
             } else if (session && !ADMIN_EMAILS.includes(session.user.email)) {
                 showError('Accès refusé. Vous n\'êtes pas administrateur.');
-                await supabase.auth.signOut();
+                await supabaseClient.auth.signOut();
             }
         });
 
@@ -1373,7 +1373,7 @@
             btn.disabled = true;
             
             try {
-                const { data, error } = await supabase.auth.signInWithPassword({
+                const { data, error } = await supabaseClient.auth.signInWithPassword({
                     email,
                     password
                 });
@@ -1413,7 +1413,7 @@
 
         // Logout
         async function handleLogout() {
-            await supabase.auth.signOut();
+            await supabaseClient.auth.signOut();
             window.location.reload();
         }
 
