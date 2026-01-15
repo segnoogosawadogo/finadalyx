@@ -13445,38 +13445,48 @@ td, th { mso-number-format:"\\@"; }
                 }
                 
                 // Process companies and financial data
-                if (companiesResult.data && companiesResult.data.length > 0) {
-                    const { data: financialData } = await supabaseClient
-                        .from('financial_data')
-                        .select('*')
-                        .eq('user_id', currentUser.id)
-                        .order('year', { ascending: false });
+                console.log('Companies result:', companiesResult);
+                
+                // Charger les données financières même sans entreprise
+                const { data: financialData, error: finError } = await supabaseClient
+                    .from('financial_data')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .order('year', { ascending: false });
+                
+                console.log('Financial data from DB:', financialData, 'Error:', finError);
+                
+                if (financialData && financialData.length > 0) {
+                    yearsData = {};
+                    financialData.forEach(fd => {
+                        yearsData[fd.year] = fd.data;
+                    });
                     
-                    if (financialData && financialData.length > 0) {
-                        yearsData = {};
-                        financialData.forEach(fd => {
-                            yearsData[fd.year] = fd.data;
-                        });
+                    const years = Object.keys(yearsData).sort((a, b) => b - a);
+                    console.log('Years loaded:', years);
+                    
+                    if (years.length > 0) {
+                        currentYear = years[0];
+                        window.financialData = yearsData[currentYear];
+                        loadFinancialData(yearsData[currentYear]);
+                        updateYearsBadges();
                         
-                        const years = Object.keys(yearsData).sort((a, b) => b - a);
-                        if (years.length > 0) {
-                            currentYear = years[0];
-                            window.financialData = yearsData[currentYear];
-                            loadFinancialData(yearsData[currentYear]);
-                            updateYearsBadges();
-                            
-                            // Masquer la zone d'upload et afficher le dashboard
-                            const uploadSection = document.getElementById('uploadSection');
-                            const dashboardContent = document.getElementById('dashboardContent');
-                            if (uploadSection) uploadSection.style.display = 'none';
-                            if (dashboardContent) dashboardContent.style.display = 'block';
-                        }
-                    } else {
-                        // Pas de données financières, essayer de charger depuis les fichiers sauvegardés
-                        await autoLoadSavedFiles();
+                        // Masquer la zone d'upload et afficher le dashboard
+                        const uploadSection = document.getElementById('uploadSection');
+                        const dashboardContent = document.getElementById('dashboardContent');
+                        if (uploadSection) uploadSection.style.display = 'none';
+                        if (dashboardContent) dashboardContent.style.display = 'block';
+                        
+                        console.log('Dashboard displayed with data for year:', currentYear);
                     }
-                    
-                    // Charger les infos de l'entreprise dans les champs
+                } else {
+                    // Pas de données financières, essayer de charger depuis les fichiers sauvegardés
+                    console.log('No financial data, trying to load from saved files...');
+                    await autoLoadSavedFiles();
+                }
+                
+                // Charger les infos de l'entreprise si elles existent
+                if (companiesResult.data && companiesResult.data.length > 0) {
                     const company = companiesResult.data[0];
                     if (company.name) {
                         const companyNameInput = document.getElementById('companyName');
@@ -13512,9 +13522,6 @@ td, th { mso-number-format:"\\@"; }
                             logoPreview.classList.add('has-logo');
                         }
                     }
-                } else {
-                    // Pas d'entreprise, essayer de charger depuis les fichiers sauvegardés
-                    await autoLoadSavedFiles();
                 }
                 
                 // Mettre à jour l'année dans la sidebar
