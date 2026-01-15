@@ -13351,6 +13351,45 @@ td, th { mso-number-format:"\\@"; }
         async function initApp() {
             showLoading(true);
             
+            // CHARGER IMMÉDIATEMENT DEPUIS LOCALSTORAGE (avant même la session)
+            try {
+                const localYearsData = localStorage.getItem('findalyx_yearsData');
+                const localCurrentYear = localStorage.getItem('findalyx_currentYear');
+                const localCompanyName = localStorage.getItem('findalyx_companyName');
+                const localCompanyLogo = localStorage.getItem('findalyx_companyLogo');
+                
+                console.log('LocalStorage check:', { 
+                    hasYearsData: !!localYearsData, 
+                    currentYear: localCurrentYear,
+                    hasCompanyName: !!localCompanyName,
+                    hasLogo: !!localCompanyLogo
+                });
+                
+                if (localYearsData && localCurrentYear) {
+                    yearsData = JSON.parse(localYearsData);
+                    currentYear = localCurrentYear;
+                    window.financialData = yearsData[currentYear];
+                    console.log('Loaded from localStorage:', Object.keys(yearsData));
+                }
+                
+                if (localCompanyName) {
+                    const nameInput = document.getElementById('companyName');
+                    const nameDisplay = document.getElementById('companyNameDisplay');
+                    if (nameInput) nameInput.value = localCompanyName;
+                    if (nameDisplay) nameDisplay.textContent = localCompanyName;
+                }
+                
+                if (localCompanyLogo) {
+                    const logoPreview = document.getElementById('companyLogoPreview');
+                    if (logoPreview) {
+                        logoPreview.innerHTML = `<img src="${localCompanyLogo}" alt="Logo">`;
+                        logoPreview.classList.add('has-logo');
+                    }
+                }
+            } catch (e) {
+                console.error('Error loading from localStorage:', e);
+            }
+            
             // Timeout de sécurité - masquer le loading après 3 secondes max
             const loadingTimeout = setTimeout(() => {
                 console.warn('Loading timeout - forcing hide');
@@ -13373,11 +13412,23 @@ td, th { mso-number-format:"\\@"; }
                     showAuth();
                 } else if (session) {
                     currentUser = session.user;
-                    // Afficher l'app IMMEDIATEMENT, charger les données après
+                    // Afficher l'app IMMEDIATEMENT
                     showApp();
                     checkAdminAccess();
                     showLoading(false);
-                    // Charger les données en arrière-plan (non-bloquant)
+                    
+                    // Si on a des données en localStorage, afficher le dashboard
+                    if (Object.keys(yearsData).length > 0 && currentYear) {
+                        loadFinancialData(yearsData[currentYear]);
+                        updateYearsBadges();
+                        const uploadSection = document.getElementById('uploadSection');
+                        const dashboardContent = document.getElementById('dashboardContent');
+                        if (uploadSection) uploadSection.style.display = 'none';
+                        if (dashboardContent) dashboardContent.style.display = 'block';
+                        console.log('Dashboard displayed from localStorage');
+                    }
+                    
+                    // Charger le reste en arrière-plan
                     loadUserProfile().catch(console.error);
                 } else {
                     showAuth();
