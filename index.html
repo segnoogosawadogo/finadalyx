@@ -314,7 +314,7 @@
         }
 
         .app-container {
-            display: flex;
+            display: block;
             min-height: 100vh;
         }
 
@@ -1405,6 +1405,8 @@
         .main-content {
             margin-left: var(--sidebar-width);
             min-height: 100vh;
+            flex: 1;
+            width: calc(100% - var(--sidebar-width));
         }
 
         /* Top Bar */
@@ -5432,9 +5434,9 @@
             <!-- User Dropdown Menu -->
             <div class="user-dropdown" id="userDropdown">
                 <div class="user-dropdown-header">
-                    <div class="user-name">Salif Fall</div>
-                    <div class="user-email">salif@findalyx.com</div>
-                    <span class="user-plan">Pro Plan</span>
+                    <div class="user-name">Utilisateur</div>
+                    <div class="user-email user-email-display">email@exemple.com</div>
+                    <span class="plan-badge basic user-plan-badge">Essai</span>
                 </div>
                 <div class="user-dropdown-menu">
                     <div class="user-dropdown-item" onclick="showUserProfile()">
@@ -5450,7 +5452,7 @@
                         </svg>
                         <span>Paramètres</span>
                     </div>
-                    <div class="user-dropdown-item" onclick="showSubscription()">
+                    <div class="user-dropdown-item" onclick="openUpgradeModal()">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
                         </svg>
@@ -5463,7 +5465,7 @@
                         </svg>
                         <span>Aide & Support</span>
                     </div>
-                    <div class="user-dropdown-item" onclick="showDocumentation()">
+                    <div class="user-dropdown-item" onclick="window.open('https://docs.findalyx.com', '_blank')">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                         </svg>
@@ -5480,10 +5482,10 @@
             </div>
 
             <div class="user-card" id="userCard" onclick="toggleUserMenu()">
-                <div class="user-avatar">SF</div>
+                <div class="user-avatar user-avatar-text">U</div>
                 <div class="user-info">
-                    <div class="user-name">Salif</div>
-                    <div class="user-role">Analyste financier</div>
+                    <div class="user-name">Utilisateur</div>
+                    <div class="user-role user-plan-badge plan-badge basic">Essai</div>
                 </div>
                 <svg class="chevron-icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: var(--slate-400);">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
@@ -12450,7 +12452,7 @@ td, th { mso-number-format:"\\@"; }
             const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
             
             document.querySelectorAll('.user-name').forEach(el => el.textContent = name);
-            document.querySelectorAll('.user-avatar-text').forEach(el => el.textContent = initials);
+            document.querySelectorAll('.user-avatar, .user-avatar-text').forEach(el => el.textContent = initials);
             document.querySelectorAll('.user-email-display').forEach(el => el.textContent = userProfile.email);
             
             // Update plan badge in sidebar
@@ -12468,8 +12470,8 @@ td, th { mso-number-format:"\\@"; }
         
         // Update plan badge
         function updatePlanBadge() {
-            const badgeContainer = document.querySelector('.user-plan-badge');
-            if (!badgeContainer) return;
+            const badgeContainers = document.querySelectorAll('.user-plan-badge');
+            if (badgeContainers.length === 0) return;
             
             const plan = userPlan.replace('_trial', '').replace('_expired', '');
             const planName = PLANS[plan]?.name || 'Basic';
@@ -12489,8 +12491,10 @@ td, th { mso-number-format:"\\@"; }
                 badgeClass = 'business';
             }
             
-            badgeContainer.className = `plan-badge ${badgeClass}`;
-            badgeContainer.textContent = badgeText;
+            badgeContainers.forEach(badge => {
+                badge.className = `plan-badge user-plan-badge ${badgeClass}`;
+                badge.textContent = badgeText;
+            });
         }
         
         // Update trial banner
