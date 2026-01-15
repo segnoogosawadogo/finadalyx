@@ -405,123 +405,101 @@
             letter-spacing: -0.5px;
         }
 
-        /* ==================== COMPANY SECTION ==================== */
-        .company-section {
-            padding: 16px;
-            margin: 12px;
-            background: linear-gradient(135deg, var(--slate-50) 0%, var(--blue-50) 100%);
-            border-radius: 16px;
-            border: 1px solid var(--slate-200);
+        .logo-text-group {
             display: flex;
-            align-items: center;
-            gap: 14px;
+            flex-direction: column;
         }
 
-        .company-logo-container {
-            position: relative;
-            cursor: pointer;
-        }
-
-        .company-logo {
-            width: 52px;
-            height: 52px;
-            border-radius: 12px;
-            background: white;
-            border: 2px dashed var(--slate-300);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--slate-400);
-            overflow: hidden;
-            transition: all 0.2s ease;
-        }
-
-        .company-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .company-logo svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .company-logo.has-logo {
-            border: 2px solid var(--blue-200);
-        }
-
-        .company-logo-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            color: white;
-        }
-
-        .company-logo-container:hover .company-logo-overlay {
-            opacity: 1;
-        }
-
-        .company-logo-container:hover .company-logo {
-            border-color: var(--blue-400);
-        }
-
-        .company-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .company-name-display {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--slate-800);
+        .company-name-small {
+            font-size: 11px;
+            color: var(--slate-500);
+            font-weight: 500;
+            margin-top: 2px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            margin-bottom: 2px;
+            max-width: 150px;
         }
 
-        .company-year-display {
-            font-size: 12px;
-            color: var(--slate-500);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* ==================== PROFILE PHOTO ==================== */
-        .user-avatar-upload {
-            position: relative;
+        /* ==================== COMPANY LOGO UPLOAD ==================== */
+        .company-logo-upload {
+            width: 120px;
+            height: 120px;
+            border: 2px dashed var(--slate-300);
+            border-radius: 16px;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s ease;
+            background: var(--slate-50);
         }
 
-        .user-avatar-upload:hover .user-avatar-overlay {
-            opacity: 1;
+        .company-logo-upload:hover {
+            border-color: var(--blue-400);
+            background: var(--blue-50);
         }
 
-        .user-avatar-overlay {
+        .company-logo-preview {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--slate-400);
+            gap: 8px;
+        }
+
+        .company-logo-preview svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .company-logo-preview span {
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .company-logo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 8px;
+        }
+
+        .company-logo-preview.has-logo {
+            background: white;
+        }
+
+        .company-logo-preview.has-logo svg,
+        .company-logo-preview.has-logo span {
+            display: none;
+        }
+
+        .company-logo-hover {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.6);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            color: white;
             opacity: 0;
             transition: opacity 0.2s ease;
-            color: white;
+            gap: 4px;
+        }
+
+        .company-logo-hover span {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .company-logo-upload:hover .company-logo-hover {
+            opacity: 1;
         }
 
         .sidebar-nav {
@@ -5660,29 +5638,10 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                     </svg>
                 </div>
-                <span class="logo-text">Findalyx</span>
-            </div>
-        </div>
-
-        <!-- Company Section -->
-        <div class="company-section" id="companySection">
-            <div class="company-logo-container" onclick="document.getElementById('companyLogoInput').click()">
-                <div class="company-logo" id="companyLogoPreview">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                    </svg>
+                <div class="logo-text-group">
+                    <span class="logo-text">Findalyx</span>
+                    <span class="company-name-small" id="companyNameDisplay">Mon Entreprise</span>
                 </div>
-                <div class="company-logo-overlay">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:16px;height:16px;">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    </svg>
-                </div>
-                <input type="file" id="companyLogoInput" accept="image/*" hidden onchange="handleCompanyLogoUpload(event)">
-            </div>
-            <div class="company-info">
-                <div class="company-name-display" id="companyNameDisplay">Mon Entreprise</div>
-                <div class="company-year-display" id="companyYearDisplay">Exercice 2024</div>
             </div>
         </div>
 
@@ -7114,29 +7073,87 @@
                     </div>
                 </div>
 
-                <!-- Entreprise & Référentiel -->
-                <div class="bottom-grid" style="margin-bottom: 24px;">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Entreprise</h3>
+                <!-- Section Entreprise avec Logo -->
+                <div class="card" style="margin-bottom: 24px;">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="card-title">🏢 Informations de l'entreprise</h3>
+                            <p class="card-subtitle">Ces informations apparaîtront sur vos exports PDF et PowerPoint</p>
                         </div>
-                        <div class="card-body">
-                            <div style="margin-bottom: 16px;">
-                                <label style="display: block; font-size: 14px; font-weight: 500; color: var(--slate-700); margin-bottom: 8px;">Nom de l'entreprise</label>
-                                <input type="text" id="companyName" value="Ma Société SA" style="width: 100%; padding: 12px; border: 1px solid var(--slate-200); border-radius: 10px; font-size: 14px; font-family: inherit;" onchange="updateCompanyNameDisplay()">
+                    </div>
+                    <div class="card-body">
+                        <div style="display: flex; gap: 32px; align-items: flex-start;">
+                            <!-- Logo Upload -->
+                            <div style="flex-shrink: 0;">
+                                <label style="display: block; font-size: 14px; font-weight: 500; color: var(--slate-700); margin-bottom: 12px;">Logo de l'entreprise</label>
+                                <div class="company-logo-upload" onclick="document.getElementById('companyLogoInput').click()">
+                                    <div class="company-logo-preview" id="companyLogoPreview">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                        </svg>
+                                        <span>Cliquez pour ajouter</span>
+                                    </div>
+                                    <div class="company-logo-hover">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:24px;height:24px;">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        </svg>
+                                        <span>Modifier</span>
+                                    </div>
+                                </div>
+                                <input type="file" id="companyLogoInput" accept="image/*" hidden onchange="handleCompanyLogoUpload(event)">
+                                <p style="font-size: 12px; color: var(--slate-500); margin-top: 8px;">PNG, JPG ou SVG. Max 2MB</p>
                             </div>
-                            <div>
-                                <label style="display: block; font-size: 14px; font-weight: 500; color: var(--slate-700); margin-bottom: 8px;">Exercice fiscal</label>
-                                <input type="text" id="fiscalYear" value="2024" style="width: 100%; padding: 12px; border: 1px solid var(--slate-200); border-radius: 10px; font-size: 14px; font-family: inherit;">
+                            
+                            <!-- Infos Entreprise -->
+                            <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                <div style="grid-column: span 2;">
+                                    <label style="display: block; font-size: 14px; font-weight: 500; color: var(--slate-700); margin-bottom: 8px;">Nom de l'entreprise</label>
+                                    <input type="text" id="companyName" value="Ma Société SA" style="width: 100%; padding: 12px; border: 1px solid var(--slate-200); border-radius: 10px; font-size: 14px; font-family: inherit;" onchange="updateCompanyNameDisplay(); saveCompanyInfo();">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 14px; font-weight: 500; color: var(--slate-700); margin-bottom: 8px;">Secteur d'activité</label>
+                                    <input type="text" id="companySector" placeholder="Ex: Commerce, Industrie..." style="width: 100%; padding: 12px; border: 1px solid var(--slate-200); border-radius: 10px; font-size: 14px; font-family: inherit;" onchange="saveCompanyInfo();">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 14px; font-weight: 500; color: var(--slate-700); margin-bottom: 8px;">Pays</label>
+                                    <select id="companyCountry" style="width: 100%; padding: 12px; border: 1px solid var(--slate-200); border-radius: 10px; font-size: 14px; font-family: inherit;" onchange="saveCompanyInfo();">
+                                        <option value="SN" selected>Sénégal</option>
+                                        <option value="CI">Côte d'Ivoire</option>
+                                        <option value="ML">Mali</option>
+                                        <option value="BF">Burkina Faso</option>
+                                        <option value="BJ">Bénin</option>
+                                        <option value="TG">Togo</option>
+                                        <option value="NE">Niger</option>
+                                        <option value="GN">Guinée</option>
+                                        <option value="CM">Cameroun</option>
+                                        <option value="GA">Gabon</option>
+                                        <option value="CG">Congo</option>
+                                        <option value="CD">RD Congo</option>
+                                        <option value="OTHER">Autre</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 14px; font-weight: 500; color: var(--slate-700); margin-bottom: 8px;">Exercice fiscal</label>
+                                    <input type="text" id="fiscalYear" value="2024" style="width: 100%; padding: 12px; border: 1px solid var(--slate-200); border-radius: 10px; font-size: 14px; font-family: inherit;">
+                                </div>
+                                <div>
+                                    <label style="display: block; font-size: 14px; font-weight: 500; color: var(--slate-700); margin-bottom: 8px;">NINEA / RCCM</label>
+                                    <input type="text" id="companyRegNumber" placeholder="Numéro d'identification" style="width: 100%; padding: 12px; border: 1px solid var(--slate-200); border-radius: 10px; font-size: 14px; font-family: inherit;" onchange="saveCompanyInfo();">
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Référentiel comptable</h3>
-                        </div>
-                        <div class="card-body">
-                            <div style="margin-bottom: 16px;">
+                </div>
+
+                <!-- Référentiel comptable -->
+                <div class="card" style="margin-bottom: 24px;">
+                    <div class="card-header">
+                        <h3 class="card-title">📚 Référentiel comptable</h3>
+                    </div>
+                    <div class="card-body">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div>
                                 <label style="display: block; font-size: 14px; font-weight: 500; color: var(--slate-700); margin-bottom: 8px;">Plan comptable</label>
                                 <select id="accountingStandard" style="width: 100%; padding: 12px; border: 1px solid var(--slate-200); border-radius: 10px; font-size: 14px; font-family: inherit;">
                                     <option value="syscohada" selected>SYSCOHADA révisé</option>
@@ -8080,7 +8097,7 @@
             try {
                 showNotification('Chargement du fichier...', 'info');
                 
-                const { data: file, error } = await supabaseClient
+                const { data: fileData, error } = await supabaseClient
                     .from('saved_files')
                     .select('*')
                     .eq('id', fileId)
@@ -8090,44 +8107,44 @@
                 
                 let arrayBuffer;
                 
-                // Si le fichier est dans le storage
-                if (file.storage_path) {
-                    const { data, error: downloadError } = await supabaseClient.storage
-                        .from('balance-files')
-                        .download(file.storage_path);
-                    
-                    if (downloadError) throw downloadError;
-                    arrayBuffer = await data.arrayBuffer();
-                } 
                 // Si le fichier est en base64 dans la base
-                else if (file.file_data) {
-                    const binaryString = atob(file.file_data);
+                if (fileData.file_data) {
+                    const binaryString = atob(fileData.file_data);
                     const bytes = new Uint8Array(binaryString.length);
                     for (let i = 0; i < binaryString.length; i++) {
                         bytes[i] = binaryString.charCodeAt(i);
                     }
                     arrayBuffer = bytes.buffer;
+                } 
+                // Si le fichier est dans le storage
+                else if (fileData.storage_path) {
+                    const { data: storageData, error: downloadError } = await supabaseClient.storage
+                        .from('balance-files')
+                        .download(fileData.storage_path);
+                    
+                    if (downloadError) throw downloadError;
+                    arrayBuffer = await storageData.arrayBuffer();
                 } else {
                     throw new Error('Données du fichier non disponibles');
                 }
                 
                 // Parser les données
-                const data = parseOHADABalance(arrayBuffer);
-                data.year = file.year;
+                const parsedData = parseOHADABalance(arrayBuffer);
+                parsedData.year = fileData.year;
                 
                 // Stocker et afficher
-                yearsData[file.year] = data;
-                currentYear = file.year;
-                window.financialData = data;
+                yearsData[fileData.year] = parsedData;
+                currentYear = fileData.year;
+                window.financialData = parsedData;
                 
-                loadFinancialData(data);
+                loadFinancialData(parsedData);
                 updateYearsBadges();
                 updateEvolutionChart();
                 
                 // Naviguer vers le dashboard
-                showPage('dashboard');
+                navigateTo('dashboard');
                 
-                showNotification(`Balance ${file.year} chargée avec succès`, 'success');
+                showNotification(`Balance ${fileData.year} chargée avec succès`, 'success');
                 
             } catch (error) {
                 console.error('Erreur chargement fichier:', error);
@@ -8268,6 +8285,44 @@
                 };
                 reader.readAsDataURL(file);
             });
+        }
+        
+        // Sauvegarder les informations de l'entreprise
+        async function saveCompanyInfo() {
+            if (!currentUser) return;
+            
+            try {
+                const companyData = {
+                    name: document.getElementById('companyName')?.value || 'Mon Entreprise',
+                    sector: document.getElementById('companySector')?.value || null,
+                    country: document.getElementById('companyCountry')?.value || 'SN',
+                    registration_number: document.getElementById('companyRegNumber')?.value || null
+                };
+                
+                // Vérifier si l'entreprise existe
+                const { data: existing } = await supabaseClient
+                    .from('companies')
+                    .select('id')
+                    .eq('user_id', currentUser.id)
+                    .single();
+                
+                if (existing) {
+                    await supabaseClient
+                        .from('companies')
+                        .update(companyData)
+                        .eq('user_id', currentUser.id);
+                } else {
+                    await supabaseClient
+                        .from('companies')
+                        .insert({ ...companyData, user_id: currentUser.id });
+                }
+                
+                // Mettre à jour l'affichage dans la sidebar
+                updateCompanyNameDisplay();
+                
+            } catch (error) {
+                console.error('Erreur sauvegarde company info:', error);
+            }
         }
         
         // Upload de la photo de profil
