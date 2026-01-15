@@ -1,0 +1,3109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Findalyx - Analyse Financière Intelligente pour l'Afrique</title>
+    <meta name="description" content="Findalyx transforme vos balances comptables SYSCOHADA en tableaux de bord financiers professionnels. Ratios, bilans, comptes de résultat en quelques clics.">
+    <meta name="keywords" content="analyse financière, SYSCOHADA, OHADA, comptabilité, Afrique, ratios financiers, bilan, compte de résultat">
+    <link rel="canonical" href="https://findalyx.com">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Findalyx - Analyse Financière Intelligente">
+    <meta property="og:description" content="Transformez vos balances comptables en insights financiers en quelques clics.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://findalyx.com">
+    <meta property="og:image" content="https://findalyx.com/og-image.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --blue-50: #eff6ff;
+            --blue-100: #dbeafe;
+            --blue-200: #bfdbfe;
+            --blue-400: #60a5fa;
+            --blue-500: #3b82f6;
+            --blue-600: #2563eb;
+            --blue-700: #1d4ed8;
+            --blue-800: #1e40af;
+            --blue-900: #1e3a8a;
+            
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+            
+            --success: #10b981;
+            --warning: #f59e0b;
+            --purple-500: #8b5cf6;
+            --purple-600: #7c3aed;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--slate-800);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ==================== NAVBAR ==================== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            transition: all 0.3s;
+        }
+
+        .navbar.scrolled {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .navbar-logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .navbar-logo-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--slate-800);
+        }
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .navbar-link {
+            text-decoration: none;
+            color: var(--slate-600);
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.2s;
+        }
+
+        .navbar-link:hover {
+            color: var(--blue-600);
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--slate-700);
+        }
+
+        .btn-ghost:hover {
+            background: var(--slate-100);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            color: white;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-lg {
+            padding: 16px 32px;
+            font-size: 16px;
+        }
+
+        .btn-white {
+            background: white;
+            color: var(--blue-600);
+        }
+
+        .btn-white:hover {
+            background: var(--blue-50);
+        }
+
+        /* ==================== HERO ==================== */
+        .hero {
+            padding: 140px 24px 80px;
+            background: linear-gradient(135deg, var(--slate-50) 0%, var(--blue-50) 50%, white 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 80%;
+            height: 150%;
+            background: radial-gradient(ellipse, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            border: 1px solid var(--blue-200);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--blue-700);
+            margin-bottom: 24px;
+            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.1);
+        }
+
+        .hero-badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--slate-900);
+            margin-bottom: 24px;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--purple-600) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 18px;
+            color: var(--slate-600);
+            margin-bottom: 32px;
+            max-width: 500px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+        }
+
+        .hero-stat {
+            text-align: left;
+        }
+
+        .hero-stat-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--slate-800);
+        }
+
+        .hero-stat-label {
+            font-size: 14px;
+            color: var(--slate-500);
+        }
+
+        .hero-image {
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.15);
+        }
+
+        .hero-image-dashboard {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.12);
+        }
+
+        .dashboard-preview {
+            background: linear-gradient(135deg, var(--slate-100) 0%, var(--blue-50) 100%);
+            border-radius: 12px;
+            padding: 24px;
+            min-height: 400px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-title {
+            font-weight: 700;
+            color: var(--slate-800);
+        }
+
+        .dashboard-badge {
+            background: var(--success);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-card {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .dashboard-card-label {
+            font-size: 12px;
+            color: var(--slate-500);
+            margin-bottom: 4px;
+        }
+
+        .dashboard-card-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--slate-800);
+        }
+
+        .dashboard-card-value.positive {
+            color: var(--success);
+        }
+
+        .dashboard-chart {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 80px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(180deg, var(--blue-500) 0%, var(--blue-600) 100%);
+            border-radius: 4px 4px 0 0;
+            animation: growUp 1s ease-out forwards;
+        }
+
+        @keyframes growUp {
+            from { height: 0; }
+        }
+
+        /* ==================== LOGOS ==================== */
+        .logos {
+            padding: 60px 24px;
+            background: white;
+            border-top: 1px solid var(--slate-100);
+            border-bottom: 1px solid var(--slate-100);
+        }
+
+        .logos-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .logos-title {
+            font-size: 14px;
+            color: var(--slate-400);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 32px;
+        }
+
+        .logos-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            opacity: 0.6;
+        }
+
+        .logo-item {
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--slate-400);
+        }
+
+        /* ==================== FEATURES ==================== */
+        .features {
+            padding: 100px 24px;
+            background: white;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 60px;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: var(--blue-100);
+            color: var(--blue-700);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--slate-900);
+            margin-bottom: 16px;
+        }
+
+        .section-description {
+            font-size: 18px;
+            color: var(--slate-500);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .feature-card {
+            background: var(--slate-50);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .feature-card:hover {
+            background: white;
+            border-color: var(--blue-200);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .feature-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--slate-800);
+            margin-bottom: 12px;
+        }
+
+        .feature-description {
+            font-size: 15px;
+            color: var(--slate-500);
+            line-height: 1.7;
+        }
+
+        /* ==================== HOW IT WORKS ==================== */
+        .how-it-works {
+            padding: 100px 24px;
+            background: linear-gradient(135deg, var(--slate-900) 0%, var(--blue-900) 100%);
+            color: white;
+        }
+
+        .how-it-works .section-title {
+            color: white;
+        }
+
+        .how-it-works .section-description {
+            color: var(--slate-300);
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 40px;
+            right: -20px;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--blue-500), transparent);
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .step-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .step-description {
+            font-size: 15px;
+            color: var(--slate-400);
+        }
+
+        /* ==================== PRICING ==================== */
+        .pricing {
+            padding: 100px 24px;
+            background: var(--slate-50);
+        }
+
+        .pricing-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 60px;
+        }
+
+        .pricing-toggle-label {
+            font-weight: 500;
+            color: var(--slate-500);
+            cursor: pointer;
+        }
+
+        .pricing-toggle-label.active {
+            color: var(--slate-800);
+            font-weight: 600;
+        }
+
+        .toggle-switch {
+            width: 56px;
+            height: 30px;
+            background: var(--slate-300);
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: var(--blue-600);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(26px);
+        }
+
+        .pricing-badge {
+            background: var(--success);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            position: relative;
+            border: 2px solid var(--slate-200);
+            transition: all 0.3s;
+        }
+
+        .pricing-card:hover {
+            border-color: var(--blue-300);
+        }
+
+        .pricing-card.popular {
+            border-color: var(--blue-500);
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.2);
+            transform: scale(1.02);
+        }
+
+        .pricing-popular-tag {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .pricing-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--slate-800);
+            margin-bottom: 8px;
+        }
+
+        .pricing-description {
+            font-size: 14px;
+            color: var(--slate-500);
+            margin-bottom: 24px;
+        }
+
+        .pricing-price {
+            margin-bottom: 32px;
+        }
+
+        .pricing-amount {
+            font-family: 'Outfit', sans-serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--slate-800);
+        }
+
+        .pricing-currency {
+            font-size: 18px;
+            color: var(--slate-500);
+        }
+
+        .pricing-period {
+            font-size: 14px;
+            color: var(--slate-400);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            font-size: 14px;
+            color: var(--slate-600);
+            border-bottom: 1px solid var(--slate-100);
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features li svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .pricing-features li svg.check {
+            color: var(--success);
+        }
+
+        .pricing-features li svg.cross {
+            color: var(--slate-300);
+        }
+
+        .pricing-features li.disabled {
+            color: var(--slate-400);
+        }
+
+        .pricing-cta {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid var(--slate-200);
+            background: white;
+            color: var(--slate-700);
+        }
+
+        .pricing-cta:hover {
+            border-color: var(--blue-500);
+            color: var(--blue-600);
+        }
+
+        .pricing-card.popular .pricing-cta {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            border: none;
+            color: white;
+        }
+
+        .pricing-card.popular .pricing-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        /* ==================== TESTIMONIALS ==================== */
+        .testimonials {
+            padding: 100px 24px;
+            background: white;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .testimonial-card {
+            background: var(--slate-50);
+            border-radius: 20px;
+            padding: 32px;
+        }
+
+        .testimonial-stars {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px;
+            color: var(--warning);
+        }
+
+        .testimonial-text {
+            font-size: 15px;
+            color: var(--slate-600);
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--blue-500) 0%, var(--purple-500) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            color: var(--slate-800);
+        }
+
+        .testimonial-role {
+            font-size: 13px;
+            color: var(--slate-500);
+        }
+
+        /* ==================== FAQ ==================== */
+        .faq {
+            padding: 100px 24px;
+            background: var(--slate-50);
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid var(--slate-200);
+        }
+
+        .faq-item:hover {
+            border-color: var(--blue-300);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1);
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: var(--slate-800);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .faq-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--blue-500);
+            transition: transform 0.3s;
+        }
+
+        .faq-item.open .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            font-size: 14px;
+            color: var(--slate-500);
+            line-height: 1.7;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 200px;
+            margin-top: 16px;
+        }
+
+        /* ==================== CTA ==================== */
+        .cta {
+            padding: 100px 24px;
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-800) 100%);
+            text-align: center;
+            color: white;
+        }
+
+        .cta-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .cta-description {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 32px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        /* ==================== FOOTER ==================== */
+        .footer {
+            padding: 60px 24px 30px;
+            background: var(--slate-900);
+            color: white;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .footer-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-logo-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .footer-tagline {
+            font-size: 14px;
+            color: var(--slate-400);
+            line-height: 1.7;
+        }
+
+        .footer-title {
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--slate-400);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--slate-800);
+            padding-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-copyright {
+            font-size: 14px;
+            color: var(--slate-500);
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-social {
+            width: 40px;
+            height: 40px;
+            background: var(--slate-800);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--slate-400);
+            transition: all 0.2s;
+        }
+
+        .footer-social:hover {
+            background: var(--blue-600);
+            color: white;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-title {
+                font-size: 42px;
+            }
+
+            .hero-description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-image {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
+            .features-grid,
+            .steps,
+            .pricing-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .step:not(:last-child)::after {
+                display: none;
+            }
+
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 120px 24px 60px;
+            }
+
+            .hero-title {
+                font-size: 32px;
+            }
+
+            .section-title {
+                font-size: 32px;
+            }
+
+            .cta-title {
+                font-size: 32px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .cta-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+
+        /* ==================== MOBILE MENU ==================== */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+        /* ==================== FEATURE SHOWCASE SECTIONS ==================== */
+        .feature-showcase {
+            padding: 100px 24px;
+            background: white;
+        }
+
+        .feature-showcase:nth-child(even) {
+            background: var(--slate-50);
+        }
+
+        .feature-showcase-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .feature-showcase-reverse .feature-showcase-container {
+            grid-template-columns: 1.2fr 1fr;
+        }
+
+        .feature-showcase-reverse .feature-showcase-content {
+            order: 2;
+        }
+
+        .feature-showcase-reverse .feature-showcase-visual {
+            order: 1;
+        }
+
+        .feature-showcase-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1));
+            color: var(--blue-600);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .feature-showcase-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--slate-900);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .feature-showcase-description {
+            font-size: 17px;
+            color: var(--slate-600);
+            margin-bottom: 28px;
+            line-height: 1.8;
+        }
+
+        .feature-showcase-list {
+            list-style: none;
+        }
+
+        .feature-showcase-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            font-size: 15px;
+            color: var(--slate-700);
+            font-weight: 500;
+        }
+
+        /* Dashboard Mockup Styles */
+        .dashboard-mockup {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            border: 1px solid var(--slate-200);
+        }
+
+        .mockup-header {
+            background: var(--slate-100);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--slate-200);
+        }
+
+        .mockup-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .mockup-dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .mockup-dots span:nth-child(1) { background: #ef4444; }
+        .mockup-dots span:nth-child(2) { background: #f59e0b; }
+        .mockup-dots span:nth-child(3) { background: #10b981; }
+
+        .mockup-title {
+            font-size: 12px;
+            color: var(--slate-500);
+            margin-left: auto;
+        }
+
+        .mockup-body {
+            padding: 20px;
+            background: var(--slate-50);
+        }
+
+        /* KPI Row */
+        .mockup-kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .mockup-kpi-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--slate-100);
+        }
+
+        .mockup-kpi-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .mockup-kpi-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mockup-kpi-label {
+            font-size: 11px;
+            color: var(--slate-500);
+            margin-bottom: 2px;
+        }
+
+        .mockup-kpi-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--slate-800);
+        }
+
+        .mockup-kpi-change {
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .mockup-kpi-change.positive { color: var(--success); }
+        .mockup-kpi-change.negative { color: #ef4444; }
+
+        /* Chart Area */
+        .mockup-chart-area {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--slate-100);
+        }
+
+        .mockup-chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--slate-700);
+        }
+
+        .mockup-chart-legend {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--slate-500);
+        }
+
+        .mockup-chart-legend span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mockup-chart-legend i {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .mockup-line-chart {
+            width: 100%;
+            height: 120px;
+        }
+
+        .mockup-chart-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 10px;
+            color: var(--slate-400);
+        }
+
+        /* Waterfall Chart */
+        .waterfall-chart {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--slate-100);
+        }
+
+        .waterfall-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--slate-700);
+            margin-bottom: 20px;
+        }
+
+        .waterfall-unit {
+            font-weight: 400;
+            color: var(--slate-400);
+            font-size: 12px;
+        }
+
+        .waterfall-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 150px;
+            padding-bottom: 30px;
+            position: relative;
+        }
+
+        .waterfall-bar-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            position: relative;
+        }
+
+        .waterfall-bar {
+            width: 100%;
+            border-radius: 4px 4px 0 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 6px;
+            position: relative;
+        }
+
+        .waterfall-bar.positive { background: linear-gradient(180deg, #3b82f6, #2563eb); }
+        .waterfall-bar.negative { background: linear-gradient(180deg, #ef4444, #dc2626); }
+        .waterfall-bar.subtotal { background: linear-gradient(180deg, #10b981, #059669); }
+        .waterfall-bar.result { background: linear-gradient(180deg, #8b5cf6, #7c3aed); }
+
+        .waterfall-value {
+            font-size: 9px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .waterfall-label {
+            position: absolute;
+            bottom: -24px;
+            font-size: 9px;
+            color: var(--slate-500);
+            white-space: nowrap;
+        }
+
+        /* Mini Table */
+        .mockup-mini-table {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--slate-100);
+        }
+
+        .mini-table-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            padding: 12px 16px;
+            font-size: 12px;
+            border-bottom: 1px solid var(--slate-100);
+        }
+
+        .mini-table-row:last-child { border-bottom: none; }
+
+        .mini-table-row.header {
+            background: var(--slate-50);
+            font-weight: 600;
+            color: var(--slate-600);
+        }
+
+        .mini-table-row span:not(:first-child) {
+            text-align: right;
+        }
+
+        .mini-table-row .positive { color: var(--success); font-weight: 600; }
+        .mini-table-row .negative { color: #ef4444; font-weight: 600; }
+
+        /* Ratios Grid */
+        .ratios-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .ratio-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--slate-100);
+        }
+
+        .ratio-header {
+            margin-bottom: 12px;
+        }
+
+        .ratio-category {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--slate-800);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .ratio-item {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--slate-100);
+        }
+
+        .ratio-item:last-child { border-bottom: none; }
+
+        .ratio-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .ratio-name {
+            font-size: 12px;
+            color: var(--slate-600);
+        }
+
+        .ratio-value {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--slate-800);
+        }
+
+        .ratio-gauge {
+            height: 6px;
+            background: var(--slate-100);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+
+        .gauge-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 1s ease;
+        }
+
+        .ratio-status {
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .ratio-status.good { color: var(--success); }
+        .ratio-status.medium { color: var(--warning); }
+        .ratio-status.bad { color: #ef4444; }
+
+        /* Radar Chart */
+        .radar-chart-container {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--slate-100);
+        }
+
+        .radar-chart {
+            width: 100%;
+            height: 150px;
+        }
+
+        /* Balance Sheet Visual */
+        .balance-sheet-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .bs-column {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .bs-header {
+            padding: 12px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+            background: var(--slate-700);
+        }
+
+        .bs-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            color: white;
+        }
+
+        .bs-label {
+            font-size: 10px;
+            opacity: 0.9;
+        }
+
+        .bs-value {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        /* FR BFR Analysis */
+        .frbfr-analysis {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--slate-100);
+        }
+
+        .frbfr-item {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--slate-100);
+        }
+
+        .frbfr-item:last-child { border-bottom: none; }
+
+        .frbfr-label {
+            font-size: 12px;
+            color: var(--slate-600);
+        }
+
+        .frbfr-value {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .frbfr-value.positive { color: var(--success); }
+        .frbfr-value.negative { color: #ef4444; }
+
+        .frbfr-bar {
+            height: 8px;
+            border-radius: 4px;
+        }
+
+        .frbfr-bar.positive { background: linear-gradient(90deg, #10b981, #059669); }
+        .frbfr-bar.negative { background: linear-gradient(90deg, #ef4444, #dc2626); }
+        .frbfr-bar.neutral { background: linear-gradient(90deg, #f59e0b, #d97706); }
+
+        /* Multi-year Chart */
+        .multiyear-chart {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--slate-100);
+        }
+
+        .multiyear-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--slate-700);
+            margin-bottom: 20px;
+        }
+
+        .multiyear-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 16px;
+            height: 140px;
+            padding-bottom: 30px;
+        }
+
+        .multiyear-bar-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+        }
+
+        .multiyear-bar {
+            width: 100%;
+            border-radius: 6px 6px 0 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 8px;
+        }
+
+        .multiyear-bar span {
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .multiyear-year {
+            margin-top: 8px;
+            font-size: 11px;
+            color: var(--slate-500);
+        }
+
+        .multiyear-bar-group.highlight .multiyear-year {
+            color: var(--blue-600);
+            font-weight: 700;
+        }
+
+        .multiyear-growth {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--slate-100);
+            font-size: 12px;
+            color: var(--slate-500);
+        }
+
+        .growth-value {
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        /* Evolution Table */
+        .evolution-table {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--slate-100);
+        }
+
+        .evo-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            padding: 12px 16px;
+            font-size: 11px;
+            border-bottom: 1px solid var(--slate-100);
+        }
+
+        .evo-row:last-child { border-bottom: none; }
+
+        .evo-row.header {
+            background: var(--slate-50);
+            font-weight: 600;
+            color: var(--slate-600);
+        }
+
+        .evo-row span:not(:first-child) {
+            text-align: right;
+        }
+
+        .evo-row .positive { color: var(--success); font-weight: 600; }
+        .evo-row .negative { color: #ef4444; font-weight: 600; }
+
+        /* Export Visual */
+        .export-visual {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+        }
+
+        .export-card {
+            width: 140px;
+            padding: 32px 24px;
+            border-radius: 20px;
+            text-align: center;
+            color: white;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .export-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .export-card.pdf {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.3);
+        }
+
+        .export-card.pptx {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            box-shadow: 0 20px 40px rgba(245, 158, 11, 0.3);
+        }
+
+        .export-card.xlsx {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.3);
+        }
+
+        .export-card:hover.pdf { box-shadow: 0 30px 60px rgba(239, 68, 68, 0.4); }
+        .export-card:hover.pptx { box-shadow: 0 30px 60px rgba(245, 158, 11, 0.4); }
+        .export-card:hover.xlsx { box-shadow: 0 30px 60px rgba(16, 185, 129, 0.4); }
+
+        .export-icon {
+            margin-bottom: 16px;
+        }
+
+        .export-label {
+            display: block;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .export-desc {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* Responsive for Feature Showcase */
+        @media (max-width: 1024px) {
+            .feature-showcase-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .feature-showcase-reverse .feature-showcase-content,
+            .feature-showcase-reverse .feature-showcase-visual {
+                order: unset;
+            }
+
+            .mockup-kpi-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .ratios-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .export-visual {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .feature-showcase {
+                padding: 60px 20px;
+            }
+
+            .feature-showcase-title {
+                font-size: 28px;
+            }
+
+            .mockup-kpi-row {
+                grid-template-columns: 1fr;
+            }
+
+            .balance-sheet-visual {
+                grid-template-columns: 1fr;
+            }
+
+            .multiyear-bars {
+                height: 100px;
+            }
+
+            .export-card {
+                width: 100px;
+                padding: 20px 16px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-container">
+            <a href="#" class="navbar-logo">
+                <div class="navbar-logo-icon">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                </div>
+                <span class="navbar-logo-text">Findalyx</span>
+            </a>
+            <div class="navbar-links">
+                <a href="#features" class="navbar-link">Fonctionnalités</a>
+                <a href="#pricing" class="navbar-link">Tarifs</a>
+                <a href="#testimonials" class="navbar-link">Témoignages</a>
+                <a href="#faq" class="navbar-link">FAQ</a>
+            </div>
+            <div class="navbar-actions">
+                <a href="/app" class="btn btn-ghost">Connexion</a>
+                <a href="/app" class="btn btn-primary">Essai gratuit</a>
+            </div>
+            <button class="mobile-menu-btn">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="hero-badge-dot"></span>
+                    Conforme SYSCOHADA
+                </div>
+                <h1 class="hero-title">
+                    Transformez vos balances en <span>insights financiers</span>
+                </h1>
+                <p class="hero-description">
+                    Findalyx analyse automatiquement vos données comptables et génère des tableaux de bord professionnels : ratios financiers, bilans, comptes de résultat, évolutions multi-années.
+                </p>
+                <div class="hero-actions">
+                    <a href="/app" class="btn btn-primary btn-lg">
+                        Commencer gratuitement
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                    </a>
+                    <a href="#features" class="btn btn-ghost btn-lg">Voir les fonctionnalités</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">500+</div>
+                        <div class="hero-stat-label">Entreprises</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">15+</div>
+                        <div class="hero-stat-label">Pays africains</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">10k+</div>
+                        <div class="hero-stat-label">Analyses générées</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-image-dashboard">
+                    <div class="dashboard-preview">
+                        <div class="dashboard-header">
+                            <span class="dashboard-title">Tableau de bord</span>
+                            <span class="dashboard-badge">En temps réel</span>
+                        </div>
+                        <div class="dashboard-cards">
+                            <div class="dashboard-card">
+                                <div class="dashboard-card-label">Chiffre d'affaires</div>
+                                <div class="dashboard-card-value">407 M FCFA</div>
+                            </div>
+                            <div class="dashboard-card">
+                                <div class="dashboard-card-label">Marge nette</div>
+                                <div class="dashboard-card-value positive">+12.4%</div>
+                            </div>
+                            <div class="dashboard-card">
+                                <div class="dashboard-card-label">ROE</div>
+                                <div class="dashboard-card-value">18.2%</div>
+                            </div>
+                            <div class="dashboard-card">
+                                <div class="dashboard-card-label">Ratio courant</div>
+                                <div class="dashboard-card-value positive">1.85</div>
+                            </div>
+                        </div>
+                        <div class="dashboard-chart">
+                            <div class="dashboard-card-label" style="margin-bottom:12px;">Évolution du CA</div>
+                            <div class="chart-bars">
+                                <div class="chart-bar" style="height: 45%;"></div>
+                                <div class="chart-bar" style="height: 55%;"></div>
+                                <div class="chart-bar" style="height: 50%;"></div>
+                                <div class="chart-bar" style="height: 65%;"></div>
+                                <div class="chart-bar" style="height: 70%;"></div>
+                                <div class="chart-bar" style="height: 60%;"></div>
+                                <div class="chart-bar" style="height: 75%;"></div>
+                                <div class="chart-bar" style="height: 85%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Logos -->
+    <section class="logos">
+        <div class="logos-container">
+            <p class="logos-title">Ils nous font confiance</p>
+            <div class="logos-grid">
+                <span class="logo-item">SONATEL</span>
+                <span class="logo-item">ORABANK</span>
+                <span class="logo-item">ECOBANK</span>
+                <span class="logo-item">CFAO</span>
+                <span class="logo-item">TOTAL</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <!-- Features Section with Detailed Visuals -->
+    <section class="features" id="features">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-badge">Fonctionnalités</span>
+                <h2 class="section-title">Des outils puissants pour votre analyse</h2>
+                <p class="section-description">
+                    Découvrez comment Findalyx transforme vos données comptables en insights actionnables
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature 1: Tableau de Bord -->
+    <section class="feature-showcase">
+        <div class="feature-showcase-container">
+            <div class="feature-showcase-content">
+                <div class="feature-showcase-badge">Tableau de bord</div>
+                <h3 class="feature-showcase-title">Vue d'ensemble instantanée de votre santé financière</h3>
+                <p class="feature-showcase-description">
+                    Un dashboard interactif qui affiche tous vos indicateurs clés en temps réel. Visualisez l'évolution de votre chiffre d'affaires, marges et ratios d'un seul coup d'œil.
+                </p>
+                <ul class="feature-showcase-list">
+                    <li>
+                        <svg width="20" height="20" fill="none" stroke="var(--success)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        KPIs financiers en temps réel
+                    </li>
+                    <li>
+                        <svg width="20" height="20" fill="none" stroke="var(--success)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Graphiques d'évolution interactifs
+                    </li>
+                    <li>
+                        <svg width="20" height="20" fill="none" stroke="var(--success)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Alertes sur les indicateurs critiques
+                    </li>
+                </ul>
+            </div>
+            <div class="feature-showcase-visual">
+                <div class="dashboard-mockup">
+                    <div class="mockup-header">
+                        <div class="mockup-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <span class="mockup-title">Tableau de bord</span>
+                    </div>
+                    <div class="mockup-body">
+                        <!-- KPI Cards Row -->
+                        <div class="mockup-kpi-row">
+                            <div class="mockup-kpi-card">
+                                <div class="mockup-kpi-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                                    <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/></svg>
+                                </div>
+                                <div class="mockup-kpi-content">
+                                    <span class="mockup-kpi-label">Chiffre d'affaires</span>
+                                    <span class="mockup-kpi-value">407.5 M</span>
+                                    <span class="mockup-kpi-change positive">↑ +12.5%</span>
+                                </div>
+                            </div>
+                            <div class="mockup-kpi-card">
+                                <div class="mockup-kpi-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+                                    <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+                                </div>
+                                <div class="mockup-kpi-content">
+                                    <span class="mockup-kpi-label">Marge brute</span>
+                                    <span class="mockup-kpi-value">24.8%</span>
+                                    <span class="mockup-kpi-change positive">↑ +3.2%</span>
+                                </div>
+                            </div>
+                            <div class="mockup-kpi-card">
+                                <div class="mockup-kpi-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                                    <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+                                </div>
+                                <div class="mockup-kpi-content">
+                                    <span class="mockup-kpi-label">Résultat net</span>
+                                    <span class="mockup-kpi-value">58.2 M</span>
+                                    <span class="mockup-kpi-change positive">↑ +8.7%</span>
+                                </div>
+                            </div>
+                            <div class="mockup-kpi-card">
+                                <div class="mockup-kpi-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                                    <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+                                </div>
+                                <div class="mockup-kpi-content">
+                                    <span class="mockup-kpi-label">ROE</span>
+                                    <span class="mockup-kpi-value">18.5%</span>
+                                    <span class="mockup-kpi-change positive">↑ +2.1%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Chart Area -->
+                        <div class="mockup-chart-area">
+                            <div class="mockup-chart-header">
+                                <span>Évolution du chiffre d'affaires</span>
+                                <div class="mockup-chart-legend">
+                                    <span><i style="background: var(--blue-500);"></i> 2024</span>
+                                    <span><i style="background: var(--purple-500);"></i> 2023</span>
+                                </div>
+                            </div>
+                            <svg class="mockup-line-chart" viewBox="0 0 400 120" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="chartGrad1" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color: #3b82f6; stop-opacity: 0.3"/>
+                                        <stop offset="100%" style="stop-color: #3b82f6; stop-opacity: 0"/>
+                                    </linearGradient>
+                                </defs>
+                                <!-- Grid -->
+                                <line x1="0" y1="30" x2="400" y2="30" stroke="#e2e8f0" stroke-dasharray="4"/>
+                                <line x1="0" y1="60" x2="400" y2="60" stroke="#e2e8f0" stroke-dasharray="4"/>
+                                <line x1="0" y1="90" x2="400" y2="90" stroke="#e2e8f0" stroke-dasharray="4"/>
+                                <!-- Area -->
+                                <path d="M0,100 Q50,85 100,70 T200,50 T300,35 T400,20 L400,120 L0,120 Z" fill="url(#chartGrad1)"/>
+                                <!-- Lines -->
+                                <path d="M0,100 Q50,85 100,70 T200,50 T300,35 T400,20" fill="none" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+                                <path d="M0,105 Q50,95 100,85 T200,70 T300,60 T400,50" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="6,3"/>
+                                <!-- Points -->
+                                <circle cx="100" cy="70" r="5" fill="#3b82f6"/>
+                                <circle cx="200" cy="50" r="5" fill="#3b82f6"/>
+                                <circle cx="300" cy="35" r="5" fill="#3b82f6"/>
+                                <circle cx="400" cy="20" r="6" fill="#3b82f6" stroke="white" stroke-width="2"/>
+                            </svg>
+                            <div class="mockup-chart-labels">
+                                <span>Jan</span><span>Fév</span><span>Mar</span><span>Avr</span><span>Mai</span><span>Jun</span><span>Jul</span><span>Aoû</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature 2: Compte de Résultat -->
+    <section class="feature-showcase feature-showcase-reverse">
+        <div class="feature-showcase-container">
+            <div class="feature-showcase-content">
+                <div class="feature-showcase-badge" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1)); color: #059669;">Compte de résultat</div>
+                <h3 class="feature-showcase-title">Analysez la formation de votre profit</h3>
+                <p class="feature-showcase-description">
+                    Visualisez chaque étape de la construction de votre résultat net avec le graphique en cascade (waterfall). Identifiez instantanément les postes qui impactent votre rentabilité.
+                </p>
+                <ul class="feature-showcase-list">
+                    <li>
+                        <svg width="20" height="20" fill="none" stroke="var(--success)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Graphique waterfall interactif
+                    </li>
+                    <li>
+                        <svg width="20" height="20" fill="none" stroke="var(--success)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Soldes intermédiaires de gestion
+                    </li>
+                    <li>
+                        <svg width="20" height="20" fill="none" stroke="var(--success)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Comparaison N / N-1 automatique
+                    </li>
+                </ul>
+            </div>
+            <div class="feature-showcase-visual">
+                <div class="dashboard-mockup">
+                    <div class="mockup-header">
+                        <div class="mockup-dots"><span></span><span></span><span></span></div>
+                        <span class="mockup-title">Compte de résultat</span>
+                    </div>
+                    <div class="mockup-body">
+                        <!-- Waterfall Chart -->
+                        <div class="waterfall-chart">
+                            <div class="waterfall-title">Formation du résultat net <span class="waterfall-unit">en M FCFA</span></div>
+                            <div class="waterfall-container">
+                                <div class="waterfall-bar-group">
+                                    <div class="waterfall-bar positive" style="height: 100%;">
+                                        <span class="waterfall-value">407.5</span>
+                                    </div>
+                                    <span class="waterfall-label">CA</span>
+                                </div>
+                                <div class="waterfall-bar-group">
+                                    <div class="waterfall-bar negative" style="height: 75%; margin-top: 25%;">
+                                        <span class="waterfall-value">-306.2</span>
+                                    </div>
+                                    <span class="waterfall-label">Achats</span>
+                                </div>
+                                <div class="waterfall-bar-group">
+                                    <div class="waterfall-bar subtotal" style="height: 25%;">
+                                        <span class="waterfall-value">101.3</span>
+                                    </div>
+                                    <span class="waterfall-label">Marge</span>
+                                </div>
+                                <div class="waterfall-bar-group">
+                                    <div class="waterfall-bar negative" style="height: 12%; margin-top: 13%;">
+                                        <span class="waterfall-value">-48.5</span>
+                                    </div>
+                                    <span class="waterfall-label">Charges</span>
+                                </div>
+                                <div class="waterfall-bar-group">
+                                    <div class="waterfall-bar subtotal" style="height: 13%;">
+                                        <span class="waterfall-value">52.8</span>
+                                    </div>
+                                    <span class="waterfall-label">EBE</span>
+                                </div>
+                                <div class="waterfall-bar-group">
+                                    <div class="waterfall-bar negative small" style="height: 3%; margin-top: 10%;">
+                                        <span class="waterfall-value">-12.1</span>
+                                    </div>
+                                    <span class="waterfall-label">Amort.</span>
+                                </div>
+                                <div class="waterfall-bar-group">
+                                    <div class="waterfall-bar result" style="height: 10%;">
+                                        <span class="waterfall-value">40.7</span>
+                                    </div>
+                                    <span class="waterfall-label">Résultat</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Mini table -->
+                        <div class="mockup-mini-table">
+                            <div class="mini-table-row header">
+                                <span>Soldes intermédiaires</span>
+                                <span>2024</span>
+                                <span>Var.</span>
+                            </div>
+                            <div class="mini-table-row">
+                                <span>Marge brute</span>
+                                <span>101.3 M</span>
+                                <span class="positive">+8.2%</span>
+                            </div>
+                            <div class="mini-table-row">
+                                <span>Valeur ajoutée</span>
+                                <span>78.5 M</span>
+                                <span class="positive">+5.1%</span>
+                            </div>
+                            <div class="mini-table-row">
+                                <span>EBE</span>
+                                <span>52.8 M</span>
+                                <span class="positive">+12.3%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature 3: Ratios Financiers -->
+    <section class="feature-showcase">
+        <div class="feature-showcase-container">
+            <div class="feature-showcase-content">
+                <div class="feature-showcase-badge" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.1)); color: #7c3aed;">Ratios financiers</div>
+                <h3 class="feature-showcase-title">20+ indicateurs calculés automatiquement</h3>
+                <p class="feature-showcase-description">
+                    Tous les ratios essentiels organisés par catégorie : rentabilité, liquidité, solvabilité, activité. Avec des jauges visuelles et des interprétations claires.
+                </p>
+                <ul class="feature-showcase-list">
+                    <li>
+                        <svg width="20" height="20" fill="none" stroke="var(--success)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Jauges de performance visuelles
+                    </li>
+                    <li>
+                        <svg width="20" height="20" fill="none" stroke="var(--success)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Interprétation automatique
+                    </li>
+                    <li>
+                        <svg width="20" height="20" fill="none" stroke="var(--success)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Graphique radar de synthèse
+                    </li>
+                </ul>
+            </div>
+            <div class="feature-showcase-visual">
+                <div class="dashboard-mockup">
+                    <div class="mockup-header">
+                        <div class="mockup-dots"><span></span><span></span><span></span></div>
+                        <span class="mockup-title">Ratios financiers</span>
+                    </div>
+                    <div class="mockup-body">
+                        <div class="ratios-grid">
+                            <!-- Ratio Cards -->
+                            <div class="ratio-card">
+                                <div class="ratio-header">
+                                    <span class="ratio-category">Rentabilité</span>
+                                </div>
+                                <div class="ratio-item">
+                                    <div class="ratio-info">
+                                        <span class="ratio-name">ROE</span>
+                                        <span class="ratio-value">18.5%</span>
+                                    </div>
+                                    <div class="ratio-gauge">
+                                        <div class="gauge-bg"></div>
+                                        <div class="gauge-fill" style="width: 75%; background: linear-gradient(90deg, #10b981, #059669);"></div>
+                                    </div>
+                                    <span class="ratio-status good">Excellent</span>
+                                </div>
+                                <div class="ratio-item">
+                                    <div class="ratio-info">
+                                        <span class="ratio-name">ROA</span>
+                                        <span class="ratio-value">12.3%</span>
+                                    </div>
+                                    <div class="ratio-gauge">
+                                        <div class="gauge-bg"></div>
+                                        <div class="gauge-fill" style="width: 62%; background: linear-gradient(90deg, #10b981, #059669);"></div>
+                                    </div>
+                                    <span class="ratio-status good">Bon</span>
+                                </div>
+                                <div class="ratio-item">
+                                    <div class="ratio-info">
+                                        <span class="ratio-name">Marge nette</span>
+                                        <span class="ratio-value">14.2%</span>
+                                    </div>
+                                    <div class="ratio-gauge">
+                                        <div class="gauge-bg"></div>
+                                        <div class="gauge-fill" style="width: 70%; background: linear-gradient(90deg, #10b981, #059669);"></div>
+                                    </div>
+                                    <span class="ratio-status good">Bon</span>
+                                </div>
+                            </div>
+                            <div class="ratio-card">
+                                <div class="ratio-header">
+                                    <span class="ratio-category">Liquidité</span>
+                                </div>
+                                <div class="ratio-item">
+                                    <div class="ratio-info">
+                                        <span class="ratio-name">Ratio courant</span>
+                                        <span class="ratio-value">1.85</span>
+                                    </div>
+                                    <div class="ratio-gauge">
+                                        <div class="gauge-bg"></div>
+                                        <div class="gauge-fill" style="width: 85%; background: linear-gradient(90deg, #10b981, #059669);"></div>
+                                    </div>
+                                    <span class="ratio-status good">Excellent</span>
+                                </div>
+                                <div class="ratio-item">
+                                    <div class="ratio-info">
+                                        <span class="ratio-name">Ratio rapide</span>
+                                        <span class="ratio-value">1.12</span>
+                                    </div>
+                                    <div class="ratio-gauge">
+                                        <div class="gauge-bg"></div>
+                                        <div class="gauge-fill" style="width: 56%; background: linear-gradient(90deg, #f59e0b, #d97706);"></div>
+                                    </div>
+                                    <span class="ratio-status medium">Correct</span>
+                                </div>
+                                <div class="ratio-item">
+                                    <div class="ratio-info">
+                                        <span class="ratio-name">Trésorerie</span>
+                                        <span class="ratio-value">0.45</span>
+                                    </div>
+                                    <div class="ratio-gauge">
+                                        <div class="gauge-bg"></div>
+                                        <div class="gauge-fill" style="width: 45%; background: linear-gradient(90deg, #f59e0b, #d97706);"></div>
+                                    </div>
+                                    <span class="ratio-status medium">À surveiller</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Radar Chart -->
+                        <div class="radar-chart-container">
+                            <svg class="radar-chart" viewBox="0 0 200 200">
+                                <!-- Background circles -->
+                                <circle cx="100" cy="100" r="80" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                <circle cx="100" cy="100" r="60" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                <circle cx="100" cy="100" r="40" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                <circle cx="100" cy="100" r="20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                <!-- Axes -->
+                                <line x1="100" y1="20" x2="100" y2="180" stroke="#e2e8f0"/>
+                                <line x1="20" y1="100" x2="180" y2="100" stroke="#e2e8f0"/>
+                                <line x1="35" y1="35" x2="165" y2="165" stroke="#e2e8f0"/>
+                                <line x1="165" y1="35" x2="35" y2="165" stroke="#e2e8f0"/>
+                                <!-- Data polygon -->
+                                <polygon points="100,30 160,60 170,100 145,150 55,150 30,100 40,60" 
+                                         fill="rgba(59, 130, 246, 0.2)" stroke="#3b82f6" stroke-width="2"/>
+                                <!-- Labels -->
+                                <text x="100" y="12" text-anchor="middle" font-size="9" fill="#64748b">Rentabilité</text>
+                                <text x="188" y="100" text-anchor="start" font-size="9" fill="#64748b">Liquidité</text>
+                                <text x="100" y="198" text-anchor="middle" font-size="9" fill="#64748b">Solvabilité</text>
+                                <text x="12" y="100" text-anchor="end" font-size="9" fill="#64748b">Activité</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature 4: Bilan -->
+    <section class="feature-showcase feature-showcase-reverse">
+        <div class="feature-showcase-container">
+            <div class="feature-showcase-content">
+                <div class="feature-showcase-badge" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1)); color: #d97706;">Bilan</div>
+                <h3 class="feature-showcase-title">Structure financière claire et visuelle</h3>
+                <p class="feature-showcase-description">
+                    Visualisez l'équilibre actif/passif de votre entreprise avec des graphiques proportionnels. Analysez le fonds de roulement et le BFR en un clin d'œil.
+                </p>
+                <ul class="feature-showcase-list">
+                    <li>
+                        <svg width="20" height="20" fill="none" stroke="var(--success)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Graphiques actif / passif
+                    </li>
+                    <li>
+                        <svg width="20" height="20" fill="none" stroke="var(--success)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Analyse FR / BFR / Trésorerie
+                    </li>
+                    <li>
+                        <svg width="20" height="20" fill="none" stroke="var(--success)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Format SYSCOHADA complet
+                    </li>
+                </ul>
+            </div>
+            <div class="feature-showcase-visual">
+                <div class="dashboard-mockup">
+                    <div class="mockup-header">
+                        <div class="mockup-dots"><span></span><span></span><span></span></div>
+                        <span class="mockup-title">Bilan</span>
+                    </div>
+                    <div class="mockup-body">
+                        <!-- Balance Sheet Visual -->
+                        <div class="balance-sheet-visual">
+                            <div class="bs-column">
+                                <div class="bs-header">ACTIF</div>
+                                <div class="bs-section" style="height: 30%; background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                                    <span class="bs-label">Immobilisations</span>
+                                    <span class="bs-value">245 M</span>
+                                </div>
+                                <div class="bs-section" style="height: 45%; background: linear-gradient(135deg, #60a5fa, #3b82f6);">
+                                    <span class="bs-label">Actif circulant</span>
+                                    <span class="bs-value">312 M</span>
+                                </div>
+                                <div class="bs-section" style="height: 25%; background: linear-gradient(135deg, #93c5fd, #60a5fa);">
+                                    <span class="bs-label">Trésorerie actif</span>
+                                    <span class="bs-value">58 M</span>
+                                </div>
+                            </div>
+                            <div class="bs-column">
+                                <div class="bs-header">PASSIF</div>
+                                <div class="bs-section" style="height: 40%; background: linear-gradient(135deg, #10b981, #059669);">
+                                    <span class="bs-label">Capitaux propres</span>
+                                    <span class="bs-value">315 M</span>
+                                </div>
+                                <div class="bs-section" style="height: 35%; background: linear-gradient(135deg, #34d399, #10b981);">
+                                    <span class="bs-label">Dettes financières</span>
+                                    <span class="bs-value">185 M</span>
+                                </div>
+                                <div class="bs-section" style="height: 25%; background: linear-gradient(135deg, #6ee7b7, #34d399);">
+                                    <span class="bs-label">Passif circulant</span>
+                                    <span class="bs-value">115 M</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- FR / BFR Analysis -->
+                        <div class="frbfr-analysis">
+                            <div class="frbfr-item">
+                                <span class="frbfr-label">Fonds de roulement</span>
+                                <span class="frbfr-value positive">+185 M</span>
+                                <div class="frbfr-bar positive" style="width: 75%;"></div>
+                            </div>
+                            <div class="frbfr-item">
+                                <span class="frbfr-label">BFR</span>
+                                <span class="frbfr-value">127 M</span>
+                                <div class="frbfr-bar neutral" style="width: 55%;"></div>
+                            </div>
+                            <div class="frbfr-item">
+                                <span class="frbfr-label">Trésorerie nette</span>
+                                <span class="frbfr-value positive">+58 M</span>
+                                <div class="frbfr-bar positive" style="width: 40%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature 5: Évolution Multi-années -->
+    <section class="feature-showcase">
+        <div class="feature-showcase-container">
+            <div class="feature-showcase-content">
+                <div class="feature-showcase-badge" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(8, 145, 178, 0.1)); color: #0891b2;">Évolution</div>
+                <h3 class="feature-showcase-title">Comparez jusqu'à 5 exercices</h3>
+                <p class="feature-showcase-description">
+                    Analysez les tendances de votre performance sur plusieurs années. Visualisez l'évolution de tous vos indicateurs avec des graphiques comparatifs.
+                </p>
+                <ul class="feature-showcase-list">
+                    <li>
+                        <svg width="20" height="20" fill="none" stroke="var(--success)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Graphiques d'évolution
+                    </li>
+                    <li>
+                        <svg width="20" height="20" fill="none" stroke="var(--success)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Tableaux comparatifs N/N-1/N-2...
+                    </li>
+                    <li>
+                        <svg width="20" height="20" fill="none" stroke="var(--success)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Calcul automatique des variations
+                    </li>
+                </ul>
+            </div>
+            <div class="feature-showcase-visual">
+                <div class="dashboard-mockup">
+                    <div class="mockup-header">
+                        <div class="mockup-dots"><span></span><span></span><span></span></div>
+                        <span class="mockup-title">Évolution multi-années</span>
+                    </div>
+                    <div class="mockup-body">
+                        <!-- Multi-year bars -->
+                        <div class="multiyear-chart">
+                            <div class="multiyear-title">Chiffre d'affaires (en M FCFA)</div>
+                            <div class="multiyear-bars">
+                                <div class="multiyear-bar-group">
+                                    <div class="multiyear-bar" style="height: 55%; background: linear-gradient(180deg, #94a3b8, #64748b);">
+                                        <span>285</span>
+                                    </div>
+                                    <span class="multiyear-year">2020</span>
+                                </div>
+                                <div class="multiyear-bar-group">
+                                    <div class="multiyear-bar" style="height: 65%; background: linear-gradient(180deg, #a5b4fc, #818cf8);">
+                                        <span>312</span>
+                                    </div>
+                                    <span class="multiyear-year">2021</span>
+                                </div>
+                                <div class="multiyear-bar-group">
+                                    <div class="multiyear-bar" style="height: 72%; background: linear-gradient(180deg, #93c5fd, #3b82f6);">
+                                        <span>348</span>
+                                    </div>
+                                    <span class="multiyear-year">2022</span>
+                                </div>
+                                <div class="multiyear-bar-group">
+                                    <div class="multiyear-bar" style="height: 82%; background: linear-gradient(180deg, #6ee7b7, #10b981);">
+                                        <span>385</span>
+                                    </div>
+                                    <span class="multiyear-year">2023</span>
+                                </div>
+                                <div class="multiyear-bar-group highlight">
+                                    <div class="multiyear-bar" style="height: 95%; background: linear-gradient(180deg, #3b82f6, #1d4ed8);">
+                                        <span>407</span>
+                                    </div>
+                                    <span class="multiyear-year">2024</span>
+                                </div>
+                            </div>
+                            <div class="multiyear-growth">
+                                <span>TCAM 5 ans:</span>
+                                <span class="growth-value">+9.3%</span>
+                            </div>
+                        </div>
+                        <!-- Evolution table -->
+                        <div class="evolution-table">
+                            <div class="evo-row header">
+                                <span>Indicateur</span>
+                                <span>2022</span>
+                                <span>2023</span>
+                                <span>2024</span>
+                                <span>Var.</span>
+                            </div>
+                            <div class="evo-row">
+                                <span>CA</span>
+                                <span>348 M</span>
+                                <span>385 M</span>
+                                <span>407 M</span>
+                                <span class="positive">+5.7%</span>
+                            </div>
+                            <div class="evo-row">
+                                <span>Résultat net</span>
+                                <span>42 M</span>
+                                <span>51 M</span>
+                                <span>58 M</span>
+                                <span class="positive">+13.7%</span>
+                            </div>
+                            <div class="evo-row">
+                                <span>Capitaux propres</span>
+                                <span>245 M</span>
+                                <span>280 M</span>
+                                <span>315 M</span>
+                                <span class="positive">+12.5%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature 6: Exports -->
+    <section class="feature-showcase feature-showcase-reverse" style="background: linear-gradient(180deg, var(--slate-50), white);">
+        <div class="feature-showcase-container">
+            <div class="feature-showcase-content">
+                <div class="feature-showcase-badge" style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(219, 39, 119, 0.1)); color: #db2777;">Exports</div>
+                <h3 class="feature-showcase-title">Rapports professionnels en 1 clic</h3>
+                <p class="feature-showcase-description">
+                    Exportez vos analyses dans tous les formats : PDF élégants, présentations PowerPoint prêtes à l'emploi, fichiers Excel pour vos calculs.
+                </p>
+                <ul class="feature-showcase-list">
+                    <li>
+                        <svg width="20" height="20" fill="none" stroke="var(--success)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        PDF avec mise en page pro
+                    </li>
+                    <li>
+                        <svg width="20" height="20" fill="none" stroke="var(--success)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        PowerPoint prêt à présenter
+                    </li>
+                    <li>
+                        <svg width="20" height="20" fill="none" stroke="var(--success)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Excel avec formules
+                    </li>
+                </ul>
+            </div>
+            <div class="feature-showcase-visual">
+                <div class="export-visual">
+                    <div class="export-card pdf">
+                        <div class="export-icon">
+                            <svg width="32" height="32" fill="white" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM6 20V4h6v6h6v10H6z"/><path d="M8 12h8v2H8v-2zm0 4h8v2H8v-2z"/></svg>
+                        </div>
+                        <span class="export-label">PDF</span>
+                        <span class="export-desc">Rapport complet</span>
+                    </div>
+                    <div class="export-card pptx">
+                        <div class="export-icon">
+                            <svg width="32" height="32" fill="white" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/><path d="M7 7h4v4H7V7zm0 6h10v2H7v-2zm6-6h4v2h-4V7zm0 4h4v2h-4v-2z"/></svg>
+                        </div>
+                        <span class="export-label">PowerPoint</span>
+                        <span class="export-desc">Présentation</span>
+                    </div>
+                    <div class="export-card xlsx">
+                        <div class="export-icon">
+                            <svg width="32" height="32" fill="white" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 2v3H5V5h14zM5 19v-9h6v9H5zm8 0v-9h6v9h-6z"/></svg>
+                        </div>
+                        <span class="export-label">Excel</span>
+                        <span class="export-desc">Données brutes</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="how-it-works">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-badge" style="background: rgba(255,255,255,0.1); color: white;">Comment ça marche</span>
+                <h2 class="section-title">Simple comme 1, 2, 3</h2>
+                <p class="section-description">
+                    De votre balance comptable à un rapport financier complet en quelques minutes
+                </p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Importez votre balance</h3>
+                    <p class="step-description">
+                        Glissez-déposez votre fichier Excel ou CSV. Findalyx reconnaît automatiquement le format.
+                    </p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Analysez en temps réel</h3>
+                    <p class="step-description">
+                        Bilans, comptes de résultat, ratios et graphiques sont générés instantanément.
+                    </p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Exportez et partagez</h3>
+                    <p class="step-description">
+                        Téléchargez vos rapports en PDF, PowerPoint ou Excel pour vos présentations.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-badge">Tarifs</span>
+                <h2 class="section-title">Des prix adaptés à vos besoins</h2>
+                <p class="section-description">
+                    Commencez gratuitement, évoluez selon votre croissance
+                </p>
+            </div>
+            <div class="pricing-toggle">
+                <span class="pricing-toggle-label active" id="monthlyLabel">Mensuel</span>
+                <div class="toggle-switch" id="pricingToggle" onclick="togglePricing()"></div>
+                <span class="pricing-toggle-label" id="yearlyLabel">Annuel</span>
+                <span class="pricing-badge">2 mois offerts</span>
+            </div>
+            <div class="pricing-grid">
+                <!-- Basic -->
+                <div class="pricing-card">
+                    <h3 class="pricing-name">Basic</h3>
+                    <p class="pricing-description">Pour découvrir Findalyx</p>
+                    <div class="pricing-price">
+                        <span class="pricing-amount">Gratuit</span>
+                        <span class="pricing-period">pendant 7 jours</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>
+                            <svg class="check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            1 entreprise
+                        </li>
+                        <li>
+                            <svg class="check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            1 année d'analyse
+                        </li>
+                        <li>
+                            <svg class="check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Tous les ratios financiers
+                        </li>
+                        <li class="disabled">
+                            <svg class="cross" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                            Export PDF / Excel
+                        </li>
+                        <li class="disabled">
+                            <svg class="cross" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                            Export PowerPoint
+                        </li>
+                    </ul>
+                    <button class="pricing-cta" onclick="window.location.href='/app'">Essayer gratuitement</button>
+                </div>
+
+                <!-- Pro -->
+                <div class="pricing-card popular">
+                    <div class="pricing-popular-tag">Plus populaire</div>
+                    <h3 class="pricing-name">Pro</h3>
+                    <p class="pricing-description">Pour les professionnels</p>
+                    <div class="pricing-price">
+                        <span class="pricing-amount" id="proPrice">22 000</span>
+                        <span class="pricing-currency">FCFA</span>
+                        <span class="pricing-period" id="proPeriod">/mois</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>
+                            <svg class="check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            10 entreprises
+                        </li>
+                        <li>
+                            <svg class="check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            5 années d'analyse
+                        </li>
+                        <li>
+                            <svg class="check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Tous les ratios financiers
+                        </li>
+                        <li>
+                            <svg class="check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Export PDF / Excel
+                        </li>
+                        <li class="disabled">
+                            <svg class="cross" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                            Export PowerPoint
+                        </li>
+                    </ul>
+                    <button class="pricing-cta" onclick="window.location.href='/app'">Commencer maintenant</button>
+                </div>
+
+                <!-- Business -->
+                <div class="pricing-card">
+                    <h3 class="pricing-name">Business</h3>
+                    <p class="pricing-description">Pour les grandes équipes</p>
+                    <div class="pricing-price">
+                        <span class="pricing-amount" id="businessPrice">34 000</span>
+                        <span class="pricing-currency">FCFA</span>
+                        <span class="pricing-period" id="businessPeriod">/mois</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>
+                            <svg class="check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Entreprises illimitées
+                        </li>
+                        <li>
+                            <svg class="check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Années illimitées
+                        </li>
+                        <li>
+                            <svg class="check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Tous les ratios financiers
+                        </li>
+                        <li>
+                            <svg class="check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Export PDF / Excel
+                        </li>
+                        <li>
+                            <svg class="check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Export PowerPoint
+                        </li>
+                    </ul>
+                    <button class="pricing-cta" onclick="window.location.href='/app'">Choisir Business</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="testimonials">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-badge">Témoignages</span>
+                <h2 class="section-title">Ce que disent nos clients</h2>
+                <p class="section-description">
+                    Découvrez comment Findalyx transforme le quotidien des professionnels de la finance
+                </p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <p class="testimonial-text">
+                        "Findalyx a révolutionné notre façon de présenter les analyses financières à nos clients. Les rapports sont professionnels et générés en quelques minutes."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">AD</div>
+                        <div>
+                            <div class="testimonial-name">Amadou Diallo</div>
+                            <div class="testimonial-role">Expert-Comptable, Dakar</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <p class="testimonial-text">
+                        "Enfin un outil adapté au référentiel SYSCOHADA ! Plus besoin de jongler entre Excel et des logiciels occidentaux. Findalyx comprend nos besoins."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">FK</div>
+                        <div>
+                            <div class="testimonial-name">Fatou Koné</div>
+                            <div class="testimonial-role">DAF, Abidjan</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <p class="testimonial-text">
+                        "L'analyse multi-années est incroyablement utile pour nos rapports d'audit. On gagne un temps précieux sur chaque mission."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">MT</div>
+                        <div>
+                            <div class="testimonial-name">Moussa Traoré</div>
+                            <div class="testimonial-role">Auditeur, Bamako</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-badge">FAQ</span>
+                <h2 class="section-title">Questions fréquentes</h2>
+                <p class="section-description">
+                    Tout ce que vous devez savoir sur Findalyx
+                </p>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        Quels formats de fichiers sont acceptés ?
+                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        Findalyx accepte les fichiers Excel (.xlsx, .xls) et CSV. Votre balance comptable doit contenir au minimum les colonnes : numéro de compte, libellé, débit et crédit.
+                    </div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        Est-ce conforme au référentiel SYSCOHADA ?
+                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        Oui, Findalyx est 100% conforme au référentiel SYSCOHADA révisé. Le plan comptable, les états financiers et tous les calculs respectent les normes OHADA.
+                    </div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        Mes données sont-elles sécurisées ?
+                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        Absolument. Vos données sont chiffrées et stockées sur des serveurs sécurisés. Nous ne partageons jamais vos informations avec des tiers.
+                    </div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        Puis-je annuler mon abonnement à tout moment ?
+                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        Oui, vous pouvez annuler votre abonnement à tout moment. Vous conserverez l'accès jusqu'à la fin de votre période de facturation.
+                    </div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        Comment fonctionne l'essai gratuit ?
+                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        L'essai gratuit dure 7 jours avec accès complet aux fonctionnalités de base. Aucune carte bancaire n'est requise pour commencer.
+                    </div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        Quels moyens de paiement acceptez-vous ?
+                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        Nous acceptons Wave, Orange Money, et les virements bancaires. Les paiements par carte seront bientôt disponibles.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="section-container">
+            <h2 class="cta-title">Prêt à transformer votre analyse financière ?</h2>
+            <p class="cta-description">
+                Rejoignez des centaines de professionnels qui utilisent Findalyx pour gagner du temps et impressionner leurs clients.
+            </p>
+            <div class="cta-actions">
+                <a href="/app" class="btn btn-white btn-lg">
+                    Commencer gratuitement
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="footer-logo-icon">
+                            <svg width="20" height="20" fill="none" stroke="white" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                        </div>
+                        <span class="footer-logo-text">Findalyx</span>
+                    </div>
+                    <p class="footer-tagline">
+                        La plateforme d'analyse financière intelligente conçue pour les entreprises africaines. Conforme SYSCOHADA.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="footer-title">Produit</h4>
+                    <ul class="footer-links">
+                        <li><a href="#features">Fonctionnalités</a></li>
+                        <li><a href="#pricing">Tarifs</a></li>
+                        <li><a href="/app">Connexion</a></li>
+                        <li><a href="/app">Inscription</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Ressources</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Guides</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Contact</h4>
+                    <ul class="footer-links">
+                        <li><a href="mailto:contact@findalyx.com">contact@findalyx.com</a></li>
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#">Mentions légales</a></li>
+                        <li><a href="#">Confidentialité</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">© 2025 Findalyx. Tous droits réservés.</p>
+                <div class="footer-socials">
+                    <a href="#" class="footer-social">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="footer-social">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Pricing toggle
+        let isYearly = false;
+        
+        function togglePricing() {
+            isYearly = !isYearly;
+            
+            document.getElementById('pricingToggle').classList.toggle('active', isYearly);
+            document.getElementById('monthlyLabel').classList.toggle('active', !isYearly);
+            document.getElementById('yearlyLabel').classList.toggle('active', isYearly);
+            
+            if (isYearly) {
+                document.getElementById('proPrice').textContent = '220 000';
+                document.getElementById('proPeriod').textContent = '/an';
+                document.getElementById('businessPrice').textContent = '340 000';
+                document.getElementById('businessPeriod').textContent = '/an';
+            } else {
+                document.getElementById('proPrice').textContent = '22 000';
+                document.getElementById('proPeriod').textContent = '/mois';
+                document.getElementById('businessPrice').textContent = '34 000';
+                document.getElementById('businessPeriod').textContent = '/mois';
+            }
+        }
+
+        // FAQ toggle
+        function toggleFaq(element) {
+            element.classList.toggle('open');
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
