@@ -313,6 +313,11 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
         /* Animated background */
         body::before {
             content: '';
@@ -5343,6 +5348,9 @@
     <!-- Toast Notifications Container -->
     <div class="toast-container" id="toastContainer"></div>
 
+    <!-- App Container (hidden when not logged in) -->
+    <div class="app-container" id="appContainer" style="display: none;">
+    
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
@@ -7168,6 +7176,8 @@
 
         </div>
     </main>
+    
+    </div><!-- End app-container -->
 
     <!-- =====================================================
          MODALES UTILISATEUR
@@ -12138,7 +12148,12 @@ td, th { mso-number-format:"\\@"; }
         // =====================================================
         
         // Initialize Supabase client
-        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let supabaseClient;
+        try {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        } catch (e) {
+            console.error('Supabase init error:', e);
+        }
         
         // Current user state
         let currentUser = null;
@@ -12151,10 +12166,17 @@ td, th { mso-number-format:"\\@"; }
             showLoading(true);
             
             try {
-                // Check for existing session
-                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (!supabaseClient) {
+                    throw new Error('Supabase not initialized');
+                }
                 
-                if (session) {
+                // Check for existing session
+                const { data: { session }, error } = await supabaseClient.auth.getSession();
+                
+                if (error) {
+                    console.error('Session error:', error);
+                    showAuth();
+                } else if (session) {
                     currentUser = session.user;
                     await loadUserProfile();
                     showApp();
@@ -12674,18 +12696,25 @@ td, th { mso-number-format:"\\@"; }
         
         // Show/hide views
         function showAuth() {
-            document.getElementById('authContainer').style.display = 'flex';
-            document.querySelector('.app-container').style.display = 'none';
+            const authContainer = document.getElementById('authContainer');
+            const appContainer = document.getElementById('appContainer');
+            if (authContainer) authContainer.style.display = 'flex';
+            if (appContainer) appContainer.style.display = 'none';
         }
         
         function showApp() {
-            document.getElementById('authContainer').style.display = 'none';
-            document.querySelector('.app-container').style.display = 'flex';
+            const authContainer = document.getElementById('authContainer');
+            const appContainer = document.getElementById('appContainer');
+            if (authContainer) authContainer.style.display = 'none';
+            if (appContainer) appContainer.style.display = 'flex';
             applyPlanRestrictions();
         }
         
         function showLoading(show) {
-            document.getElementById('loadingOverlay').classList.toggle('hidden', !show);
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.classList.toggle('hidden', !show);
+            }
         }
         
         // =====================================================
