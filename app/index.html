@@ -12202,12 +12202,12 @@ td, th { mso-number-format:"\\@"; }
         async function initApp() {
             showLoading(true);
             
-            // Timeout de sécurité - masquer le loading après 10 secondes max
+            // Timeout de sécurité - masquer le loading après 3 secondes max
             const loadingTimeout = setTimeout(() => {
                 console.warn('Loading timeout - forcing hide');
                 showLoading(false);
                 showAuth();
-            }, 10000);
+            }, 3000);
             
             try {
                 if (!supabaseClient) {
@@ -12224,19 +12224,22 @@ td, th { mso-number-format:"\\@"; }
                     showAuth();
                 } else if (session) {
                     currentUser = session.user;
-                    await loadUserProfile();
-                    checkAdminAccess();
+                    // Afficher l'app IMMEDIATEMENT, charger les données après
                     showApp();
+                    checkAdminAccess();
+                    showLoading(false);
+                    // Charger les données en arrière-plan (non-bloquant)
+                    loadUserProfile().catch(console.error);
                 } else {
                     showAuth();
+                    showLoading(false);
                 }
             } catch (error) {
                 console.error('Init error:', error);
                 clearTimeout(loadingTimeout);
                 showAuth();
+                showLoading(false);
             }
-            
-            showLoading(false);
         }
         
         // Auth state change listener
@@ -12245,9 +12248,10 @@ td, th { mso-number-format:"\\@"; }
             
             if (event === 'SIGNED_IN' && session) {
                 currentUser = session.user;
-                await loadUserProfile();
-                checkAdminAccess();
                 showApp();
+                checkAdminAccess();
+                // Charger les données en arrière-plan
+                loadUserProfile().catch(console.error);
             } else if (event === 'SIGNED_OUT') {
                 currentUser = null;
                 userProfile = null;
@@ -12260,32 +12264,56 @@ td, th { mso-number-format:"\\@"; }
             if (!currentUser) return;
             
             try {
-                // Get profile with timeout
-                const profilePromise = supabaseClient
-                    .from('profiles')
-                    .select('*')
-                    .eq('id', currentUser.id)
-                    .single();
+                // Charger profile, settings et data EN PARALLÈLE
+                const [profileResult, settingsResult, companiesResult] = await Promise.all([
+                    supabaseClient.from('profiles').select('*').eq('id', currentUser.id).single(),
+                    supabaseClient.from('user_settings').select('*').eq('user_id', currentUser.id).single(),
+                    supabaseClient.from('companies').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false })
+                ]);
                 
-                const timeoutPromise = new Promise((_, reject) => 
-                    setTimeout(() => reject(new Error('Profile load timeout')), 8000)
-                );
+                // Process profile
+                if (profileResult.data) {
+                    userProfile = profileResult.data;
+                    userPlan = getActivePlan(profileResult.data);
+                    updateUserUI();
+                }
                 
-                const { data: profile, error } = await Promise.race([profilePromise, timeoutPromise]);
+                // Process settings
+                if (settingsResult.data) {
+                    if (settingsResult.data.objectives) {
+                        localStorage.setItem('findalyx_objectives', JSON.stringify(settingsResult.data.objectives));
+                        loadObjectives();
+                    }
+                    if (settingsResult.data.account_mapping && Object.keys(settingsResult.data.account_mapping).length > 0) {
+                        accountMapping = settingsResult.data.account_mapping;
+                    }
+                }
                 
-                if (error) throw error;
-                
-                userProfile = profile;
-                userPlan = getActivePlan(profile);
-                
-                // Update UI with user info
-                updateUserUI();
-                
-                // Load user settings
-                await loadUserSettings();
-                
-                // Load saved companies and data
-                await loadUserData();
+                // Process companies and financial data
+                if (companiesResult.data && companiesResult.data.length > 0) {
+                    const { data: financialData } = await supabaseClient
+                        .from('financial_data')
+                        .select('*')
+                        .eq('user_id', currentUser.id)
+                        .order('year', { ascending: false });
+                    
+                    if (financialData && financialData.length > 0) {
+                        yearsData = {};
+                        financialData.forEach(fd => {
+                            yearsData[fd.year] = fd.data;
+                        });
+                        
+                        const years = Object.keys(yearsData).sort((a, b) => b - a);
+                        if (years.length > 0) {
+                            currentYear = years[0];
+                            loadFinancialData(yearsData[currentYear]);
+                        }
+                    }
+                    
+                    if (companiesResult.data[0].name) {
+                        document.getElementById('companyName').value = companiesResult.data[0].name;
+                    }
+                }
                 
             } catch (error) {
                 console.error('Error loading profile:', error);
