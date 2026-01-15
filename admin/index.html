@@ -1422,7 +1422,7 @@
             showLoading(true);
             
             try {
-                const { data: users, error } = await supabase
+                const { data: users, error } = await supabaseClient
                     .from('profiles')
                     .select('*')
                     .order('created_at', { ascending: false });
@@ -1702,7 +1702,7 @@
             subscriptionEnds.setMonth(subscriptionEnds.getMonth() + duration);
             
             try {
-                const { error } = await supabase
+                const { error } = await supabaseClient
                     .from('profiles')
                     .update({
                         plan: plan,
@@ -1736,7 +1736,7 @@
         async function confirmDelete() {
             try {
                 // Delete profile
-                const { error } = await supabase
+                const { error } = await supabaseClient
                     .from('profiles')
                     .delete()
                     .eq('id', selectedUserId);
