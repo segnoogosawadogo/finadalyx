@@ -7908,6 +7908,11 @@
                     currentYear = year;
                     window.financialData = data;
                     
+                    // SAUVEGARDER IMMÉDIATEMENT DANS LOCALSTORAGE
+                    localStorage.setItem('findalyx_yearsData', JSON.stringify(yearsData));
+                    localStorage.setItem('findalyx_currentYear', currentYear);
+                    console.log('Data saved to localStorage');
+                    
                     loadFinancialData(data);
                     updateYearsBadges();
                     updateEvolutionChart();
@@ -7918,7 +7923,7 @@
                         await saveFileToStorage(file, year, arrayBuffer);
                     }
                     
-                    // Sauvegarder les données financières
+                    // Sauvegarder les données financières dans Supabase
                     if (currentUser) {
                         saveFinancialData(year, data);
                     }
@@ -8288,6 +8293,13 @@
             try {
                 showNotification('Réinitialisation en cours...', 'info');
                 
+                // VIDER LE LOCALSTORAGE
+                localStorage.removeItem('findalyx_yearsData');
+                localStorage.removeItem('findalyx_currentYear');
+                localStorage.removeItem('findalyx_companyName');
+                localStorage.removeItem('findalyx_companyLogo');
+                console.log('localStorage cleared');
+                
                 if (currentUser) {
                     // Supprimer les données financières
                     await supabaseClient
@@ -8383,45 +8395,25 @@
             try {
                 showNotification('Upload en cours...', 'info');
                 
-                // Afficher preview immédiatement
+                // Afficher preview immédiatement ET sauvegarder dans localStorage
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const logoPreview = document.getElementById('companyLogoPreview');
                     logoPreview.innerHTML = `<img src="${e.target.result}" alt="Logo">`;
                     logoPreview.classList.add('has-logo');
+                    
+                    // Sauvegarder dans localStorage
+                    localStorage.setItem('findalyx_companyLogo', e.target.result);
+                    console.log('Logo saved to localStorage');
+                    
+                    showNotification('Logo mis à jour !', 'success');
                 };
                 reader.readAsDataURL(file);
                 
-                if (!currentUser) return;
-                
-                // Upload vers Supabase Storage
-                const fileName = `${currentUser.id}/company-logo.${file.name.split('.').pop()}`;
-                
-                const { data, error } = await supabaseClient.storage
-                    .from('company-logos')
-                    .upload(fileName, file, {
-                        cacheControl: '3600',
-                        upsert: true
-                    });
-                
-                if (error) {
-                    console.error('Erreur upload logo:', error);
-                    // Sauvegarder en base64 en fallback
+                // Sauvegarder aussi dans Supabase si connecté
+                if (currentUser) {
                     await saveCompanyLogoBase64(file);
-                    return;
                 }
-                
-                // Sauvegarder l'URL dans le profil
-                const { data: { publicUrl } } = supabaseClient.storage
-                    .from('company-logos')
-                    .getPublicUrl(fileName);
-                
-                await supabaseClient
-                    .from('companies')
-                    .update({ logo_url: publicUrl })
-                    .eq('user_id', currentUser.id);
-                
-                showNotification('Logo mis à jour !', 'success');
                 
             } catch (error) {
                 console.error('Erreur:', error);
@@ -8644,6 +8636,8 @@
             const companyNameDisplay = document.getElementById('companyNameDisplay');
             if (companyNameInput && companyNameDisplay) {
                 companyNameDisplay.textContent = companyNameInput.value || 'Mon Entreprise';
+                // Sauvegarder dans localStorage
+                localStorage.setItem('findalyx_companyName', companyNameInput.value || 'Mon Entreprise');
             }
         }
 
@@ -13419,7 +13413,47 @@ td, th { mso-number-format:"\\@"; }
             if (!currentUser) return;
             
             try {
-                // Charger profile, settings et data EN PARALLÈLE
+                // D'ABORD: Charger depuis localStorage (instantané)
+                const localYearsData = localStorage.getItem('findalyx_yearsData');
+                const localCurrentYear = localStorage.getItem('findalyx_currentYear');
+                const localCompanyName = localStorage.getItem('findalyx_companyName');
+                const localCompanyLogo = localStorage.getItem('findalyx_companyLogo');
+                
+                if (localYearsData && localCurrentYear) {
+                    console.log('Loading from localStorage...');
+                    yearsData = JSON.parse(localYearsData);
+                    currentYear = localCurrentYear;
+                    window.financialData = yearsData[currentYear];
+                    
+                    loadFinancialData(yearsData[currentYear]);
+                    updateYearsBadges();
+                    
+                    // Afficher le dashboard
+                    const uploadSection = document.getElementById('uploadSection');
+                    const dashboardContent = document.getElementById('dashboardContent');
+                    if (uploadSection) uploadSection.style.display = 'none';
+                    if (dashboardContent) dashboardContent.style.display = 'block';
+                    
+                    console.log('Data loaded from localStorage, years:', Object.keys(yearsData));
+                }
+                
+                // Charger le nom et logo depuis localStorage
+                if (localCompanyName) {
+                    const nameInput = document.getElementById('companyName');
+                    const nameDisplay = document.getElementById('companyNameDisplay');
+                    if (nameInput) nameInput.value = localCompanyName;
+                    if (nameDisplay) nameDisplay.textContent = localCompanyName;
+                }
+                
+                if (localCompanyLogo) {
+                    const logoPreview = document.getElementById('companyLogoPreview');
+                    if (logoPreview) {
+                        logoPreview.innerHTML = `<img src="${localCompanyLogo}" alt="Logo">`;
+                        logoPreview.classList.add('has-logo');
+                    }
+                }
+                
+                // ENSUITE: Charger depuis Supabase en arrière-plan
                 const [profileResult, settingsResult, companiesResult] = await Promise.all([
                     supabaseClient.from('profiles').select('*').eq('id', currentUser.id).single(),
                     supabaseClient.from('user_settings').select('*').eq('user_id', currentUser.id).single(),
