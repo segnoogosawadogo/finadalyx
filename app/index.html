@@ -5903,7 +5903,7 @@
             <div class="user-dropdown" id="userDropdown">
                 <div class="user-dropdown-header">
                     <div class="user-name">Utilisateur</div>
-                    <div class="user-email user-email-display">email@exemple.com</div>
+                    <div class="user-email user-email-display"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="640109050d0824011c01091408014a070b09">[email&#160;protected]</a></div>
                     <span class="plan-badge basic user-plan-badge">Essai</span>
                 </div>
                 <div class="user-dropdown-menu">
@@ -8011,7 +8011,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                         </svg>
                         <h4>Email</h4>
-                        <p>support@findalyx.com</p>
+                        <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="572422272738252317313e3933363b2e2f7934383a">[email&#160;protected]</a></p>
                     </div>
                     <div class="contact-card" onclick="window.open('https://wa.me/221771234567')">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -8028,7 +8028,7 @@
         </div>
     </div>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // ========== MULTI-YEAR DATA STORAGE ==========
         let yearsData = {}; // { year: financialData }
         let currentYear = null;
@@ -11371,16 +11371,31 @@ td, th { mso-number-format:"\\@"; }
                     <th style="background-color:#1E40AF;color:white;font-weight:bold;">Benchmark</th>
                     <th style="background-color:#1E40AF;color:white;font-weight:bold;text-align:center;">Statut</th>
                 </tr>`;
+                
+                // Calculs des ratios additionnels
+                const ratioEndettement = data.totalPassif > 0 ? ((data.totalDetteFin + data.passifCirculant) / data.totalPassif * 100) : 0;
+                const delaiClients = data.ca > 0 ? Math.round((data.clients || 0) / (data.ca / 365)) : 0;
+                const delaiFournisseurs = data.achats > 0 ? Math.round((data.fournisseurs || 0) / (data.achats / 365)) : 0;
+                const rotationStocks = data.achats > 0 ? Math.round((data.stocks || 0) / (data.achats / 365)) : 0;
+                const autonomieFinanciere = data.totalPassif > 0 ? (data.capitauxPropres / data.totalPassif * 100) : 0;
+                const gearing = data.capitauxPropres > 0 ? (data.totalDetteFin / data.capitauxPropres * 100) : 0;
+                
                 const ratiosData = [
-                    ['Profitabilité', 'Marge Brute', data.margeBrutePct.toFixed(1) + '%', '> 20%', data.margeBrutePct > 20],
-                    ['Profitabilité', 'Marge EBITDA', data.margeEbitda.toFixed(1) + '%', '> 15%', data.margeEbitda > 15],
-                    ['Profitabilité', 'Marge Nette', data.margeNette.toFixed(1) + '%', '> 5%', data.margeNette > 5],
-                    ['Rentabilité', 'ROE', data.roe.toFixed(1) + '%', '> 15%', data.roe > 15],
-                    ['Rentabilité', 'ROA', data.roi.toFixed(1) + '%', '> 5%', data.roi > 5],
-                    ['Liquidité', 'Current Ratio', data.currentRatio.toFixed(2), '> 1.5', data.currentRatio > 1.5],
-                    ['Liquidité', 'Quick Ratio', data.quickRatio.toFixed(2), '> 1', data.quickRatio > 1],
-                    ['Liquidité', 'BFR (jours)', data.bfrJours + 'j', '< 60j', data.bfrJours < 60],
-                    ['Solvabilité', 'Dette Nette/EBITDA', data.netDebtEbitda.toFixed(1) + 'x', '< 3x', data.netDebtEbitda < 3]
+                    ['Profitabilité', 'Marge Brute', (data.margeBrutePct || 0).toFixed(1) + '%', '> 20%', (data.margeBrutePct || 0) > 20],
+                    ['Profitabilité', 'Marge EBITDA', (data.margeEbitda || 0).toFixed(1) + '%', '> 15%', (data.margeEbitda || 0) > 15],
+                    ['Profitabilité', 'Marge Nette', (data.margeNette || 0).toFixed(1) + '%', '> 5%', (data.margeNette || 0) > 5],
+                    ['Rentabilité', 'ROE', (data.roe || 0).toFixed(1) + '%', '> 15%', (data.roe || 0) > 15],
+                    ['Rentabilité', 'ROA', (data.roi || 0).toFixed(1) + '%', '> 5%', (data.roi || 0) > 5],
+                    ['Liquidité', 'Current Ratio', (data.currentRatio || 0).toFixed(2), '> 1.5', (data.currentRatio || 0) > 1.5],
+                    ['Liquidité', 'Quick Ratio', (data.quickRatio || 0).toFixed(2), '> 1', (data.quickRatio || 0) > 1],
+                    ['Solvabilité', 'Ratio d\'endettement', ratioEndettement.toFixed(1) + '%', '< 60%', ratioEndettement < 60],
+                    ['Solvabilité', 'Autonomie financière', autonomieFinanciere.toFixed(1) + '%', '> 40%', autonomieFinanciere > 40],
+                    ['Solvabilité', 'Gearing', gearing.toFixed(1) + '%', '< 100%', gearing < 100],
+                    ['Solvabilité', 'Dette Nette/EBITDA', (data.netDebtEbitda || 0).toFixed(1) + 'x', '< 3x', (data.netDebtEbitda || 0) < 3],
+                    ['Activité', 'BFR (jours CA)', (data.bfrJours || 0) + 'j', '< 45j', (data.bfrJours || 0) < 45],
+                    ['Activité', 'Délai clients', delaiClients + 'j', '< 45j', delaiClients < 45],
+                    ['Activité', 'Délai fournisseurs', delaiFournisseurs + 'j', '30-60j', delaiFournisseurs >= 30 && delaiFournisseurs <= 60],
+                    ['Activité', 'Rotation stocks', rotationStocks + 'j', '< 60j', rotationStocks < 60]
                 ];
                 ratiosData.forEach(r => {
                     const statusColor = r[4] ? '#10B981' : '#EF4444';
@@ -11817,17 +11832,30 @@ td, th { mso-number-format:"\\@"; }
                 return;
             } else if (type === 'ratios') {
                 title = 'Ratios Financiers - ' + currentYear;
+                
+                // Calculs des ratios additionnels
+                const ratioEndettement = data.totalPassif > 0 ? ((data.totalDetteFin + data.passifCirculant) / data.totalPassif * 100) : 0;
+                const delaiClients = data.ca > 0 ? Math.round((data.clients || 0) / (data.ca / 365)) : 0;
+                const delaiFournisseurs = data.achats > 0 ? Math.round((data.fournisseurs || 0) / (data.achats / 365)) : 0;
+                const rotationStocks = data.achats > 0 ? Math.round((data.stocks || 0) / (data.achats / 365)) : 0;
+                const autonomieFinanciere = data.totalPassif > 0 ? (data.capitauxPropres / data.totalPassif * 100) : 0;
+                
                 headers = [['Catégorie', 'Ratio', 'Valeur', 'Benchmark', 'Statut']];
                 tableData = [
-                    ['Profitabilité', 'Marge Brute', data.margeBrutePct.toFixed(1) + '%', '> 20%', data.margeBrutePct > 20 ? '✓' : '⚠'],
-                    ['Profitabilité', 'Marge EBITDA', data.margeEbitda.toFixed(1) + '%', '> 15%', data.margeEbitda > 15 ? '✓' : '⚠'],
-                    ['Profitabilité', 'Marge Nette', data.margeNette.toFixed(1) + '%', '> 5%', data.margeNette > 5 ? '✓' : '⚠'],
-                    ['Rentabilité', 'ROE', data.roe.toFixed(1) + '%', '> 15%', data.roe > 15 ? '✓' : '⚠'],
-                    ['Rentabilité', 'ROA', data.roi.toFixed(1) + '%', '> 5%', data.roi > 5 ? '✓' : '⚠'],
-                    ['Liquidité', 'Current Ratio', data.currentRatio.toFixed(2), '> 1.5', data.currentRatio > 1.5 ? '✓' : '⚠'],
-                    ['Liquidité', 'Quick Ratio', data.quickRatio.toFixed(2), '> 1', data.quickRatio > 1 ? '✓' : '⚠'],
-                    ['Liquidité', 'BFR (jours CA)', data.bfrJours + 'j', '< 60j', data.bfrJours < 60 ? '✓' : '⚠'],
-                    ['Solvabilité', 'Dette Nette/EBITDA', data.netDebtEbitda.toFixed(1) + 'x', '< 3x', data.netDebtEbitda < 3 ? '✓' : '⚠']
+                    ['Profitabilité', 'Marge Brute', (data.margeBrutePct || 0).toFixed(1) + '%', '> 20%', (data.margeBrutePct || 0) > 20 ? '✓' : '⚠'],
+                    ['Profitabilité', 'Marge EBITDA', (data.margeEbitda || 0).toFixed(1) + '%', '> 15%', (data.margeEbitda || 0) > 15 ? '✓' : '⚠'],
+                    ['Profitabilité', 'Marge Nette', (data.margeNette || 0).toFixed(1) + '%', '> 5%', (data.margeNette || 0) > 5 ? '✓' : '⚠'],
+                    ['Rentabilité', 'ROE', (data.roe || 0).toFixed(1) + '%', '> 15%', (data.roe || 0) > 15 ? '✓' : '⚠'],
+                    ['Rentabilité', 'ROA', (data.roi || 0).toFixed(1) + '%', '> 5%', (data.roi || 0) > 5 ? '✓' : '⚠'],
+                    ['Liquidité', 'Current Ratio', (data.currentRatio || 0).toFixed(2), '> 1.5', (data.currentRatio || 0) > 1.5 ? '✓' : '⚠'],
+                    ['Liquidité', 'Quick Ratio', (data.quickRatio || 0).toFixed(2), '> 1', (data.quickRatio || 0) > 1 ? '✓' : '⚠'],
+                    ['Solvabilité', 'Ratio d\'endettement', ratioEndettement.toFixed(1) + '%', '< 60%', ratioEndettement < 60 ? '✓' : '⚠'],
+                    ['Solvabilité', 'Autonomie financière', autonomieFinanciere.toFixed(1) + '%', '> 40%', autonomieFinanciere > 40 ? '✓' : '⚠'],
+                    ['Solvabilité', 'Dette Nette/EBITDA', (data.netDebtEbitda || 0).toFixed(1) + 'x', '< 3x', (data.netDebtEbitda || 0) < 3 ? '✓' : '⚠'],
+                    ['Activité', 'BFR (jours CA)', (data.bfrJours || 0) + 'j', '< 45j', (data.bfrJours || 0) < 45 ? '✓' : '⚠'],
+                    ['Activité', 'Délai clients', delaiClients + 'j', '< 45j', delaiClients < 45 ? '✓' : '⚠'],
+                    ['Activité', 'Délai fournisseurs', delaiFournisseurs + 'j', '30-60j', (delaiFournisseurs >= 30 && delaiFournisseurs <= 60) ? '✓' : '⚠'],
+                    ['Activité', 'Rotation stocks', rotationStocks + 'j', '< 60j', rotationStocks < 60 ? '✓' : '⚠']
                 ];
             } else if (type === 'cashflow') {
                 // Cash Flow complet avec N-1 si disponible
@@ -12837,13 +12865,13 @@ td, th { mso-number-format:"\\@"; }
             slide.addText('04  Structure Bilancielle', { x: 0.5, y: 0.3, w: 9, h: 0.7, fontSize: 28, bold: true, color: colors.dark, fontFace: 'Arial' });
             slide.addShape(pptx.ShapeType.rect, { x: 0.5, y: 0.95, w: 2, h: 0.05, fill: { color: colors.primary } });
             
-            // Actif
+            // Actif - Utiliser les vraies clés du parser
             slide.addText('ACTIF', { x: 0.5, y: 1.2, w: 4, h: 0.4, fontSize: 14, bold: true, color: colors.secondary, fontFace: 'Arial' });
             const actifItems = [
-                ['Actif Immobilisé', fmtM(data.actifImmobilise || 0)],
+                ['Actif Immobilisé', fmtM(data.immoNet || 0)],
                 ['Actif Circulant', fmtM(data.actifCirculant || 0)],
-                ['Trésorerie Actif', fmtM(data.tresorerieActif || 0)],
-                ['TOTAL ACTIF', fmtM((data.actifImmobilise || 0) + (data.actifCirculant || 0) + (data.tresorerieActif || 0))]
+                ['Trésorerie Actif', fmtM(data.tresoActif || 0)],
+                ['TOTAL ACTIF', fmtM(data.totalActif || 0)]
             ];
             slide.addTable(actifItems, {
                 x: 0.5, y: 1.6, w: 4.2,
@@ -12852,13 +12880,14 @@ td, th { mso-number-format:"\\@"; }
                 colW: [2.8, 1.4], rowH: 0.4
             });
             
-            // Passif
+            // Passif - Utiliser les vraies clés du parser
             slide.addText('PASSIF', { x: 5.3, y: 1.2, w: 4, h: 0.4, fontSize: 14, bold: true, color: colors.success, fontFace: 'Arial' });
             const passifItems = [
                 ['Capitaux Propres', fmtM(data.capitauxPropres || 0)],
-                ['Dettes Long Terme', fmtM(data.dettesLT || 0)],
-                ['Dettes Court Terme', fmtM(data.dettesCT || 0)],
-                ['TOTAL PASSIF', fmtM((data.capitauxPropres || 0) + (data.dettesLT || 0) + (data.dettesCT || 0))]
+                ['Dettes Financières', fmtM(data.totalDetteFin || 0)],
+                ['Provisions Risques', fmtM(data.provisionsRisques || 0)],
+                ['Passif Circulant', fmtM(data.passifCirculant || 0)],
+                ['TOTAL PASSIF', fmtM(data.totalPassif || 0)]
             ];
             slide.addTable(passifItems, {
                 x: 5.3, y: 1.6, w: 4.2,
@@ -12867,19 +12896,19 @@ td, th { mso-number-format:"\\@"; }
                 colW: [2.8, 1.4], rowH: 0.4
             });
             
-            // Équilibre financier
-            slide.addText('Équilibre Financier', { x: 0.5, y: 3.6, w: 9, h: 0.4, fontSize: 14, bold: true, color: colors.dark, fontFace: 'Arial' });
-            const frng = (data.capitauxPropres || 0) + (data.dettesLT || 0) - (data.actifImmobilise || 0);
-            const bfr = (data.actifCirculant || 0) - (data.dettesCT || 0);
-            const tresoNette = frng - bfr;
+            // Équilibre financier - Utiliser les vraies clés
+            slide.addText('Équilibre Financier', { x: 0.5, y: 3.8, w: 9, h: 0.4, fontSize: 14, bold: true, color: colors.dark, fontFace: 'Arial' });
+            const frng = (data.capitauxPropres || 0) + (data.totalDetteFin || 0) + (data.provisionsRisques || 0) - (data.immoNet || 0);
+            const bfrCalc = data.bfr || ((data.actifCirculant || 0) - (data.passifCirculant || 0) + (data.tresoPassif || 0));
+            const tresoNetteCalc = (data.tresoActif || 0) - (data.tresoPassif || 0);
             
             const equilibreData = [
                 ['Fonds de Roulement (FRNG)', fmtM(frng), frng >= 0 ? '✓ Positif' : '⚠ Négatif'],
-                ['Besoin en Fonds de Roulement', fmtM(bfr), ''],
-                ['Trésorerie Nette', fmtM(tresoNette), tresoNette >= 0 ? '✓ Excédentaire' : '⚠ Déficitaire']
+                ['Besoin en Fonds de Roulement', fmtM(bfrCalc), ''],
+                ['Trésorerie Nette', fmtM(tresoNetteCalc), tresoNetteCalc >= 0 ? '✓ Excédentaire' : '⚠ Déficitaire']
             ];
             slide.addTable(equilibreData, {
-                x: 0.5, y: 4, w: 9,
+                x: 0.5, y: 4.2, w: 9,
                 fontFace: 'Arial', fontSize: 11, color: colors.dark,
                 border: { pt: 0.5, color: 'e2e8f0' },
                 colW: [5, 2, 2], rowH: 0.4
@@ -12891,6 +12920,9 @@ td, th { mso-number-format:"\\@"; }
             slide.addShape(pptx.ShapeType.rect, { x: 0.5, y: 0.95, w: 2, h: 0.05, fill: { color: colors.primary } });
             
             const obj = getObjectives();
+            // Calcul du ratio d'endettement correct
+            const ratioEndettementCalc = data.totalPassif > 0 ? ((data.totalDetteFin + data.passifCirculant) / data.totalPassif * 100) : 0;
+            
             const ratiosTable = [
                 ['Catégorie', 'Ratio', 'Valeur', 'Objectif', 'Statut'],
                 ['Profitabilité', 'Marge Brute', fmtPct(data.margeBrutePct || 0), `≥ ${obj.margeBrute}%`, (data.margeBrutePct || 0) >= obj.margeBrute ? '✓' : '✗'],
@@ -12899,7 +12931,7 @@ td, th { mso-number-format:"\\@"; }
                 ['Rentabilité', 'ROE', fmtPct(data.roe || 0), `≥ ${obj.roe}%`, (data.roe || 0) >= obj.roe ? '✓' : '✗'],
                 ['Rentabilité', 'ROA', fmtPct(data.roi || 0), `≥ ${obj.roa}%`, (data.roi || 0) >= obj.roa ? '✓' : '✗'],
                 ['Liquidité', 'Current Ratio', (data.currentRatio || 0).toFixed(2), `≥ ${obj.currentRatio}`, (data.currentRatio || 0) >= obj.currentRatio ? '✓' : '✗'],
-                ['Solvabilité', 'Endettement', fmtPct(data.ratioEndettement || 0), `≤ ${obj.endettement}%`, (data.ratioEndettement || 0) <= obj.endettement ? '✓' : '✗'],
+                ['Solvabilité', 'Endettement', fmtPct(ratioEndettementCalc), `≤ ${obj.endettement}%`, ratioEndettementCalc <= obj.endettement ? '✓' : '✗'],
                 ['Activité', 'BFR (jours)', `${data.bfrJours || 0}j`, `≤ ${obj.bfr}j`, (data.bfrJours || 0) <= obj.bfr ? '✓' : '✗']
             ];
             
@@ -13055,6 +13087,7 @@ td, th { mso-number-format:"\\@"; }
             pptx.title = `${pageType.toUpperCase()} - ${currentYear}`;
             
             const data = yearsData[currentYear];
+            const companyName = document.getElementById('companyName')?.value || 'Mon Entreprise';
             const fmtMrd = n => new Intl.NumberFormat('fr-FR', {maximumFractionDigits: 1}).format((n || 0) / 1000000000);
             const fmtM = n => new Intl.NumberFormat('fr-FR', {maximumFractionDigits: 0}).format((n || 0) / 1000000);
             
@@ -13087,7 +13120,7 @@ td, th { mso-number-format:"\\@"; }
             
             // Content slides based on page type
             if (pageType === 'pnl') {
-                // P&L Slide
+                // P&L Slide - Utiliser les vraies clés du parser SYSCOHADA
                 slide = pptx.addSlide();
                 slide.addText('Compte de Résultat', { x: 0.5, y: 0.3, w: 9, h: 0.6, fontSize: 28, bold: true, color: '1e293b' });
                 
@@ -13095,46 +13128,57 @@ td, th { mso-number-format:"\\@"; }
                     ['Libellé', 'Montant (M FCFA)'],
                     ['Chiffre d\'Affaires', fmtM(data.ca)],
                     ['Achats consommés', fmtM(-data.achats)],
-                    ['Marge Brute', fmtM(data.margeBrute)],
-                    ['Charges externes', fmtM(-data.chargesExternes)],
-                    ['Charges de personnel', fmtM(-data.chargesPersonnel)],
+                    ['Variation de stocks', fmtM(data.varStocks)],
+                    ['MARGE BRUTE', fmtM(data.margeBrute)],
+                    ['Transports', fmtM(-data.transports)],
+                    ['Services extérieurs', fmtM(-data.servicesExt)],
+                    ['Autres services', fmtM(-data.autresServices)],
+                    ['Impôts et taxes', fmtM(-data.impotsTaxes)],
+                    ['Autres charges', fmtM(-data.autresCharges)],
+                    ['Charges de personnel', fmtM(-data.personnel)],
                     ['EBITDA', fmtM(data.ebitda)],
                     ['Dotations aux amortissements', fmtM(-data.dotations)],
-                    ['EBIT', fmtM(data.ebit)],
-                    ['Résultat financier', fmtM(data.resultatFinancier)],
-                    ['Impôts', fmtM(-data.impots)],
-                    ['Résultat Net', fmtM(data.resultatNet)]
+                    ['Reprises de provisions', fmtM(data.reprises)],
+                    ['RÉSULTAT D\'EXPLOITATION (EBIT)', fmtM(data.ebit)],
+                    ['Produits financiers', fmtM(data.prodFin)],
+                    ['Charges financières', fmtM(-data.chgFin)],
+                    ['RÉSULTAT FINANCIER', fmtM(data.resultatFin)],
+                    ['Résultat HAO', fmtM(data.resultatHAO)],
+                    ['Impôts sur les bénéfices', fmtM(-data.impotBIC)],
+                    ['RÉSULTAT NET', fmtM(data.resultatNet)]
                 ];
                 
                 slide.addTable(pnlData, {
-                    x: 0.5, y: 1.2, w: 9, h: 4,
+                    x: 0.5, y: 1.0, w: 9, h: 4.2,
                     fontFace: 'Arial',
-                    fontSize: 11,
+                    fontSize: 9,
                     color: '333333',
                     border: { pt: 0.5, color: 'CCCCCC' },
                     colW: [6, 3],
-                    rowH: 0.35,
+                    rowH: 0.22,
                     valign: 'middle',
                     align: 'left'
                 });
                 
             } else if (pageType === 'bilan') {
-                // Bilan Slide - Actif
+                // Bilan Slide - Actif - Utiliser les vraies clés SYSCOHADA
                 slide = pptx.addSlide();
                 slide.addText('Bilan - Actif', { x: 0.5, y: 0.3, w: 9, h: 0.6, fontSize: 28, bold: true, color: '1e293b' });
                 
                 const actifData = [
                     ['Poste', 'Montant (M FCFA)'],
-                    ['Actif Immobilisé', fmtM(data.actifImmobilise)],
-                    ['  Immobilisations incorporelles', fmtM(data.immoIncorporelles || 0)],
-                    ['  Immobilisations corporelles', fmtM(data.immoCorporelles || 0)],
-                    ['  Immobilisations financières', fmtM(data.immoFinancieres || 0)],
-                    ['Actif Circulant', fmtM(data.actifCirculant)],
+                    ['ACTIF IMMOBILISÉ', fmtM(data.immoNet)],
+                    ['  Immobilisations incorporelles', fmtM(data.immoIncorp || 0)],
+                    ['  Immobilisations corporelles', fmtM(data.immoCorp || 0)],
+                    ['  Immobilisations financières', fmtM(data.immoFin || 0)],
+                    ['ACTIF CIRCULANT', fmtM(data.actifCirculant)],
                     ['  Stocks', fmtM(data.stocks || 0)],
-                    ['  Créances clients', fmtM(data.creancesClients || 0)],
+                    ['  Créances clients', fmtM(data.clients || 0)],
                     ['  Autres créances', fmtM(data.autresCreances || 0)],
-                    ['Trésorerie Actif', fmtM(data.tresorerieActif)],
-                    ['TOTAL ACTIF', fmtM((data.actifImmobilise || 0) + (data.actifCirculant || 0) + (data.tresorerieActif || 0))]
+                    ['TRÉSORERIE ACTIF', fmtM(data.tresoActif)],
+                    ['  Banques', fmtM(data.banques || 0)],
+                    ['  Caisse', fmtM(data.caisse || 0)],
+                    ['TOTAL ACTIF', fmtM(data.totalActif)]
                 ];
                 
                 slide.addTable(actifData, {
@@ -13144,70 +13188,135 @@ td, th { mso-number-format:"\\@"; }
                     colW: [6, 3], rowH: 0.32
                 });
                 
-                // Bilan Slide - Passif
+                // Bilan Slide - Passif - Utiliser les vraies clés SYSCOHADA
                 slide = pptx.addSlide();
                 slide.addText('Bilan - Passif', { x: 0.5, y: 0.3, w: 9, h: 0.6, fontSize: 28, bold: true, color: '1e293b' });
                 
                 const passifData = [
                     ['Poste', 'Montant (M FCFA)'],
-                    ['Capitaux Propres', fmtM(data.capitauxPropres)],
-                    ['  Capital social', fmtM(data.capitalSocial || 0)],
+                    ['CAPITAUX PROPRES', fmtM(data.capitauxPropres)],
+                    ['  Capital social', fmtM(data.capital || 0)],
                     ['  Réserves', fmtM(data.reserves || 0)],
-                    ['  Résultat de l\'exercice', fmtM(data.resultatNet)],
-                    ['Dettes Long Terme', fmtM(data.dettesLT)],
+                    ['  Report à nouveau', fmtM(data.reportAN || 0)],
+                    ['DETTES FINANCIÈRES', fmtM(data.totalDetteFin)],
                     ['  Emprunts', fmtM(data.emprunts || 0)],
-                    ['Dettes Court Terme', fmtM(data.dettesCT)],
-                    ['  Fournisseurs', fmtM(data.dettesFournisseurs || 0)],
+                    ['  Autres dettes financières', fmtM(data.autresDetteFin || 0)],
+                    ['PROVISIONS RISQUES', fmtM(data.provisionsRisques || 0)],
+                    ['PASSIF CIRCULANT', fmtM(data.passifCirculant)],
+                    ['  Fournisseurs', fmtM(data.fournisseurs || 0)],
                     ['  Dettes fiscales', fmtM(data.dettesFiscales || 0)],
-                    ['Trésorerie Passif', fmtM(data.tresoreriePassif || 0)],
-                    ['TOTAL PASSIF', fmtM((data.capitauxPropres || 0) + (data.dettesLT || 0) + (data.dettesCT || 0) + (data.tresoreriePassif || 0))]
+                    ['  Dettes sociales', fmtM(data.dettesSociales || 0)],
+                    ['  Autres dettes', fmtM(data.autresDettes || 0)],
+                    ['TOTAL PASSIF', fmtM(data.totalPassif)]
                 ];
                 
                 slide.addTable(passifData, {
                     x: 0.5, y: 1.1, w: 9,
                     fontFace: 'Arial', fontSize: 10,
                     border: { pt: 0.5, color: 'CCCCCC' },
-                    colW: [6, 3], rowH: 0.32
+                    colW: [6, 3], rowH: 0.30
                 });
                 
             } else if (pageType === 'cashflow') {
-                // Cash Flow Slide
+                // Cash Flow Slide - Utiliser les vraies clés et calculs SYSCOHADA
                 slide = pptx.addSlide();
                 slide.addText('Tableau des Flux de Trésorerie', { x: 0.5, y: 0.3, w: 9, h: 0.6, fontSize: 28, bold: true, color: '1e293b' });
                 
-                const cfData = [
-                    ['Flux', 'Montant (M FCFA)'],
-                    ['FLUX D\'EXPLOITATION', ''],
-                    ['  Résultat net', fmtM(data.resultatNet)],
-                    ['  Dotations aux amortissements', fmtM(data.dotations)],
-                    ['  Variation BFR', fmtM(-(data.variationBFR || 0))],
-                    ['  = Flux d\'exploitation', fmtM((data.resultatNet || 0) + (data.dotations || 0) - (data.variationBFR || 0))],
-                    ['FLUX D\'INVESTISSEMENT', ''],
-                    ['  Acquisitions d\'immobilisations', fmtM(-(data.investissements || 0))],
-                    ['  = Flux d\'investissement', fmtM(-(data.investissements || 0))],
-                    ['FLUX DE FINANCEMENT', ''],
-                    ['  Nouveaux emprunts', fmtM(data.nouveauxEmprunts || 0)],
-                    ['  Remboursement emprunts', fmtM(-(data.remboursementEmprunts || 0))],
-                    ['  Dividendes versés', fmtM(-(data.dividendes || 0))],
-                    ['  = Flux de financement', fmtM((data.nouveauxEmprunts || 0) - (data.remboursementEmprunts || 0) - (data.dividendes || 0))],
-                    ['', ''],
-                    ['VARIATION DE TRÉSORERIE', fmtM(data.variationTresorerie || data.tresorerieNette || 0)]
-                ];
+                // Vérifier si on a N-1 pour calculer les variations
+                const years = Object.keys(yearsData).sort();
+                const yearN1Index = years.indexOf(currentYear) - 1;
+                const yearN1 = yearN1Index >= 0 ? years[yearN1Index] : null;
+                const dataN1 = yearN1 ? yearsData[yearN1] : null;
+                const hasN1 = dataN1 !== null;
+                
+                const caf = (data.resultatNet || 0) + (data.dotations || 0) - (data.reprises || 0);
+                
+                let cfData;
+                if (hasN1) {
+                    // Calculs des variations BFR
+                    const varStocks = (data.stocks || 0) - (dataN1.stocks || 0);
+                    const varClients = (data.clients || 0) - (dataN1.clients || 0);
+                    const varAutresCreances = (data.autresCreances || 0) - (dataN1.autresCreances || 0);
+                    const varFournisseurs = (data.fournisseurs || 0) - (dataN1.fournisseurs || 0);
+                    const varDettesFiscales = (data.dettesFiscales || 0) - (dataN1.dettesFiscales || 0);
+                    const varAutresDettes = (data.autresDettes || 0) - (dataN1.autresDettes || 0);
+                    const varBFR = (varStocks + varClients + varAutresCreances) - (varFournisseurs + varDettesFiscales + varAutresDettes);
+                    const fluxExploitation = caf - varBFR;
+                    
+                    // Flux investissement
+                    const varImmo = ((data.immoNet || 0) - (dataN1.immoNet || 0)) + (data.dotations || 0);
+                    const fluxInvestissement = -varImmo;
+                    
+                    // Flux financement
+                    const varEmprunts = (data.emprunts || 0) - (dataN1.emprunts || 0);
+                    const varCapital = (data.capital || 0) - (dataN1.capital || 0);
+                    const fluxFinancement = varEmprunts + varCapital;
+                    
+                    const varTreso = fluxExploitation + fluxInvestissement + fluxFinancement;
+                    
+                    cfData = [
+                        ['Flux', 'Montant (M FCFA)'],
+                        ['A. FLUX D\'EXPLOITATION', ''],
+                        ['  Résultat net', fmtM(data.resultatNet)],
+                        ['  + Dotations aux amortissements', fmtM(data.dotations)],
+                        ['  - Reprises de provisions', fmtM(-data.reprises)],
+                        ['  = CAF', fmtM(caf)],
+                        ['  - Variation du BFR', fmtM(-varBFR)],
+                        ['  = Flux d\'exploitation', fmtM(fluxExploitation)],
+                        ['B. FLUX D\'INVESTISSEMENT', ''],
+                        ['  Acquisitions d\'immobilisations', fmtM(-varImmo)],
+                        ['  = Flux d\'investissement', fmtM(fluxInvestissement)],
+                        ['C. FLUX DE FINANCEMENT', ''],
+                        ['  Δ Emprunts', fmtM(varEmprunts)],
+                        ['  Δ Capital', fmtM(varCapital)],
+                        ['  = Flux de financement', fmtM(fluxFinancement)],
+                        ['', ''],
+                        ['VARIATION DE TRÉSORERIE (A+B+C)', fmtM(varTreso)],
+                        ['', ''],
+                        ['Trésorerie ' + yearN1, fmtM(dataN1.tresoActif)],
+                        ['Trésorerie ' + currentYear, fmtM(data.tresoActif)]
+                    ];
+                } else {
+                    cfData = [
+                        ['Flux', 'Montant (M FCFA)'],
+                        ['A. FLUX D\'EXPLOITATION', ''],
+                        ['  Résultat net', fmtM(data.resultatNet)],
+                        ['  + Dotations aux amortissements', fmtM(data.dotations)],
+                        ['  - Reprises de provisions', fmtM(-data.reprises)],
+                        ['  = Capacité d\'autofinancement (CAF)', fmtM(caf)],
+                        ['  - Variation du BFR', 'N/A (requiert N-1)'],
+                        ['', ''],
+                        ['B. FLUX D\'INVESTISSEMENT', 'N/A (requiert N-1)'],
+                        ['', ''],
+                        ['C. FLUX DE FINANCEMENT', 'N/A (requiert N-1)'],
+                        ['', ''],
+                        ['Trésorerie nette ' + currentYear, fmtM(data.tresoActif)]
+                    ];
+                }
                 
                 slide.addTable(cfData, {
                     x: 0.5, y: 1.0, w: 9,
                     fontFace: 'Arial', fontSize: 10,
                     border: { pt: 0.5, color: 'CCCCCC' },
-                    colW: [6, 3], rowH: 0.28
+                    colW: [6, 3], rowH: 0.25
                 });
                 
             } else if (pageType === 'ratios') {
-                // Ratios Slide
+                // Ratios Slide - Utiliser les vraies clés et calculs SYSCOHADA
                 slide = pptx.addSlide();
                 slide.addText('Ratios Financiers', { x: 0.5, y: 0.3, w: 9, h: 0.6, fontSize: 28, bold: true, color: '1e293b' });
                 
                 const fmtPct = n => (n || 0).toFixed(1) + '%';
                 const fmtRatio = n => (n || 0).toFixed(2);
+                
+                // Calculer le ratio d'endettement
+                const ratioEndettement = data.totalPassif > 0 ? ((data.totalDetteFin + data.passifCirculant) / data.totalPassif * 100) : 0;
+                // Calculer le délai clients
+                const delaiClients = data.ca > 0 ? Math.round((data.clients || 0) / (data.ca / 365)) : 0;
+                // Calculer le délai fournisseurs
+                const delaiFournisseurs = data.achats > 0 ? Math.round((data.fournisseurs || 0) / (data.achats / 365)) : 0;
+                // Calculer la rotation des stocks
+                const rotationStocks = data.achats > 0 ? Math.round((data.stocks || 0) / (data.achats / 365)) : 0;
                 
                 const ratiosData = [
                     ['Catégorie', 'Ratio', 'Valeur', 'Objectif'],
@@ -13218,15 +13327,19 @@ td, th { mso-number-format:"\\@"; }
                     ['Rentabilité', 'ROA', fmtPct(data.roi), '> 5%'],
                     ['Liquidité', 'Ratio de liquidité générale', fmtRatio(data.currentRatio), '> 1.5'],
                     ['Liquidité', 'Ratio de liquidité réduite', fmtRatio(data.quickRatio), '> 1.0'],
-                    ['Solvabilité', 'Ratio d\'endettement', fmtPct(data.ratioEndettement), '< 60%'],
-                    ['Activité', 'BFR en jours de CA', (data.bfrJours || 0) + ' jours', '< 60 jours']
+                    ['Solvabilité', 'Ratio d\'endettement', fmtPct(ratioEndettement), '< 60%'],
+                    ['Solvabilité', 'Dette nette / EBITDA', (data.netDebtEbitda || 0).toFixed(1) + 'x', '< 3x'],
+                    ['Activité', 'BFR en jours de CA', (data.bfrJours || 0) + ' jours', '< 45 jours'],
+                    ['Activité', 'Délai clients', delaiClients + ' jours', '< 45 jours'],
+                    ['Activité', 'Délai fournisseurs', delaiFournisseurs + ' jours', '30-60 jours'],
+                    ['Activité', 'Rotation stocks', rotationStocks + ' jours', '< 60 jours']
                 ];
                 
                 slide.addTable(ratiosData, {
-                    x: 0.3, y: 1.1, w: 9.4,
-                    fontFace: 'Arial', fontSize: 10,
+                    x: 0.3, y: 1.0, w: 9.4,
+                    fontFace: 'Arial', fontSize: 9,
                     border: { pt: 0.5, color: 'CCCCCC' },
-                    colW: [2, 3, 2, 2.4], rowH: 0.38
+                    colW: [2, 3, 2, 2.4], rowH: 0.32
                 });
             }
             
@@ -14648,17 +14761,4 @@ td, th { mso-number-format:"\\@"; }
             if (!canUseFeature('exportPPT')) {
                 showNotification('Export PowerPoint disponible avec le plan Business', 'warning');
                 openUpgradeModal();
-                return;
-            }
-            if (originalExportPageToPPT) await originalExportPageToPPT(pageType);
-        };
-
-        // Initialize app on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            loadMapping();
-            loadObjectives();
-            initApp();
-        });
-    </script>
-</body>
-</html>
+         
