@@ -12286,8 +12286,49 @@ td, th { mso-number-format:"\\@"; }
             }
         });
 
-        function showUserProfile() {
+        async function showUserProfile() {
             toggleUserMenu();
+            
+            // Charger les données du profil depuis Supabase
+            if (currentUser) {
+                try {
+                    const { data: profile, error } = await supabaseClient
+                        .from('profiles')
+                        .select('*')
+                        .eq('id', currentUser.id)
+                        .single();
+                    
+                    if (profile) {
+                        // Séparer le nom complet en prénom et nom
+                        const fullName = profile.full_name || currentUser.user_metadata?.full_name || '';
+                        const nameParts = fullName.split(' ');
+                        const firstName = nameParts[0] || '';
+                        const lastName = nameParts.slice(1).join(' ') || '';
+                        
+                        document.getElementById('profileFirstName').value = firstName;
+                        document.getElementById('profileLastName').value = lastName;
+                        document.getElementById('profileEmail').value = profile.email || currentUser.email || '';
+                        document.getElementById('profilePhone').value = profile.phone || '';
+                        document.getElementById('profileCompany').value = profile.company_name || '';
+                        document.getElementById('profileRole').value = profile.role || '';
+                        
+                        // Mettre à jour l'avatar preview
+                        const avatarPreview = document.getElementById('avatarPreview');
+                        if (avatarPreview) {
+                            if (profile.avatar_url) {
+                                avatarPreview.innerHTML = `<img src="${profile.avatar_url}" alt="Photo" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">`;
+                            } else if (profile.avatar_base64) {
+                                avatarPreview.innerHTML = `<img src="${profile.avatar_base64}" alt="Photo" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">`;
+                            } else {
+                                avatarPreview.textContent = firstName.charAt(0).toUpperCase() + (lastName.charAt(0) || '').toUpperCase();
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.error('Erreur chargement profil:', e);
+                }
+            }
+            
             openModal('modalProfile');
         }
 
@@ -12358,24 +12399,97 @@ td, th { mso-number-format:"\\@"; }
         });
 
         // Profile Functions
-        function saveProfile() {
+        async function saveProfile() {
             const firstName = document.getElementById('profileFirstName').value;
             const lastName = document.getElementById('profileLastName').value;
             const email = document.getElementById('profileEmail').value;
+            const phone = document.getElementById('profilePhone').value;
+            const company = document.getElementById('profileCompany').value;
+            const role = document.getElementById('profileRole').value;
+            const currentPwd = document.getElementById('profileCurrentPwd').value;
+            const newPwd = document.getElementById('profileNewPwd').value;
+            const confirmPwd = document.getElementById('profileConfirmPwd').value;
             
-            // Mettre à jour l'avatar et le nom dans le sidebar
-            const initials = (firstName[0] || '') + (lastName[0] || '');
-            document.querySelectorAll('.user-avatar').forEach(el => el.textContent = initials.toUpperCase());
-            document.querySelectorAll('.user-name').forEach(el => {
-                if (el.closest('.user-card')) {
-                    el.textContent = firstName;
-                } else {
-                    el.textContent = firstName + ' ' + lastName;
+            // Valider le mot de passe si renseigné
+            if (newPwd) {
+                if (newPwd !== confirmPwd) {
+                    showNotification('Les mots de passe ne correspondent pas', 'error');
+                    return;
                 }
-            });
+                if (newPwd.length < 6) {
+                    showNotification('Le mot de passe doit contenir au moins 6 caractères', 'error');
+                    return;
+                }
+            }
             
-            closeModal('modalProfile');
-            showNotification('Profil mis à jour avec succès', 'success');
+            try {
+                // Sauvegarder dans Supabase
+                if (currentUser) {
+                    const { error } = await supabaseClient
+                        .from('profiles')
+                        .update({
+                            full_name: `${firstName} ${lastName}`.trim(),
+                            phone: phone,
+                            company_name: company,
+                            role: role,
+                            updated_at: new Date().toISOString()
+                        })
+                        .eq('id', currentUser.id);
+                    
+                    if (error) {
+                        console.error('Erreur mise à jour profil:', error);
+                        showNotification('Erreur lors de la mise à jour', 'error');
+                        return;
+                    }
+                    
+                    // Changer le mot de passe si demandé
+                    if (newPwd && currentPwd) {
+                        const { error: pwdError } = await supabaseClient.auth.updateUser({
+                            password: newPwd
+                        });
+                        
+                        if (pwdError) {
+                            console.error('Erreur changement mot de passe:', pwdError);
+                            showNotification('Erreur lors du changement de mot de passe', 'error');
+                            return;
+                        }
+                    }
+                }
+                
+                // Mettre à jour l'avatar et le nom dans le sidebar
+                const initials = (firstName[0] || '') + (lastName[0] || '');
+                document.querySelectorAll('.user-avatar').forEach(el => {
+                    if (!el.querySelector('img')) {
+                        el.textContent = initials.toUpperCase();
+                    }
+                });
+                document.querySelectorAll('.user-name').forEach(el => {
+                    if (el.closest('.user-card')) {
+                        el.textContent = firstName;
+                    } else {
+                        el.textContent = firstName + ' ' + lastName;
+                    }
+                });
+                
+                // Synchroniser le nom d'entreprise avec les paramètres
+                const companyNameInput = document.getElementById('companyName');
+                const companyNameDisplay = document.getElementById('companyNameDisplay');
+                if (companyNameInput) companyNameInput.value = company;
+                if (companyNameDisplay) companyNameDisplay.textContent = company || 'Mon Entreprise';
+                localStorage.setItem('findalyx_companyName', company || 'Mon Entreprise');
+                
+                // Réinitialiser les champs de mot de passe
+                document.getElementById('profileCurrentPwd').value = '';
+                document.getElementById('profileNewPwd').value = '';
+                document.getElementById('profileConfirmPwd').value = '';
+                
+                closeModal('modalProfile');
+                showNotification('Profil mis à jour avec succès', 'success');
+                
+            } catch (error) {
+                console.error('Erreur:', error);
+                showNotification('Erreur lors de la mise à jour', 'error');
+            }
         }
 
         // Subscription Functions
@@ -15032,18 +15146,28 @@ ${userName}`;
                 console.error('Error recording payment:', e);
             }
             
+            // Fermer le modal d'upgrade d'abord
+            closeUpgradeModal();
+            
             // Show payment modal
             const modal = document.createElement('div');
-            modal.className = 'modal-overlay';
-            modal.style.cssText = 'display:flex;align-items:center;justify-content:center;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:100001;';
+            modal.id = 'paymentModal';
+            modal.style.cssText = 'display:flex;align-items:center;justify-content:center;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:999999;';
             modal.innerHTML = `
-                <div style="background:white;border-radius:20px;max-width:480px;width:90%;position:relative;box-shadow:0 25px 50px rgba(0,0,0,0.25);">
-                    <button onclick="this.parentElement.parentElement.remove()" 
-                        style="position:absolute;top:16px;right:16px;background:var(--slate-100);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;">✕</button>
+                <div style="background:white;border-radius:20px;max-width:480px;width:90%;position:relative;box-shadow:0 25px 50px rgba(0,0,0,0.25);max-height:90vh;overflow-y:auto;">
+                    <button onclick="document.getElementById('paymentModal').remove()" 
+                        style="position:absolute;top:16px;right:16px;background:var(--slate-100);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;z-index:10;">✕</button>
                     ${paymentInfo}
                 </div>
             `;
             document.body.appendChild(modal);
+            
+            // Fermer en cliquant à l'extérieur
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
         }
         
         // =====================================================
@@ -15134,6 +15258,24 @@ ${userName}`;
             loadMapping();
             loadObjectives();
             initApp();
+            
+            // Event listener pour l'upload de photo de profil
+            const avatarInput = document.getElementById('avatarInput');
+            if (avatarInput) {
+                avatarInput.addEventListener('change', handleProfilePhotoUpload);
+            }
+            
+            // Synchroniser le nom d'entreprise du profil avec les paramètres
+            const profileCompany = document.getElementById('profileCompany');
+            if (profileCompany) {
+                profileCompany.addEventListener('change', function() {
+                    const companyName = document.getElementById('companyName');
+                    const companyNameDisplay = document.getElementById('companyNameDisplay');
+                    if (companyName) companyName.value = this.value;
+                    if (companyNameDisplay) companyNameDisplay.textContent = this.value || 'Mon Entreprise';
+                    localStorage.setItem('findalyx_companyName', this.value || 'Mon Entreprise');
+                });
+            }
         });
     </script>
 </body>
