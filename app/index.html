@@ -1955,6 +1955,379 @@
             transform: translateY(0);
         }
 
+        /* ==================== ONBOARDING SECTION ==================== */
+        .onboarding-section {
+            margin-bottom: 32px;
+        }
+        
+        .onboarding-card {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
+            border-radius: 24px;
+            padding: 32px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .onboarding-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        
+        .onboarding-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+            position: relative;
+        }
+        
+        .onboarding-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .onboarding-icon svg {
+            width: 28px;
+            height: 28px;
+            color: white;
+        }
+        
+        .onboarding-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .onboarding-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .onboarding-close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .onboarding-close svg {
+            width: 18px;
+            height: 18px;
+            color: white;
+        }
+        
+        .onboarding-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+        
+        .onboarding-step {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .onboarding-step:hover:not(.disabled) {
+            background: rgba(255,255,255,0.25);
+            transform: translateX(8px);
+        }
+        
+        .onboarding-step.disabled {
+            opacity: 0.6;
+            cursor: default;
+        }
+        
+        .step-number {
+            width: 36px;
+            height: 36px;
+            background: white;
+            color: var(--blue-600);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-content h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        
+        .step-content p {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+        
+        .onboarding-step > svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+        
+        .onboarding-demo {
+            text-align: center;
+            position: relative;
+        }
+        
+        .demo-divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .demo-divider::before,
+        .demo-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .demo-divider span {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        
+        .btn-demo {
+            background: white;
+            color: var(--blue-600);
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-demo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .btn-demo svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .demo-hint {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 12px;
+        }
+        
+        /* Bouton Rapport Express */
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: white;
+            border: none;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+        
+        /* ==================== VARIATION BADGES ==================== */
+        .kpi-variation {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+        
+        .kpi-variation.positive {
+            color: var(--success);
+        }
+        
+        .kpi-variation.negative {
+            color: var(--danger);
+        }
+        
+        .kpi-variation svg {
+            width: 14px;
+            height: 14px;
+        }
+        
+        /* Sparkline mini chart */
+        .kpi-sparkline {
+            height: 30px;
+            margin-top: 8px;
+        }
+        
+        /* ==================== BENCHMARK BADGE ==================== */
+        .benchmark-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-top: 6px;
+        }
+        
+        .benchmark-badge.above {
+            background: var(--success-light);
+            color: var(--success);
+        }
+        
+        .benchmark-badge.below {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+        
+        .benchmark-badge.average {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+        
+        /* ==================== COMPARISON PANEL ==================== */
+        .comparison-panel {
+            background: linear-gradient(135deg, var(--slate-50) 0%, var(--blue-50) 100%);
+            border: 1px solid var(--blue-100);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .comparison-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .comparison-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--slate-700);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .comparison-header h3 svg {
+            width: 20px;
+            height: 20px;
+            color: var(--blue-500);
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        
+        .comparison-item {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .comparison-item .label {
+            font-size: 12px;
+            color: var(--slate-500);
+            margin-bottom: 8px;
+        }
+        
+        .comparison-item .values {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            gap: 8px;
+        }
+        
+        .comparison-item .current {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--slate-800);
+        }
+        
+        .comparison-item .previous {
+            font-size: 14px;
+            color: var(--slate-400);
+        }
+        
+        .comparison-item .variation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        
+        .comparison-item .variation.up {
+            color: var(--success);
+        }
+        
+        .comparison-item .variation.down {
+            color: var(--danger);
+        }
+        
+        @media (max-width: 768px) {
+            .onboarding-card {
+                padding: 24px 20px;
+            }
+            .onboarding-header {
+                flex-wrap: wrap;
+            }
+            .onboarding-header h2 {
+                font-size: 20px;
+            }
+            .onboarding-step {
+                padding: 14px 16px;
+            }
+            .comparison-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         /* ==================== UPLOAD SECTION ==================== */
         .upload-section {
             background: white;
@@ -6475,6 +6848,13 @@
                         <p>Analyse financière complète de votre entreprise</p>
                     </div>
                     <div class="header-actions">
+                        <!-- Bouton Rapport Express -->
+                        <button class="btn btn-success" onclick="generateExpressReport()" id="expressReportBtn" style="display:none;">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                            Rapport Express
+                        </button>
                         <div class="export-dropdown" id="exportDropdown">
                             <button class="btn btn-secondary" onclick="toggleExportMenu()">
                                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -6521,8 +6901,71 @@
                 <!-- Hidden File Input (Global) -->
                 <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" hidden onchange="handleFileUpload(event)">
 
-                <!-- Upload Section -->
-                <div class="upload-section" id="uploadSection">
+                <!-- Assistant de Démarrage (Onboarding) -->
+                <div class="onboarding-section" id="onboardingSection">
+                    <div class="onboarding-card">
+                        <div class="onboarding-header">
+                            <div class="onboarding-icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2>Bienvenue sur Findalyx ! 🎉</h2>
+                                <p>Votre plateforme d'analyse financière SYSCOHADA</p>
+                            </div>
+                            <button class="onboarding-close" onclick="closeOnboarding()">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            </button>
+                        </div>
+                        
+                        <div class="onboarding-steps">
+                            <div class="onboarding-step" onclick="document.getElementById('fileInput').click()">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h3>Importez votre balance comptable</h3>
+                                    <p>Glissez-déposez ou sélectionnez votre fichier Excel (.xlsx) ou CSV</p>
+                                </div>
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </div>
+                            
+                            <div class="onboarding-step disabled">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h3>Analysez vos indicateurs</h3>
+                                    <p>KPIs, ratios, scoring et recommandations automatiques</p>
+                                </div>
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </div>
+                            
+                            <div class="onboarding-step disabled">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h3>Exportez vos rapports</h3>
+                                    <p>PDF, PowerPoint ou Excel en un clic</p>
+                                </div>
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </div>
+                        </div>
+                        
+                        <div class="onboarding-demo">
+                            <div class="demo-divider">
+                                <span>ou</span>
+                            </div>
+                            <button class="btn btn-demo" onclick="loadDemoData()">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Essayer avec des données de démonstration
+                            </button>
+                            <p class="demo-hint">Découvrez les fonctionnalités avec un exemple réel d'entreprise</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload Section (caché si onboarding visible) -->
+                <div class="upload-section" id="uploadSection" style="display:none;">
                     <div class="upload-icon-wrapper">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
@@ -12657,6 +13100,320 @@ td, th { mso-number-format:"\\@"; }
         }
 
         // =====================================================
+        // ONBOARDING & DEMO DATA
+        // =====================================================
+        
+        function closeOnboarding() {
+            const onboarding = document.getElementById('onboardingSection');
+            if (onboarding) {
+                onboarding.style.display = 'none';
+                localStorage.setItem('findalyx_onboarding_closed', 'true');
+            }
+            // Afficher la section upload
+            const uploadSection = document.getElementById('uploadSection');
+            if (uploadSection) uploadSection.style.display = 'block';
+        }
+        
+        function checkOnboardingStatus() {
+            const hasData = Object.keys(yearsData).length > 0;
+            const onboardingClosed = localStorage.getItem('findalyx_onboarding_closed');
+            const onboarding = document.getElementById('onboardingSection');
+            const uploadSection = document.getElementById('uploadSection');
+            
+            if (hasData) {
+                // Si données présentes, cacher onboarding et upload
+                if (onboarding) onboarding.style.display = 'none';
+                if (uploadSection) uploadSection.style.display = 'none';
+                // Afficher le bouton rapport express
+                const expressBtn = document.getElementById('expressReportBtn');
+                if (expressBtn) expressBtn.style.display = 'inline-flex';
+            } else if (onboardingClosed) {
+                // Si onboarding fermé mais pas de données, afficher upload
+                if (onboarding) onboarding.style.display = 'none';
+                if (uploadSection) uploadSection.style.display = 'block';
+            } else {
+                // Première visite, afficher onboarding
+                if (onboarding) onboarding.style.display = 'block';
+                if (uploadSection) uploadSection.style.display = 'none';
+            }
+        }
+        
+        // Données de démonstration réalistes (entreprise industrielle SYSCOHADA)
+        function loadDemoData() {
+            showNotification('Chargement des données de démonstration...', 'info');
+            
+            // Données 2023
+            const demoData2023 = {
+                year: '2023',
+                // Compte de résultat
+                ca: 45000000000, // 45 Mrd
+                achatsMarchandises: 18000000000,
+                variationStocks: 500000000,
+                autresAchats: 8500000000,
+                servicesExterieurs: 3200000000,
+                impots: 1800000000,
+                chargesPersonnel: 6500000000,
+                dotations: 2800000000,
+                reprises: 400000000,
+                chargesFinancieres: 1200000000,
+                produitsFinanciers: 300000000,
+                chargesExceptionnelles: 200000000,
+                produitsExceptionnels: 150000000,
+                impotSociete: 850000000,
+                
+                // Calculs automatiques
+                margeBrute: 45000000000 - 18000000000 + 500000000, // 27.5 Mrd
+                valeurAjoutee: 45000000000 - 18000000000 - 8500000000 - 3200000000 + 500000000, // 15.8 Mrd
+                ebe: 15800000000 - 1800000000 - 6500000000, // 7.5 Mrd (EBE)
+                ebitda: 7500000000,
+                ebit: 7500000000 - 2800000000 + 400000000, // 5.1 Mrd
+                resultatFinancier: 300000000 - 1200000000, // -0.9 Mrd
+                resultatExceptionnel: 150000000 - 200000000, // -0.05 Mrd
+                resultatNet: 5100000000 - 900000000 - 50000000 - 850000000, // 3.3 Mrd
+                
+                // Bilan Actif
+                actifImmobilise: 28000000000,
+                immoCorporelles: 22000000000,
+                immoIncorporelles: 3000000000,
+                immoFinancieres: 3000000000,
+                actifCirculant: 18000000000,
+                stocks: 6500000000,
+                creancesClients: 9500000000,
+                autresCreances: 2000000000,
+                tresorerieActif: 4500000000,
+                totalActif: 50500000000,
+                
+                // Bilan Passif
+                capitauxPropres: 25000000000,
+                capital: 15000000000,
+                reserves: 7000000000,
+                resultatExercice: 3300000000,
+                dettesLT: 12000000000,
+                emprunts: 10000000000,
+                autresDettesLT: 2000000000,
+                dettesCT: 13500000000,
+                fournisseurs: 8500000000,
+                dettesFiscales: 2500000000,
+                autresDettesCT: 2500000000,
+                tresoreriePassif: 0,
+                totalPassif: 50500000000,
+                
+                // Ratios calculés
+                margeBrutePct: 61.1,
+                margeEbitda: 16.7,
+                margeNette: 7.3,
+                currentRatio: 1.67,
+                quickRatio: 1.04,
+                ratioEndettement: 48,
+                roe: 13.2,
+                roi: 6.5,
+                bfrJours: 58,
+                tresorerieNette: 4500000000
+            };
+            
+            // Données 2024
+            const demoData2024 = {
+                year: '2024',
+                // Compte de résultat (croissance de 8%)
+                ca: 48600000000, // 48.6 Mrd (+8%)
+                achatsMarchandises: 19200000000,
+                variationStocks: 600000000,
+                autresAchats: 9000000000,
+                servicesExterieurs: 3400000000,
+                impots: 1950000000,
+                chargesPersonnel: 7000000000,
+                dotations: 3000000000,
+                reprises: 450000000,
+                chargesFinancieres: 1100000000,
+                produitsFinanciers: 350000000,
+                chargesExceptionnelles: 180000000,
+                produitsExceptionnels: 200000000,
+                impotSociete: 950000000,
+                
+                // Calculs automatiques
+                margeBrute: 48600000000 - 19200000000 + 600000000, // 30 Mrd
+                valeurAjoutee: 48600000000 - 19200000000 - 9000000000 - 3400000000 + 600000000, // 17.6 Mrd
+                ebe: 17600000000 - 1950000000 - 7000000000, // 8.65 Mrd
+                ebitda: 8650000000,
+                ebit: 8650000000 - 3000000000 + 450000000, // 6.1 Mrd
+                resultatFinancier: 350000000 - 1100000000, // -0.75 Mrd
+                resultatExceptionnel: 200000000 - 180000000, // +0.02 Mrd
+                resultatNet: 6100000000 - 750000000 + 20000000 - 950000000, // 4.42 Mrd
+                
+                // Bilan Actif
+                actifImmobilise: 30000000000,
+                immoCorporelles: 24000000000,
+                immoIncorporelles: 3200000000,
+                immoFinancieres: 2800000000,
+                actifCirculant: 19500000000,
+                stocks: 7000000000,
+                creancesClients: 10200000000,
+                autresCreances: 2300000000,
+                tresorerieActif: 5200000000,
+                totalActif: 54700000000,
+                
+                // Bilan Passif
+                capitauxPropres: 28500000000,
+                capital: 15000000000,
+                reserves: 9100000000,
+                resultatExercice: 4400000000,
+                dettesLT: 11500000000,
+                emprunts: 9500000000,
+                autresDettesLT: 2000000000,
+                dettesCT: 14700000000,
+                fournisseurs: 9200000000,
+                dettesFiscales: 2800000000,
+                autresDettesCT: 2700000000,
+                tresoreriePassif: 0,
+                totalPassif: 54700000000,
+                
+                // Ratios calculés
+                margeBrutePct: 61.7,
+                margeEbitda: 17.8,
+                margeNette: 9.1,
+                currentRatio: 1.68,
+                quickRatio: 1.09,
+                ratioEndettement: 40.4,
+                roe: 15.4,
+                roi: 8.1,
+                bfrJours: 55,
+                tresorerieNette: 5200000000
+            };
+            
+            // Charger les données
+            yearsData['2023'] = demoData2023;
+            yearsData['2024'] = demoData2024;
+            currentYear = '2024';
+            
+            // Sauvegarder en localStorage
+            localStorage.setItem('findalyx_yearsData', JSON.stringify(yearsData));
+            localStorage.setItem('findalyx_currentYear', currentYear);
+            localStorage.setItem('findalyx_companyName', 'SENEGAL INDUSTRIES SA');
+            
+            // Mettre à jour le nom de l'entreprise
+            const companyNameInput = document.getElementById('companyName');
+            const companyNameDisplay = document.getElementById('companyNameDisplay');
+            if (companyNameInput) companyNameInput.value = 'SENEGAL INDUSTRIES SA';
+            if (companyNameDisplay) companyNameDisplay.textContent = 'SENEGAL INDUSTRIES SA';
+            
+            // Cacher l'onboarding et afficher le dashboard
+            closeOnboarding();
+            const uploadSection = document.getElementById('uploadSection');
+            const dashboardContent = document.getElementById('dashboardContent');
+            if (uploadSection) uploadSection.style.display = 'none';
+            if (dashboardContent) dashboardContent.style.display = 'block';
+            
+            // Afficher le bouton rapport express
+            const expressBtn = document.getElementById('expressReportBtn');
+            if (expressBtn) expressBtn.style.display = 'inline-flex';
+            
+            // Charger les données dans le dashboard
+            loadFinancialData(demoData2024);
+            updateYearsBadges();
+            
+            // Afficher le panel de comparaison
+            showComparisonPanel();
+            
+            showNotification('Données de démonstration chargées ! Explorez le tableau de bord.', 'success');
+            
+            // Ajouter une notification
+            addNotification('success', 'Données chargées', 'Les données de SENEGAL INDUSTRIES SA (2023-2024) sont prêtes à analyser.', null);
+        }
+        
+        // Afficher le panel de comparaison N vs N-1
+        function showComparisonPanel() {
+            const years = Object.keys(yearsData).sort();
+            if (years.length < 2) return;
+            
+            const currentYearData = yearsData[years[years.length - 1]];
+            const previousYearData = yearsData[years[years.length - 2]];
+            
+            const fmtMrd = n => (n / 1000000000).toFixed(1);
+            const fmtVar = (curr, prev) => {
+                if (!prev || prev === 0) return { value: 'N/A', class: '' };
+                const pct = ((curr - prev) / Math.abs(prev)) * 100;
+                return {
+                    value: (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%',
+                    class: pct >= 0 ? 'up' : 'down',
+                    arrow: pct >= 0 ? '↑' : '↓'
+                };
+            };
+            
+            const caVar = fmtVar(currentYearData.ca, previousYearData.ca);
+            const ebitdaVar = fmtVar(currentYearData.ebitda, previousYearData.ebitda);
+            const rnVar = fmtVar(currentYearData.resultatNet, previousYearData.resultatNet);
+            const tresoVar = fmtVar(currentYearData.tresorerieNette, previousYearData.tresorerieNette);
+            
+            const panelHTML = `
+                <div class="comparison-panel" id="comparisonPanel">
+                    <div class="comparison-header">
+                        <h3>
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                            Évolution ${years[years.length - 2]} → ${years[years.length - 1]}
+                        </h3>
+                        <span style="font-size:12px;color:var(--slate-400);">Comparaison année précédente</span>
+                    </div>
+                    <div class="comparison-grid">
+                        <div class="comparison-item">
+                            <div class="label">Chiffre d'Affaires</div>
+                            <div class="values">
+                                <span class="current">${fmtMrd(currentYearData.ca)} Mrd</span>
+                                <span class="previous">vs ${fmtMrd(previousYearData.ca)}</span>
+                            </div>
+                            <div class="variation ${caVar.class}">${caVar.arrow} ${caVar.value}</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="label">EBITDA</div>
+                            <div class="values">
+                                <span class="current">${fmtMrd(currentYearData.ebitda)} Mrd</span>
+                                <span class="previous">vs ${fmtMrd(previousYearData.ebitda)}</span>
+                            </div>
+                            <div class="variation ${ebitdaVar.class}">${ebitdaVar.arrow} ${ebitdaVar.value}</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="label">Résultat Net</div>
+                            <div class="values">
+                                <span class="current">${fmtMrd(currentYearData.resultatNet)} Mrd</span>
+                                <span class="previous">vs ${fmtMrd(previousYearData.resultatNet)}</span>
+                            </div>
+                            <div class="variation ${rnVar.class}">${rnVar.arrow} ${rnVar.value}</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="label">Trésorerie Nette</div>
+                            <div class="values">
+                                <span class="current">${fmtMrd(currentYearData.tresorerieNette)} Mrd</span>
+                                <span class="previous">vs ${fmtMrd(previousYearData.tresorerieNette)}</span>
+                            </div>
+                            <div class="variation ${tresoVar.class}">${tresoVar.arrow} ${tresoVar.value}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Insérer après le year banner
+            const yearBanner = document.getElementById('yearBanner');
+            const existingPanel = document.getElementById('comparisonPanel');
+            if (existingPanel) existingPanel.remove();
+            
+            if (yearBanner) {
+                yearBanner.insertAdjacentHTML('afterend', panelHTML);
+            }
+        }
+        
+        // Rapport Express en 1 clic (PDF complet)
+        async function generateExpressReport() {
+            if (!currentYear || !yearsData[currentYear]) {
+                showNotification('Aucune donnée à exporter', 'warning');
+                return;
+            }
+            
+            showNotification('Génération du rapport express...', 'info');
+            
+            // Générer le PowerPoint (rapport le plus complet)
+            await exportToPowerPoint();
+        }
+
+        // =====================================================
         // NOTIFICATIONS FUNCTIONS
         // =====================================================
         
@@ -16090,6 +16847,15 @@ ${userName}`;
             loadMapping();
             loadObjectives();
             initApp();
+            
+            // Vérifier le statut de l'onboarding après un court délai
+            setTimeout(() => {
+                checkOnboardingStatus();
+                // Si plusieurs années, afficher le panel de comparaison
+                if (Object.keys(yearsData).length >= 2) {
+                    showComparisonPanel();
+                }
+            }, 500);
             
             // Event listener pour l'upload de photo de profil
             const avatarInput = document.getElementById('avatarInput');
