@@ -1210,7 +1210,7 @@
                     <div class="user-detail-avatar" id="modalUserAvatar">JD</div>
                     <div class="user-detail-info">
                         <h3 id="modalUserName">John Doe</h3>
-                        <p id="modalUserEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f19b9e999fb19489909c819d94df929e9c">[email&#160;protected]</a></p>
+                        <p id="modalUserEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a4cecbcccae4c1dcc5c9d4c8c18ac7cbc9">[email&#160;protected]</a></p>
                     </div>
                 </div>
                 <div class="detail-grid">
@@ -1326,7 +1326,7 @@
         </div>
     </div>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // Supabase Configuration
         const SUPABASE_URL = 'https://woxaceylnyudpvxoospj.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndveGFjZXlsbnl1ZHB2eG9vc3BqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg0OTMwMTksImV4cCI6MjA4NDA2OTAxOX0.c-iKclN-L6hrx_Tj3fkKdZwVmrz4Ob8ejgJYJXNwPe4';
@@ -1422,19 +1422,12 @@
             showLoading(true);
             
             try {
-                console.log('Chargement des utilisateurs depuis profiles...');
-                
                 const { data: users, error } = await supabaseClient
                     .from('profiles')
                     .select('*')
                     .order('created_at', { ascending: false });
                 
-                if (error) {
-                    console.error('Erreur Supabase:', error);
-                    throw error;
-                }
-                
-                console.log('Utilisateurs chargés:', users?.length || 0, users);
+                if (error) throw error;
                 
                 allUsers = users || [];
                 updateStats();
@@ -1443,18 +1436,11 @@
                 renderSubscriptionsTable();
                 
             } catch (error) {
-                showToast('Erreur lors du chargement des données: ' + error.message, 'error');
-                console.error('Erreur complète:', error);
+                showToast('Erreur lors du chargement des données', 'error');
+                console.error(error);
             } finally {
                 showLoading(false);
             }
-        }
-        
-        // Fonction pour rafraîchir manuellement
-        async function refreshData() {
-            showToast('Actualisation en cours...', 'success');
-            await loadData();
-            showToast('Données actualisées', 'success');
         }
 
         // Update Stats
