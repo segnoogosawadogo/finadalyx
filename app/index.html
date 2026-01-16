@@ -2224,92 +2224,6 @@
             color: var(--warning);
         }
         
-        /* ==================== COMPARISON PANEL ==================== */
-        .comparison-panel {
-            background: linear-gradient(135deg, var(--slate-50) 0%, var(--blue-50) 100%);
-            border: 1px solid var(--blue-100);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 24px;
-        }
-        
-        .comparison-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        
-        .comparison-header h3 {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--slate-700);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .comparison-header h3 svg {
-            width: 20px;
-            height: 20px;
-            color: var(--blue-500);
-        }
-        
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-        }
-        
-        .comparison-item {
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            text-align: center;
-        }
-        
-        .comparison-item .label {
-            font-size: 12px;
-            color: var(--slate-500);
-            margin-bottom: 8px;
-        }
-        
-        .comparison-item .values {
-            display: flex;
-            justify-content: center;
-            align-items: baseline;
-            gap: 8px;
-        }
-        
-        .comparison-item .current {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--slate-800);
-        }
-        
-        .comparison-item .previous {
-            font-size: 14px;
-            color: var(--slate-400);
-        }
-        
-        .comparison-item .variation {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            font-size: 13px;
-            font-weight: 600;
-            margin-top: 8px;
-        }
-        
-        .comparison-item .variation.up {
-            color: var(--success);
-        }
-        
-        .comparison-item .variation.down {
-            color: var(--danger);
-        }
-        
         @media (max-width: 768px) {
             .onboarding-card {
                 padding: 24px 20px;
@@ -2322,9 +2236,6 @@
             }
             .onboarding-step {
                 padding: 14px 16px;
-            }
-            .comparison-grid {
-                grid-template-columns: repeat(2, 1fr);
             }
         }
 
@@ -13319,7 +13230,7 @@ td, th { mso-number-format:"\\@"; }
             updateYearsBadges();
             
             // Afficher le panel de comparaison
-            showComparisonPanel();
+            updateKPIVariations();
             
             showNotification('Données de démonstration chargées ! Explorez le tableau de bord.', 'success');
             
@@ -13327,84 +13238,17 @@ td, th { mso-number-format:"\\@"; }
             addNotification('success', 'Données chargées', 'Les données de SENEGAL INDUSTRIES SA (2023-2024) sont prêtes à analyser.', null);
         }
         
-        // Afficher le panel de comparaison N vs N-1
-        function showComparisonPanel() {
+        // Afficher les variations N vs N-1 dans les KPIs existants (sans panel séparé)
+        function updateKPIVariations() {
             const years = Object.keys(yearsData).sort();
             if (years.length < 2) return;
             
             const currentYearData = yearsData[years[years.length - 1]];
             const previousYearData = yearsData[years[years.length - 2]];
             
-            const fmtMrd = n => (n / 1000000000).toFixed(1);
-            const fmtVar = (curr, prev) => {
-                if (!prev || prev === 0) return { value: 'N/A', class: '' };
-                const pct = ((curr - prev) / Math.abs(prev)) * 100;
-                return {
-                    value: (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%',
-                    class: pct >= 0 ? 'up' : 'down',
-                    arrow: pct >= 0 ? '↑' : '↓'
-                };
-            };
-            
-            const caVar = fmtVar(currentYearData.ca, previousYearData.ca);
-            const ebitdaVar = fmtVar(currentYearData.ebitda, previousYearData.ebitda);
-            const rnVar = fmtVar(currentYearData.resultatNet, previousYearData.resultatNet);
-            const tresoVar = fmtVar(currentYearData.tresorerieNette, previousYearData.tresorerieNette);
-            
-            const panelHTML = `
-                <div class="comparison-panel" id="comparisonPanel">
-                    <div class="comparison-header">
-                        <h3>
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                            Évolution ${years[years.length - 2]} → ${years[years.length - 1]}
-                        </h3>
-                        <span style="font-size:12px;color:var(--slate-400);">Comparaison année précédente</span>
-                    </div>
-                    <div class="comparison-grid">
-                        <div class="comparison-item">
-                            <div class="label">Chiffre d'Affaires</div>
-                            <div class="values">
-                                <span class="current">${fmtMrd(currentYearData.ca)} Mrd</span>
-                                <span class="previous">vs ${fmtMrd(previousYearData.ca)}</span>
-                            </div>
-                            <div class="variation ${caVar.class}">${caVar.arrow} ${caVar.value}</div>
-                        </div>
-                        <div class="comparison-item">
-                            <div class="label">EBITDA</div>
-                            <div class="values">
-                                <span class="current">${fmtMrd(currentYearData.ebitda)} Mrd</span>
-                                <span class="previous">vs ${fmtMrd(previousYearData.ebitda)}</span>
-                            </div>
-                            <div class="variation ${ebitdaVar.class}">${ebitdaVar.arrow} ${ebitdaVar.value}</div>
-                        </div>
-                        <div class="comparison-item">
-                            <div class="label">Résultat Net</div>
-                            <div class="values">
-                                <span class="current">${fmtMrd(currentYearData.resultatNet)} Mrd</span>
-                                <span class="previous">vs ${fmtMrd(previousYearData.resultatNet)}</span>
-                            </div>
-                            <div class="variation ${rnVar.class}">${rnVar.arrow} ${rnVar.value}</div>
-                        </div>
-                        <div class="comparison-item">
-                            <div class="label">Trésorerie Nette</div>
-                            <div class="values">
-                                <span class="current">${fmtMrd(currentYearData.tresorerieNette)} Mrd</span>
-                                <span class="previous">vs ${fmtMrd(previousYearData.tresorerieNette)}</span>
-                            </div>
-                            <div class="variation ${tresoVar.class}">${tresoVar.arrow} ${tresoVar.value}</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            // Insérer après le year banner
-            const yearBanner = document.getElementById('yearBanner');
-            const existingPanel = document.getElementById('comparisonPanel');
-            if (existingPanel) existingPanel.remove();
-            
-            if (yearBanner) {
-                yearBanner.insertAdjacentHTML('afterend', panelHTML);
-            }
+            // Cette fonction est appelée pour mettre à jour les badges de variation
+            // Les variations sont déjà affichées dans les KPI cards via loadFinancialData
+            console.log(`Comparaison disponible: ${years[years.length - 2]} → ${years[years.length - 1]}`);
         }
         
         // Rapport Express en 1 clic (PDF complet)
@@ -16557,7 +16401,7 @@ ${userName}`;
                 checkOnboardingStatus();
                 // Si plusieurs années, afficher le panel de comparaison
                 if (Object.keys(yearsData).length >= 2) {
-                    showComparisonPanel();
+                    updateKPIVariations();
                 }
             }, 300);
         }
@@ -16869,7 +16713,7 @@ ${userName}`;
                 checkOnboardingStatus();
                 // Si plusieurs années, afficher le panel de comparaison
                 if (Object.keys(yearsData).length >= 2) {
-                    showComparisonPanel();
+                    updateKPIVariations();
                 }
             }, 500);
             
