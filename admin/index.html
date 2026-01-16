@@ -1210,7 +1210,7 @@
                     <div class="user-detail-avatar" id="modalUserAvatar">JD</div>
                     <div class="user-detail-info">
                         <h3 id="modalUserName">John Doe</h3>
-                        <p id="modalUserEmail">user@example.com</p>
+                        <p id="modalUserEmail">john@example.com</p>
                     </div>
                 </div>
                 <div class="detail-grid">
@@ -1840,4 +1840,13 @@
         }
 
         // Loading
-        function showL
+        function showLoading(show) {
+            document.getElementById('loadingOverlay').classList.toggle('show', show);
+        }
+
+        function showError(message) {
+            showLoginError(message);
+        }
+    </script>
+</body>
+</html>
