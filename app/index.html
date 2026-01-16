@@ -5870,7 +5870,7 @@
             <div class="user-dropdown" id="userDropdown">
                 <div class="user-dropdown-header">
                     <div class="user-name">Utilisateur</div>
-                    <div class="user-email user-email-display">email@exemple.com</div>
+                    <div class="user-email user-email-display"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cfaaa2aea6a38faab7aaa2bfa3aae1aca0a2">[email&#160;protected]</a></div>
                     <span class="plan-badge basic user-plan-badge">Essai</span>
                 </div>
                 <div class="user-dropdown-menu">
@@ -7978,7 +7978,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                         </svg>
                         <h4>Email</h4>
-                        <p>support@findalyx.com</p>
+                        <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8bf8fefbfbe4f9ffcbede2e5efeae7f2f3a5e8e4e6">[email&#160;protected]</a></p>
                     </div>
                     <div class="contact-card" onclick="window.open('https://wa.me/221771234567')">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -7995,7 +7995,7 @@
         </div>
     </div>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // ========== MULTI-YEAR DATA STORAGE ==========
         let yearsData = {}; // { year: financialData }
         let currentYear = null;
@@ -13359,21 +13359,25 @@ td, th { mso-number-format:"\\@"; }
             
             // Mettre à jour les status visuels sur la page Ratios
             updateRatioStatusVisual('statusMargeBrute', margeBruteOk);
-            updateRatioStatusVisual('statusMargeEBITDA', margeEBITDAOk);
+            updateRatioStatusVisual('statusMargeEbitda', margeEBITDAOk);
+            updateRatioStatusVisual('statusMargeOp', evaluate((data.ebit || 0) / (data.ca || 1) * 100, 10));
             updateRatioStatusVisual('statusMargeNette', margeNetteOk);
             updateRatioStatusVisual('statusROE', roeOk);
-            updateRatioStatusVisual('statusROI', roaOk);
+            updateRatioStatusVisual('statusROA', roaOk);
+            updateRatioStatusVisual('statusROCE', evaluate((data.roce || 0), 10));
             updateRatioStatusVisual('statusCurrent', currentOk);
             updateRatioStatusVisual('statusQuick', quickOk);
+            updateRatioStatusVisual('statusCash', evaluate((data.cashRatio || 0), 0.2));
             updateRatioStatusVisual('statusEndettement', endettementOk);
             updateRatioStatusVisual('statusGearing', gearingOk);
+            updateRatioStatusVisual('statusNetDebt', evaluate((data.netDebtEbitda || 0), 3, '<='));
             updateRatioStatusVisual('statusAutonomie', autonomieOk);
             updateRatioStatusVisual('statusBFR', bfrOk);
             updateRatioStatusVisual('statusDelaiClients', delaiClientsOk);
             updateRatioStatusVisual('statusDelaiFourn', delaiFournOk);
             updateRatioStatusVisual('statusRotationStocks', rotationOk);
             
-            // Mettre à jour les commentaires d'objectifs avec conformité
+            // Mettre à jour les commentaires d'objectifs (juste le texte de l'objectif)
             updateObjectiveComment('objMargeBrute', margeBruteOk, `Obj: >${obj.margeBrute}%`);
             updateObjectiveComment('objMargeEbitda', margeEBITDAOk, `Obj: >${obj.margeEBITDA}%`);
             updateObjectiveComment('objMargeOp', evaluate((data.ebit || 0) / (data.ca || 1) * 100, 10), `Obj: >10%`);
@@ -13425,17 +13429,14 @@ td, th { mso-number-format:"\\@"; }
             }
         }
         
-        // Fonction pour mettre à jour le commentaire d'objectif avec la conformité
+        // Fonction pour mettre à jour le commentaire d'objectif (juste le texte, pas d'icône)
         function updateObjectiveComment(objId, isConform, objectifText) {
             const el = document.getElementById(objId);
             if (el) {
+                // Changer la couleur selon conformité
                 el.className = 'ratio-detail-objective ' + (isConform ? 'conform' : 'non-conform');
-                
-                const icon = isConform 
-                    ? '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>'
-                    : '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>';
-                
-                el.innerHTML = `${icon} ${objectifText}`;
+                // Afficher juste l'objectif sans icône
+                el.innerHTML = objectifText;
             }
         }
         
@@ -14649,17 +14650,4 @@ td, th { mso-number-format:"\\@"; }
             if (!canUseFeature('exportPPT')) {
                 showNotification('Export PowerPoint disponible avec le plan Business', 'warning');
                 openUpgradeModal();
-                return;
-            }
-            if (originalExportPageToPPT) await originalExportPageToPPT(pageType);
-        };
-
-        // Initialize app on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            loadMapping();
-            loadObjectives();
-            initApp();
-        });
-    </script>
-</body>
-</html>
+         
