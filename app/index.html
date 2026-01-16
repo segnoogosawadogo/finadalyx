@@ -5870,7 +5870,7 @@
             <div class="user-dropdown" id="userDropdown">
                 <div class="user-dropdown-header">
                     <div class="user-name">Utilisateur</div>
-                    <div class="user-email user-email-display"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cfaaa2aea6a38faab7aaa2bfa3aae1aca0a2">[email&#160;protected]</a></div>
+                    <div class="user-email user-email-display">email@exemple.com</div>
                     <span class="plan-badge basic user-plan-badge">Essai</span>
                 </div>
                 <div class="user-dropdown-menu">
@@ -7978,7 +7978,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                         </svg>
                         <h4>Email</h4>
-                        <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8bf8fefbfbe4f9ffcbede2e5efeae7f2f3a5e8e4e6">[email&#160;protected]</a></p>
+                        <p>support@findalyx.com</p>
                     </div>
                     <div class="contact-card" onclick="window.open('https://wa.me/221771234567')">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -7995,7 +7995,7 @@
         </div>
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script>
         // ========== MULTI-YEAR DATA STORAGE ==========
         let yearsData = {}; // { year: financialData }
         let currentYear = null;
@@ -10985,6 +10985,10 @@
             const hasComparison = yearN1 !== null;
             const dataN1 = hasComparison ? yearsData[yearN1] : null;
             
+            // Récupérer le nom de l'entreprise
+            const companyName = document.getElementById('companyName')?.value || 'Mon Entreprise';
+            const exportDate = new Date().toLocaleDateString('fr-FR');
+            
             const fmt = n => Math.round((n || 0) / 1000000);
             const fmtVar = (n, n1) => {
                 if (n1 === null || n1 === undefined || n1 === 0) return '-';
@@ -10995,9 +10999,11 @@
             
             let wsData = [];
             let fileName = '';
+            let sheetTitle = '';
 
             if (type === 'pnl') {
-                fileName = hasComparison ? `Compte_Resultat_${yearN1}_${yearN}.xlsx` : `Compte_Resultat_${yearN}.xlsx`;
+                sheetTitle = 'COMPTE DE RÉSULTAT';
+                fileName = hasComparison ? `${companyName}_Compte_Resultat_${yearN1}_${yearN}.xlsx` : `${companyName}_Compte_Resultat_${yearN}.xlsx`;
 
                 const pnlStructure = [
                     { label: "CHIFFRE D'AFFAIRES", key: 'ca' },
@@ -11034,8 +11040,9 @@
                     });
                 }
             } else if (type === 'bilan') {
+                sheetTitle = 'BILAN';
                 const hasN1 = hasComparison && dataN1 !== null;
-                fileName = hasN1 ? `Bilan_${yearN1}_${yearN}.xlsx` : `Bilan_${yearN}.xlsx`;
+                fileName = hasN1 ? `${companyName}_Bilan_${yearN1}_${yearN}.xlsx` : `${companyName}_Bilan_${yearN}.xlsx`;
 
                 // ACTIF
                 if (hasN1) {
@@ -11105,7 +11112,7 @@
                     }
                 });
             } else if (type === 'ratios') {
-                fileName = `Ratios_${currentYear}.xlsx`;
+                fileName = `${companyName}_Ratios_${currentYear}.xlsx`;
                 wsData.push(['Ratio', 'Valeur', 'Benchmark']);
                 wsData.push(['ROE', data.roe.toFixed(1) + '%', '> 15%']);
                 wsData.push(['ROA', data.roi.toFixed(1) + '%', '> 5%']);
@@ -11117,7 +11124,7 @@
                 wsData.push(['BFR (jours CA)', data.bfrJours, '< 60 jours']);
                 wsData.push(['Dette Nette / EBITDA', data.netDebtEbitda.toFixed(1) + 'x', '< 3x']);
             } else if (type === 'cashflow') {
-                fileName = `CashFlow_${currentYear}.xlsx`;
+                fileName = `${companyName}_CashFlow_${currentYear}.xlsx`;
                 wsData.push(['FLUX DE TRÉSORERIE', 'Montant (M FCFA)']);
                 wsData.push(['Résultat net', fmt(data.resultatNet)]);
                 wsData.push(['Dotations aux amortissements', fmt(data.dotations)]);
@@ -11129,6 +11136,14 @@
             const fmtNum = n => {
                 if (n === null || n === undefined || n === '') return '';
                 return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+            };
+
+            // Titres selon le type
+            const sheetTitles = {
+                pnl: 'COMPTE DE RÉSULTAT',
+                bilan: 'BILAN',
+                ratios: 'RATIOS FINANCIERS',
+                cashflow: 'TABLEAU DES FLUX DE TRÉSORERIE'
             };
 
             // Générer le HTML pour Excel avec styles
@@ -11147,6 +11162,17 @@ td, th { mso-number-format:"\\@"; }
 </style>
 </head>
 <body>
+<table border="0" cellspacing="0" cellpadding="5">
+<tr>
+    <td colspan="4" style="font-size:18px;font-weight:bold;color:#1E40AF;padding-bottom:5px;">${companyName}</td>
+</tr>
+<tr>
+    <td colspan="4" style="font-size:14px;font-weight:bold;color:#334155;padding-bottom:3px;">${sheetTitles[type] || type.toUpperCase()}</td>
+</tr>
+<tr>
+    <td colspan="4" style="font-size:11px;color:#64748B;padding-bottom:15px;">Exercice ${yearN} - Exporté le ${exportDate}</td>
+</tr>
+</table>
 <table border="1" cellspacing="0" cellpadding="5">
 `;
 
@@ -11486,11 +11512,11 @@ td, th { mso-number-format:"\\@"; }
             // Header avec logo
             let startY = 15;
             
-            // Ajouter le logo si disponible
+            // Ajouter le logo si disponible (taille réduite)
             if (logoSrc && !logoSrc.includes('data:image/svg')) {
                 try {
-                    doc.addImage(logoSrc, 'PNG', 14, 10, 25, 25);
-                    startY = 40;
+                    doc.addImage(logoSrc, 'PNG', 14, 10, 15, 15);
+                    startY = 30;
                     // Nom de l'entreprise à côté du logo
                     doc.setFontSize(16);
                     doc.setTextColor(30, 41, 59);
@@ -11628,15 +11654,15 @@ td, th { mso-number-format:"\\@"; }
                 // PDF en mode paysage pour tout mettre sur 1 page
                 const docLandscape = new jsPDF('landscape');
                 
-                // Ajouter le logo si disponible
+                // Ajouter le logo si disponible (taille réduite)
                 let bilanStartY = 15;
                 if (logoSrc && !logoSrc.includes('data:image/svg')) {
                     try {
-                        docLandscape.addImage(logoSrc, 'PNG', 14, 8, 20, 20);
+                        docLandscape.addImage(logoSrc, 'PNG', 14, 8, 12, 12);
                         docLandscape.setFontSize(14);
                         docLandscape.setTextColor(30, 41, 59);
-                        docLandscape.text(companyName, 38, 18);
-                        bilanStartY = 32;
+                        docLandscape.text(companyName, 30, 15);
+                        bilanStartY = 25;
                     } catch (e) {
                         console.log('Logo non ajouté:', e);
                     }
@@ -12532,11 +12558,11 @@ td, th { mso-number-format:"\\@"; }
             let titleX = 20;
             if (logoSrc && !logoSrc.includes('data:image/svg')) {
                 try {
-                    // Fond blanc pour le logo
+                    // Fond blanc pour le logo (taille réduite)
                     doc.setFillColor(255, 255, 255);
-                    doc.roundedRect(15, 8, 30, 30, 3, 3, 'F');
-                    doc.addImage(logoSrc, 'PNG', 17, 10, 26, 26);
-                    titleX = 55;
+                    doc.roundedRect(15, 10, 20, 20, 2, 2, 'F');
+                    doc.addImage(logoSrc, 'PNG', 17, 12, 16, 16);
+                    titleX = 42;
                 } catch (e) {
                     console.log('Logo non ajouté:', e);
                 }
@@ -12668,10 +12694,10 @@ td, th { mso-number-format:"\\@"; }
             slide.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: '100%', fill: { color: colors.primary } });
             slide.addShape(pptx.ShapeType.rect, { x: 0, y: 4.5, w: '100%', h: 1, fill: { color: colors.secondary } });
             
-            // Ajouter le logo de l'entreprise si disponible
+            // Ajouter le logo de l'entreprise si disponible (taille réduite)
             if (logoSrc && !logoSrc.includes('data:image/svg')) {
                 try {
-                    slide.addImage({ data: logoSrc, x: 0.5, y: 0.5, w: 1.8, h: 1.8 });
+                    slide.addImage({ data: logoSrc, x: 0.5, y: 0.5, w: 1, h: 1 });
                 } catch (e) {
                     console.log('Logo non ajouté au PPT:', e);
                 }
@@ -13017,6 +13043,9 @@ td, th { mso-number-format:"\\@"; }
                 await new Promise(resolve => script.onload = resolve);
             }
             
+            // Récupérer le nom de l'entreprise
+            const companyName = document.getElementById('companyName')?.value || 'Mon Entreprise';
+            
             const pptx = new PptxGenJS();
             pptx.author = 'Findalyx';
             pptx.title = `${pageType.toUpperCase()} - ${currentYear}`;
@@ -13028,14 +13057,14 @@ td, th { mso-number-format:"\\@"; }
             // Slide Title
             let slide = pptx.addSlide();
             
-            // Logo si disponible
+            // Logo si disponible (taille réduite)
             const logoPreview = document.getElementById('companyLogoPreview');
             const logoImg = logoPreview?.querySelector('img');
             const logoSrc = logoImg?.src || null;
             
             if (logoSrc && !logoSrc.includes('data:image/svg')) {
                 try {
-                    slide.addImage({ data: logoSrc, x: 0.5, y: 0.5, w: 1.2, h: 1.2 });
+                    slide.addImage({ data: logoSrc, x: 0.5, y: 0.5, w: 0.8, h: 0.8 });
                 } catch (e) {
                     console.log('Logo non ajouté:', e);
                 }
@@ -14650,4 +14679,17 @@ td, th { mso-number-format:"\\@"; }
             if (!canUseFeature('exportPPT')) {
                 showNotification('Export PowerPoint disponible avec le plan Business', 'warning');
                 openUpgradeModal();
-         
+                return;
+            }
+            if (originalExportPageToPPT) await originalExportPageToPPT(pageType);
+        };
+
+        // Initialize app on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMapping();
+            loadObjectives();
+            initApp();
+        });
+    </script>
+</body>
+</html>
