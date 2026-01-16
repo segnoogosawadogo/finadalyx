@@ -3961,90 +3961,57 @@
             left: 100%;
         }
 
-        /* Tooltip pour les ratios */
-        .ratio-tooltip {
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%) translateY(10px);
-            background: var(--slate-800);
-            color: white;
-            padding: 12px 16px;
-            border-radius: 12px;
-            font-size: 12px;
-            line-height: 1.5;
-            width: max-content;
-            max-width: 280px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 100;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            pointer-events: none;
+        /* Footer des ratios avec formule et conformité */
+        .ratio-detail-footer {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--slate-100);
+            position: relative;
+            z-index: 1;
         }
 
-        .ratio-tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 8px solid transparent;
-            border-top-color: var(--slate-800);
-        }
-
-        .ratio-detail-card:hover .ratio-tooltip {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .ratio-tooltip-title {
-            font-weight: 600;
-            color: var(--blue-300);
+        .ratio-detail-formula {
+            font-size: 11px;
+            color: var(--slate-400);
+            font-family: 'SF Mono', Monaco, Consolas, monospace;
             margin-bottom: 8px;
+        }
+
+        .ratio-detail-comment {
             display: flex;
             align-items: center;
             gap: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            padding: 6px 10px;
+            border-radius: 8px;
         }
 
-        .ratio-tooltip-title svg {
+        .ratio-detail-comment svg {
             width: 14px;
             height: 14px;
+            flex-shrink: 0;
         }
 
-        .ratio-tooltip-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            margin-bottom: 6px;
+        .ratio-detail-comment.conform {
+            background: var(--success-light);
+            color: var(--success);
         }
 
-        .ratio-tooltip-row:last-child {
-            margin-bottom: 0;
+        .ratio-detail-comment.warning {
+            background: var(--warning-light);
+            color: var(--warning);
         }
 
-        .ratio-tooltip-label {
-            color: var(--slate-400);
-            font-size: 11px;
-            min-width: 55px;
+        .ratio-detail-comment.danger {
+            background: var(--danger-light);
+            color: var(--danger);
         }
 
-        .ratio-tooltip-value {
-            color: white;
-            font-weight: 500;
-        }
-
-        .ratio-tooltip-value.formula {
-            font-family: 'SF Mono', Monaco, monospace;
-            background: rgba(255,255,255,0.1);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 11px;
-        }
-
-        .ratio-tooltip-value.objective {
-            color: var(--success-light);
+        .ratio-detail-comment .objective {
+            color: inherit;
+            opacity: 0.8;
+            margin-left: auto;
             font-weight: 600;
         }
 
@@ -13406,6 +13373,26 @@ td, th { mso-number-format:"\\@"; }
             updateRatioStatusVisual('statusDelaiFourn', delaiFournOk);
             updateRatioStatusVisual('statusRotationStocks', rotationOk);
             
+            // Mettre à jour les commentaires d'objectifs avec conformité
+            updateObjectiveComment('objMargeBrute', margeBruteOk, `Obj: >${obj.margeBrute}%`);
+            updateObjectiveComment('objMargeEbitda', margeEBITDAOk, `Obj: >${obj.margeEBITDA}%`);
+            updateObjectiveComment('objMargeOp', evaluate((data.ebit || 0) / (data.ca || 1) * 100, 10), `Obj: >10%`);
+            updateObjectiveComment('objMargeNette', margeNetteOk, `Obj: >${obj.margeNette}%`);
+            updateObjectiveComment('objROE', roeOk, `Obj: >${obj.roe}%`);
+            updateObjectiveComment('objROA', roaOk, `Obj: >${obj.roa}%`);
+            updateObjectiveComment('objROCE', evaluate((data.roce || 0), 10), `Obj: >10%`);
+            updateObjectiveComment('objCurrent', currentOk, `Obj: >${obj.currentRatio}`);
+            updateObjectiveComment('objQuick', quickOk, `Obj: >${obj.quickRatio}`);
+            updateObjectiveComment('objCash', evaluate((data.cashRatio || 0), 0.2), `Obj: >0.2`);
+            updateObjectiveComment('objEndettement', endettementOk, `Obj: <${obj.endettement}%`);
+            updateObjectiveComment('objGearing', gearingOk, `Obj: <${obj.gearing}%`);
+            updateObjectiveComment('objNetDebt', evaluate((data.netDebtEbitda || 0), 3, '<='), `Obj: <3x`);
+            updateObjectiveComment('objAutonomie', autonomieOk, `Obj: >${obj.autonomie}%`);
+            updateObjectiveComment('objBFR', bfrOk, `Obj: <${obj.bfr}j`);
+            updateObjectiveComment('objRotationStocks', rotationOk, `Obj: <${obj.rotationStocks}j`);
+            updateObjectiveComment('objDelaiClients', delaiClientsOk, `Obj: <${obj.delaiClients}j`);
+            updateObjectiveComment('objDelaiFourn', delaiFournOk, `Obj: >${obj.delaiFourn}j`);
+            
             // Mettre à jour les textes d'objectifs dans la page Ratios
             updateObjectiveText('MargeBrute', obj.margeBrute, '%', '≥');
             updateObjectiveText('MargeEBITDA', obj.margeEBITDA, '%', '≥');
@@ -13432,9 +13419,25 @@ td, th { mso-number-format:"\\@"; }
                 // Mettre à jour la card parente
                 const card = el.closest('.ratio-detail-card');
                 if (card) {
-                    card.classList.remove('status-good', 'status-warning');
+                    card.classList.remove('status-good', 'status-warning', 'status-bad');
                     card.classList.add(isGood ? 'status-good' : 'status-warning');
                 }
+            }
+        }
+        
+        // Fonction pour mettre à jour le commentaire d'objectif avec la conformité
+        function updateObjectiveComment(objId, isConform, objectifText) {
+            const el = document.getElementById(objId);
+            if (el) {
+                el.className = 'ratio-detail-objective ' + (isConform ? 'conform' : 'non-conform');
+                
+                const icon = isConform 
+                    ? '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>'
+                    : '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>';
+                
+                const comment = isConform ? '✓ Conforme' : '✗ Non conforme';
+                
+                el.innerHTML = `${icon} ${comment} (${objectifText})`;
             }
         }
         
