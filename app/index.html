@@ -14081,7 +14081,7 @@ ${userName}`;
             toggleExportMenu();
         }
         
-        // Fonction pour générer une analyse executive complète
+        // Fonction pour générer une analyse executive complète avec narration
         function generateExecutiveAnalysis(data, score) {
             const strengths = [];
             const weaknesses = [];
@@ -14090,113 +14090,169 @@ ${userName}`;
             const nextSteps = [];
             
             const fmtMrd = n => new Intl.NumberFormat('fr-FR', {maximumFractionDigits: 1}).format((n || 0) / 1000000000);
+            const fmtM = n => new Intl.NumberFormat('fr-FR', {maximumFractionDigits: 0}).format((n || 0) / 1000000);
             const margeEBITDA = data.ca > 0 ? (data.ebitda / data.ca) * 100 : 0;
             const margeNette = data.ca > 0 ? (data.resultatNet / data.ca) * 100 : 0;
+            const margeBrute = data.ca > 0 ? ((data.margeBrute || 0) / data.ca) * 100 : 0;
             
-            // Analyse des points forts
-            if (data.ca > 50000000000) {
-                strengths.push(`Chiffre d'affaires significatif de ${fmtMrd(data.ca)} Mrd FCFA`);
+            // ========== ANALYSE DES POINTS FORTS ==========
+            
+            // Analyse du CA avec contexte
+            if (data.ca > 100000000000) {
+                strengths.push(`L'entreprise affiche un volume d'activité important qui lui confère une position significative sur son marché et un pouvoir de négociation avec ses partenaires.`);
+            } else if (data.ca > 10000000000) {
+                strengths.push(`Le niveau d'activité témoigne d'une présence commerciale établie, avec une base de revenus permettant d'absorber les charges fixes.`);
             }
-            if (margeEBITDA >= 15) {
-                strengths.push(`Excellente marge EBITDA de ${margeEBITDA.toFixed(1)}%`);
+            
+            // Analyse de la marge EBITDA
+            if (margeEBITDA >= 20) {
+                strengths.push(`La rentabilité opérationnelle est remarquable, traduisant une excellente maîtrise des coûts d'exploitation et un positionnement prix favorable.`);
+            } else if (margeEBITDA >= 15) {
+                strengths.push(`L'exploitation dégage une marge confortable qui permet de financer les investissements et de rémunérer les apporteurs de capitaux.`);
             } else if (margeEBITDA >= 10) {
-                strengths.push(`Marge EBITDA solide de ${margeEBITDA.toFixed(1)}%`);
-            }
-            if (data.resultatNet > 0) {
-                strengths.push(`Entreprise profitable (RN: ${fmtMrd(data.resultatNet)} Mrd)`);
-            }
-            if ((data.currentRatio || 0) >= 1.5) {
-                strengths.push('Liquidité confortable (Current Ratio > 1.5)');
-            }
-            if ((data.ratioEndettement || 0) <= 50) {
-                strengths.push('Niveau d\'endettement maîtrisé');
-            }
-            if ((data.tresorerieNette || 0) > 0) {
-                strengths.push(`Trésorerie nette positive (${fmtMrd(data.tresorerieNette)} Mrd)`);
-            }
-            if (score && score.global >= 70) {
-                strengths.push('Score de santé financière excellent');
+                strengths.push(`La marge opérationnelle se situe dans les standards du marché, assurant une rentabilité satisfaisante de l'activité courante.`);
             }
             
-            // Si pas assez de points forts, ajouter des génériques
-            if (strengths.length < 3) {
-                if (data.ca > 0) strengths.push('Activité commerciale opérationnelle');
-                if (data.margeBrute > 0) strengths.push('Marge brute positive sur l\'activité');
+            // Analyse du résultat net
+            if (data.resultatNet > 0 && margeNette >= 5) {
+                strengths.push(`L'entreprise dégage un bénéfice significatif après toutes charges, démontrant sa capacité à créer de la valeur pour ses actionnaires.`);
+            } else if (data.resultatNet > 0) {
+                strengths.push(`Le résultat net positif confirme la viabilité du modèle économique, même si des marges de progression existent.`);
             }
             
-            // Analyse des points d'attention
-            if (margeEBITDA < 8 && margeEBITDA > 0) {
-                weaknesses.push(`Marge EBITDA faible (${margeEBITDA.toFixed(1)}%), optimiser les coûts`);
+            // Analyse de la liquidité
+            if ((data.currentRatio || 0) >= 2) {
+                strengths.push(`La structure de liquidité est très solide, offrant une marge de sécurité importante pour faire face aux engagements à court terme.`);
+            } else if ((data.currentRatio || 0) >= 1.5) {
+                strengths.push(`L'équilibre financier à court terme est bien maîtrisé, avec des actifs circulants couvrant largement les dettes d'exploitation.`);
+            }
+            
+            // Analyse de l'endettement
+            if ((data.ratioEndettement || 0) <= 30) {
+                strengths.push(`La structure financière est très saine avec un faible recours à l'endettement, préservant une capacité d'emprunt future importante.`);
+            } else if ((data.ratioEndettement || 0) <= 50) {
+                strengths.push(`Le niveau d'endettement reste raisonnable et ne compromet pas l'indépendance financière de l'entreprise.`);
+            }
+            
+            // Analyse de la trésorerie
+            if ((data.tresorerieNette || 0) > data.ca * 0.1) {
+                strengths.push(`La trésorerie excédentaire représente un matelas de sécurité conséquent, offrant flexibilité et opportunités d'investissement.`);
+            } else if ((data.tresorerieNette || 0) > 0) {
+                strengths.push(`La position de trésorerie positive témoigne d'une gestion prudente du cycle d'exploitation.`);
+            }
+            
+            // Analyse de la marge brute
+            if (margeBrute >= 40) {
+                strengths.push(`La marge brute élevée reflète un bon pouvoir de pricing et/ou une chaîne d'approvisionnement optimisée.`);
+            }
+            
+            // ========== ANALYSE DES POINTS D'ATTENTION ==========
+            
+            // Problème de marge EBITDA
+            if (margeEBITDA < 5 && margeEBITDA > 0) {
+                weaknesses.push(`La marge opérationnelle reste fragile et expose l'entreprise à tout retournement conjoncturel. Une revue approfondie de la structure de coûts s'impose.`);
             } else if (margeEBITDA <= 0) {
-                weaknesses.push('EBITDA négatif, exploitation déficitaire');
+                weaknesses.push(`L'exploitation consomme plus de ressources qu'elle n'en génère, situation qui ne peut perdurer sans remettre en cause la pérennité de l'activité.`);
+            } else if (margeEBITDA < 10) {
+                weaknesses.push(`La marge d'exploitation laisse peu de marge de manœuvre pour absorber des aléas ou financer la croissance sur fonds propres.`);
             }
+            
+            // Problème de résultat net
             if (data.resultatNet < 0) {
-                weaknesses.push(`Résultat net déficitaire (${fmtMrd(data.resultatNet)} Mrd)`);
-            }
-            if ((data.currentRatio || 0) < 1) {
-                weaknesses.push('Liquidité insuffisante (Current Ratio < 1)');
-            }
-            if ((data.ratioEndettement || 0) > 70) {
-                weaknesses.push(`Endettement élevé (${(data.ratioEndettement || 0).toFixed(0)}%)`);
-            }
-            if ((data.tresorerieNette || 0) < 0) {
-                weaknesses.push('Trésorerie nette négative');
-            }
-            if ((data.bfrJours || 0) > 90) {
-                weaknesses.push(`BFR élevé (${data.bfrJours} jours de CA)`);
-            }
-            if (score && score.global < 50) {
-                weaknesses.push('Score de santé financière préoccupant');
+                const pertesPct = Math.abs(margeNette);
+                if (pertesPct > 10) {
+                    weaknesses.push(`Les pertes significatives érodent les fonds propres et fragilisent la capacité de l'entreprise à honorer ses engagements futurs.`);
+                } else {
+                    weaknesses.push(`Le déficit constaté, bien que contenu, appelle des mesures correctives rapides pour éviter une dégradation de la situation financière.`);
+                }
             }
             
-            // Si pas assez de points faibles, mentionner les axes d'amélioration
-            if (weaknesses.length < 2) {
-                if (margeNette < 5 && data.resultatNet > 0) weaknesses.push('Marge nette à améliorer (< 5%)');
-                weaknesses.push('Pas de données N-1 pour analyse des tendances');
+            // Problème de liquidité
+            if ((data.currentRatio || 0) < 0.8) {
+                weaknesses.push(`Le déséquilibre entre actifs et passifs à court terme crée un risque de tension de trésorerie pouvant compromettre les opérations courantes.`);
+            } else if ((data.currentRatio || 0) < 1) {
+                weaknesses.push(`La couverture des dettes à court terme par les actifs circulants est insuffisante, nécessitant une vigilance accrue sur le BFR.`);
             }
             
-            // Recommandations stratégiques basées sur l'analyse
+            // Problème d'endettement
+            if ((data.ratioEndettement || 0) > 80) {
+                weaknesses.push(`Le poids de l'endettement limite fortement la flexibilité financière et expose l'entreprise au risque de taux et de refinancement.`);
+            } else if ((data.ratioEndettement || 0) > 60) {
+                weaknesses.push(`Le niveau de dette mérite attention : toute nouvelle dégradation des résultats pourrait compromettre le respect des covenants bancaires.`);
+            }
+            
+            // Problème de trésorerie
+            if ((data.tresorerieNette || 0) < -data.ca * 0.05) {
+                weaknesses.push(`La position de trésorerie déficitaire traduit une dépendance aux concours bancaires à court terme, source de fragilité.`);
+            } else if ((data.tresorerieNette || 0) < 0) {
+                weaknesses.push(`Le découvert de trésorerie, même limité, signale des tensions sur le cycle d'exploitation à surveiller.`);
+            }
+            
+            // Problème de BFR
+            if ((data.bfrJours || 0) > 120) {
+                weaknesses.push(`Le cycle d'exploitation immobilise des ressources considérables, pénalisant la rentabilité des capitaux investis.`);
+            } else if ((data.bfrJours || 0) > 90) {
+                weaknesses.push(`Le besoin en fonds de roulement élevé absorbe une part importante des ressources financières de l'entreprise.`);
+            }
+            
+            // ========== RECOMMANDATIONS STRATÉGIQUES ==========
+            
+            // Recommandations selon le profil
             if (margeEBITDA < 10) {
-                recommendations.push('Lancer un programme d\'optimisation des coûts opérationnels pour améliorer la marge EBITDA');
+                recommendations.push(`Engager un programme d'excellence opérationnelle visant à identifier et éliminer les sources d'inefficience dans les processus de production et de support.`);
             }
-            if ((data.currentRatio || 0) < 1.2) {
-                recommendations.push('Renforcer la gestion du BFR : réduire les délais clients, négocier les délais fournisseurs');
+            
+            if ((data.currentRatio || 0) < 1.2 || (data.bfrJours || 0) > 60) {
+                recommendations.push(`Optimiser le cycle cash-to-cash en accélérant le recouvrement clients, en renégociant les conditions fournisseurs et en rationalisant les stocks.`);
             }
+            
             if ((data.ratioEndettement || 0) > 60) {
-                recommendations.push('Envisager un désendettement progressif ou une augmentation des fonds propres');
+                recommendations.push(`Élaborer un plan de désendettement progressif combinant amélioration de l'autofinancement et arbitrages sur les actifs non stratégiques.`);
             }
+            
             if (data.resultatNet < 0) {
-                recommendations.push('Établir un plan de redressement avec objectifs de retour à la rentabilité sous 12-18 mois');
-            }
-            if (data.resultatNet > 0 && margeNette < 3) {
-                recommendations.push('Analyser la structure des charges financières et exceptionnelles pour améliorer la marge nette');
+                recommendations.push(`Définir un plan de retournement avec des jalons trimestriels, identifiant les leviers rapides de réduction des pertes.`);
+            } else if (margeNette < 3 && data.resultatNet > 0) {
+                recommendations.push(`Analyser la chaîne de valeur pour identifier les maillons destructeurs de valeur et arbitrer entre internalisation et externalisation.`);
             }
             
-            // Recommandations générales
+            if (data.resultatNet > 0 && margeEBITDA >= 10 && (data.ratioEndettement || 0) <= 50) {
+                recommendations.push(`Capitaliser sur la solidité financière pour investir dans les relais de croissance : innovation, expansion géographique ou acquisitions ciblées.`);
+            }
+            
+            // Recommandations générales si besoin
             if (recommendations.length < 3) {
-                recommendations.push('Mettre en place un reporting mensuel de suivi des KPIs financiers');
-                recommendations.push('Réaliser un benchmark sectoriel pour identifier les leviers de performance');
+                recommendations.push(`Instaurer un tableau de bord mensuel de pilotage financier permettant d'anticiper les dérives et de réagir rapidement.`);
+            }
+            if (recommendations.length < 4) {
+                recommendations.push(`Conduire une analyse comparative avec les pairs du secteur pour identifier les meilleures pratiques et les écarts de performance.`);
             }
             
-            // Synthèse
-            if (score && score.global >= 70) {
-                summary = `L'entreprise présente une situation financière solide avec un score de ${score.global}/100. La rentabilité et la structure financière sont satisfaisantes. Focus recommandé sur l'optimisation continue et la croissance.`;
-            } else if (score && score.global >= 50) {
-                summary = `La situation financière est correcte mais présente des axes d'amélioration. Score de ${score.global}/100. Des actions ciblées sur les points faibles permettraient d'améliorer significativement les performances.`;
+            // ========== SYNTHÈSE NARRATIVE ==========
+            
+            if (score && score.global >= 75) {
+                summary = `L'analyse révèle une entreprise en excellente santé financière. Les fondamentaux sont solides : rentabilité satisfaisante, structure bilancielle équilibrée et liquidité maîtrisée. Cette situation favorable permet d'envisager sereinement les projets de développement tout en maintenant une politique de distribution attractive.`;
+            } else if (score && score.global >= 60) {
+                summary = `L'entreprise présente un profil financier globalement satisfaisant, avec des indicateurs dans les normes sectorielles. Quelques axes d'amélioration ont été identifiés qui, une fois adressés, permettront de consolider durablement la performance et de dégager des marges de manœuvre supplémentaires.`;
+            } else if (score && score.global >= 45) {
+                summary = `La situation financière appelle une vigilance particulière. Si l'entreprise reste viable, certains indicateurs signalent des fragilités qu'il convient de traiter rapidement pour éviter une dégradation. Un plan d'actions correctives priorisé est recommandé.`;
             } else if (score) {
-                summary = `La situation financière nécessite une attention particulière avec un score de ${score.global}/100. Des mesures correctives sont recommandées pour renforcer la solidité financière de l'entreprise.`;
+                summary = `L'analyse met en évidence des difficultés financières significatives nécessitant des mesures de redressement urgentes. La mobilisation de l'ensemble des parties prenantes autour d'un plan de retournement ambitieux mais réaliste est indispensable.`;
             } else {
-                summary = `Analyse basée sur les données de l'exercice ${currentYear}. Une comparaison avec N-1 permettrait d'affiner le diagnostic.`;
+                summary = `Cette analyse constitue une photographie de la situation financière à date. L'absence de données comparatives limite la portée du diagnostic. Un suivi dans le temps permettra d'affiner les conclusions et d'adapter les recommandations.`;
             }
             
-            // Prochaines étapes
-            nextSteps.push('Valider les hypothèses et objectifs avec la direction');
-            nextSteps.push('Mettre en place le suivi mensuel des indicateurs clés');
-            if (weaknesses.some(w => w.includes('BFR') || w.includes('Liquidité'))) {
-                nextSteps.push('Prioriser l\'amélioration de la gestion du cash');
+            // ========== PROCHAINES ÉTAPES ==========
+            
+            nextSteps.push('Partager ce diagnostic avec le comité de direction pour validation et priorisation des actions');
+            
+            if (weaknesses.length > 2) {
+                nextSteps.push('Constituer un groupe de travail dédié aux chantiers d\'amélioration identifiés');
             } else {
-                nextSteps.push('Préparer le budget prévisionnel N+1');
+                nextSteps.push('Définir les objectifs chiffrés et le calendrier de mise en œuvre des recommandations');
             }
+            
+            nextSteps.push('Programmer un point de suivi trimestriel pour mesurer les progrès réalisés');
             
             return {
                 strengths: strengths.slice(0, 5),
