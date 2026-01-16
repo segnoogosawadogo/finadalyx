@@ -12620,7 +12620,7 @@ td, th { mso-number-format:"\\@"; }
                 resultsContainer.innerHTML = '<div class="search-no-results">Aucun résultat trouvé</div>';
             } else {
                 resultsContainer.innerHTML = filtered.map(item => `
-                    <div class="search-result-item" onclick="executeSearchResult('${item.page || ''}', '${item.action || ''}')">
+                    <div class="search-result-item" onmousedown="executeSearchResult('${item.page || ''}', '${item.action || ''}')">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">${item.icon}</svg>
                         <div class="result-text">
                             <div class="result-title">${item.title}</div>
