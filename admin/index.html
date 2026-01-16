@@ -857,25 +857,191 @@
 
         @media (max-width: 768px) {
             .sidebar {
+                position: fixed;
+                left: -260px;
+                top: 0;
+                bottom: 0;
+                z-index: 1000;
+                transition: left 0.3s ease;
+            }
+            
+            .sidebar.open {
+                left: 0;
+            }
+            
+            .mobile-overlay {
                 display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.5);
+                z-index: 999;
+            }
+            
+            .mobile-overlay.show {
+                display: block;
             }
 
             .main-content {
                 margin-left: 0;
             }
+            
+            .main-header {
+                padding: 16px 20px;
+            }
+            
+            .header-title h1 {
+                font-size: 20px;
+            }
+            
+            .header-actions {
+                gap: 8px;
+            }
+            
+            .header-actions .btn span {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: flex !important;
+                width: 40px;
+                height: 40px;
+                background: var(--gray-100);
+                border: none;
+                border-radius: 10px;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                margin-right: 12px;
+            }
+            
+            .mobile-menu-btn svg {
+                width: 24px;
+                height: 24px;
+                color: var(--gray-600);
+            }
 
             .stats-grid {
                 grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .stat-card {
+                padding: 16px;
             }
 
             .table-actions {
-                flex-wrap: wrap;
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .filter-group {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .filter-group select {
+                flex: 1;
             }
 
             .data-table {
                 display: block;
                 overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
             }
+            
+            .data-table th, .data-table td {
+                padding: 12px 8px;
+                font-size: 13px;
+                white-space: nowrap;
+            }
+            
+            .user-info {
+                gap: 8px;
+            }
+            
+            .user-avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 11px;
+            }
+            
+            .user-details {
+                max-width: 120px;
+            }
+            
+            .user-name {
+                font-size: 13px;
+            }
+            
+            .user-email {
+                font-size: 11px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            
+            .action-btns {
+                flex-direction: column;
+                gap: 4px;
+            }
+            
+            .action-btn {
+                width: 28px;
+                height: 28px;
+            }
+            
+            .pagination {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            /* Modal responsive */
+            .modal {
+                width: 95% !important;
+                max-width: 95% !important;
+                margin: 16px;
+                max-height: 90vh;
+            }
+            
+            .modal-header, .modal-body, .modal-footer {
+                padding: 16px;
+            }
+            
+            .modal-header h2 {
+                font-size: 18px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .modal-footer {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .modal-footer .btn {
+                flex: 1;
+                min-width: 100px;
+            }
+            
+            /* Login responsive */
+            .login-card {
+                margin: 16px;
+                padding: 32px 24px;
+            }
+        }
+        
+        /* Hide mobile menu button on desktop */
+        .mobile-menu-btn {
+            display: none;
         }
     </style>
 </head>
@@ -914,8 +1080,18 @@
 
     <!-- Admin Layout -->
     <div class="admin-layout" id="adminLayout">
+        <!-- Mobile Overlay -->
+        <div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileMenu()"></div>
+        
+        <!-- Mobile Menu Button (visible only on mobile) -->
+        <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+        </button>
+        
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="adminSidebar">
             <div class="sidebar-logo">
                 <div class="sidebar-logo-icon">
                     <svg width="22" height="22" fill="none" stroke="white" viewBox="0 0 24 24">
@@ -1210,7 +1386,7 @@
                     <div class="user-detail-avatar" id="modalUserAvatar">JD</div>
                     <div class="user-detail-info">
                         <h3 id="modalUserName">John Doe</h3>
-                        <p id="modalUserEmail">john@example.com</p>
+                        <p id="modalUserEmail">user@example.com</p>
                     </div>
                 </div>
                 <div class="detail-grid">
@@ -1752,6 +1928,21 @@
             }
         }
 
+        // Mobile Menu Functions
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('adminSidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+        
+        function closeMobileMenu() {
+            const sidebar = document.getElementById('adminSidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+        }
+
         // Navigation
         function showSection(sectionId) {
             document.querySelectorAll('section').forEach(s => s.style.display = 'none');
@@ -1759,6 +1950,9 @@
             
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             event.currentTarget.classList.add('active');
+            
+            // Fermer le menu mobile après navigation
+            closeMobileMenu();
         }
 
         function goToPage(page) {
@@ -1840,13 +2034,4 @@
         }
 
         // Loading
-        function showLoading(show) {
-            document.getElementById('loadingOverlay').classList.toggle('show', show);
-        }
-
-        function showError(message) {
-            showLoginError(message);
-        }
-    </script>
-</body>
-</html>
+        function showL
