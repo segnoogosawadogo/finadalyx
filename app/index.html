@@ -11414,14 +11414,11 @@ td, th { mso-number-format:"\\@"; }
                 const resultatNetIndex = pnlRows.findIndex(r => r.total);
 
                 doc.text(title, 14, startY + 7);
-                doc.setFontSize(10);
-                doc.setTextColor(100);
-                doc.text('Généré par Findalyx - ' + new Date().toLocaleDateString('fr-FR'), 14, startY + 15);
 
                 doc.autoTable({
                     head: headers,
                     body: tableData,
-                    startY: startY + 25,
+                    startY: startY + 15,
                     theme: 'striped',
                     headStyles: { fillColor: [30, 64, 175], fontSize: 9 },
                     styles: { fontSize: 9, cellPadding: 3 },
@@ -11434,7 +11431,12 @@ td, th { mso-number-format:"\\@"; }
                     }
                 });
 
-                doc.save(`PnL_${currentYear}.pdf`);
+                // Signature en bas de page
+                doc.setFontSize(8);
+                doc.setTextColor(150);
+                doc.text('Généré par Findalyx le ' + new Date().toLocaleDateString('fr-FR'), 14, 285);
+                
+                doc.save(`${companyName.replace(/[^a-zA-Z0-9]/g, '_')}_PnL_${currentYear}.pdf`);
                 return;
             } else if (type === 'bilan') {
                 // Check for comparison data
@@ -11477,9 +11479,6 @@ td, th { mso-number-format:"\\@"; }
                 docLandscape.setFontSize(14);
                 docLandscape.setTextColor(30, 64, 175);
                 docLandscape.text(title, 14, bilanStartY);
-                docLandscape.setFontSize(8);
-                docLandscape.setTextColor(100);
-                docLandscape.text('Généré par Findalyx - ' + new Date().toLocaleDateString('fr-FR'), 14, bilanStartY + 6);
 
                 // Style commun pour les tableaux compacts
                 const tableStyles = {
@@ -11609,7 +11608,12 @@ td, th { mso-number-format:"\\@"; }
                     }
                 });
 
-                docLandscape.save(`Bilan_${yearN}.pdf`);
+                // Signature en bas de page
+                docLandscape.setFontSize(8);
+                docLandscape.setTextColor(150);
+                docLandscape.text('Généré par Findalyx le ' + new Date().toLocaleDateString('fr-FR'), 14, 200);
+                
+                docLandscape.save(`${companyName}_Bilan_${yearN}.pdf`);
                 return;
             } else if (type === 'ratios') {
                 title = 'Ratios Financiers - ' + currentYear;
@@ -11642,7 +11646,7 @@ td, th { mso-number-format:"\\@"; }
                 doc.text(title, 14, 22);
                 doc.setFontSize(10);
                 doc.setTextColor(100);
-                doc.text('Généré par Findalyx - ' + new Date().toLocaleDateString('fr-FR') + ' | Montants en M FCFA', 14, 30);
+                doc.text('Montants en M FCFA', 14, 30);
 
                 if (hasN1Cf) {
                     // Calculs
@@ -11739,19 +11743,21 @@ td, th { mso-number-format:"\\@"; }
                     }
                 });
 
-                doc.save(`CashFlow_${currentYear}.pdf`);
+                // Signature en bas
+                doc.setFontSize(8);
+                doc.setTextColor(150);
+                doc.text('Généré par Findalyx le ' + new Date().toLocaleDateString('fr-FR'), 14, 285);
+
+                doc.save(`${companyName.replace(/[^a-zA-Z0-9]/g, '_')}_CashFlow_${currentYear}.pdf`);
                 return;
             }
 
             doc.text(title, 14, 22);
-            doc.setFontSize(10);
-            doc.setTextColor(100);
-            doc.text('Généré par Findalyx - ' + new Date().toLocaleDateString('fr-FR'), 14, 30);
 
             doc.autoTable({
                 head: headers,
                 body: tableData,
-                startY: 40,
+                startY: 35,
                 theme: 'striped',
                 headStyles: { fillColor: [30, 64, 175], fontSize: 9 },
                 styles: { fontSize: 9, cellPadding: 3 },
@@ -11763,7 +11769,12 @@ td, th { mso-number-format:"\\@"; }
                 } : {}
             });
 
-            doc.save(`${type}_${currentYear}.pdf`);
+            // Signature en bas
+            doc.setFontSize(8);
+            doc.setTextColor(150);
+            doc.text('Généré par Findalyx le ' + new Date().toLocaleDateString('fr-FR'), 14, 285);
+
+            doc.save(`${companyName.replace(/[^a-zA-Z0-9]/g, '_')}_${type}_${currentYear}.pdf`);
         }
 
         // ========== BALANCE CHECK ==========
@@ -12338,22 +12349,44 @@ td, th { mso-number-format:"\\@"; }
             const doc = new jsPDF();
             const data = yearsData[currentYear];
             
+            // Récupérer les infos de l'entreprise
+            const companyName = document.getElementById('companyName')?.value || 'Mon Entreprise';
+            const logoPreview = document.getElementById('companyLogoPreview');
+            const logoImg = logoPreview?.querySelector('img');
+            const logoSrc = logoImg?.src || null;
+            
             const fmtMrd = n => new Intl.NumberFormat('fr-FR', {maximumFractionDigits: 2}).format((n || 0) / 1000000000);
             
-            // Header
+            // Header avec couleur
             doc.setFillColor(30, 64, 175);
-            doc.rect(0, 0, 210, 40, 'F');
+            doc.rect(0, 0, 210, 45, 'F');
+            
+            // Logo si disponible
+            let titleX = 20;
+            if (logoSrc && !logoSrc.includes('data:image/svg')) {
+                try {
+                    // Fond blanc pour le logo
+                    doc.setFillColor(255, 255, 255);
+                    doc.roundedRect(15, 8, 30, 30, 3, 3, 'F');
+                    doc.addImage(logoSrc, 'PNG', 17, 10, 26, 26);
+                    titleX = 55;
+                } catch (e) {
+                    console.log('Logo non ajouté:', e);
+                }
+            }
+            
+            // Nom de l'entreprise
             doc.setTextColor(255, 255, 255);
-            doc.setFontSize(24);
+            doc.setFontSize(22);
             doc.setFont('helvetica', 'bold');
-            doc.text('FINDALYX', 20, 25);
+            doc.text(companyName.toUpperCase(), titleX, 25);
             doc.setFontSize(12);
             doc.setFont('helvetica', 'normal');
-            doc.text('Rapport d\'Analyse Financière - Exercice ' + currentYear, 20, 35);
+            doc.text('Rapport d\'Analyse Financière - Exercice ' + currentYear, titleX, 37);
             
             // Reset colors
             doc.setTextColor(0, 0, 0);
-            let y = 55;
+            let y = 60;
             
             // KPIs Section
             doc.setFontSize(14);
@@ -12406,7 +12439,7 @@ td, th { mso-number-format:"\\@"; }
             doc.setTextColor(128, 128, 128);
             doc.text(`Généré par Findalyx le ${new Date().toLocaleDateString('fr-FR')}`, 20, 285);
             
-            doc.save(`Findalyx_Rapport_${currentYear}.pdf`);
+            doc.save(`${companyName.replace(/[^a-zA-Z0-9]/g, '_')}_Rapport_${currentYear}.pdf`);
             showNotification('Rapport PDF exporté avec succès', 'success');
             toggleExportMenu();
         }
@@ -12471,17 +12504,18 @@ td, th { mso-number-format:"\\@"; }
             // Ajouter le logo de l'entreprise si disponible
             if (logoSrc && !logoSrc.includes('data:image/svg')) {
                 try {
-                    slide.addImage({ data: logoSrc, x: 8, y: 0.3, w: 1.5, h: 1.5 });
+                    slide.addImage({ data: logoSrc, x: 0.5, y: 0.5, w: 1.8, h: 1.8 });
                 } catch (e) {
                     console.log('Logo non ajouté au PPT:', e);
                 }
             }
             
-            slide.addText('FINDALYX', { x: 0.5, y: 1.5, w: 9, h: 0.8, fontSize: 48, bold: true, color: colors.white, fontFace: 'Arial' });
-            slide.addText('Rapport d\'Analyse Financière', { x: 0.5, y: 2.3, w: 9, h: 0.5, fontSize: 24, color: 'a5b4fc', fontFace: 'Arial' });
-            slide.addText(companyName.toUpperCase(), { x: 0.5, y: 3.2, w: 9, h: 0.6, fontSize: 32, bold: true, color: colors.white, fontFace: 'Arial' });
-            slide.addText(`Exercice ${currentYear}`, { x: 0.5, y: 4.6, w: 4, h: 0.4, fontSize: 18, color: colors.white, fontFace: 'Arial' });
-            slide.addText(new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }), { x: 5.5, y: 4.6, w: 4, h: 0.4, fontSize: 14, color: colors.white, align: 'right', fontFace: 'Arial' });
+            // Nom de l'entreprise en grand
+            slide.addText(companyName.toUpperCase(), { x: 0.5, y: 1.8, w: 9, h: 0.8, fontSize: 44, bold: true, color: colors.white, fontFace: 'Arial' });
+            slide.addText('Rapport d\'Analyse Financière', { x: 0.5, y: 2.6, w: 9, h: 0.5, fontSize: 24, color: 'a5b4fc', fontFace: 'Arial' });
+            slide.addText(`Exercice ${currentYear}`, { x: 0.5, y: 3.3, w: 9, h: 0.5, fontSize: 20, color: colors.white, fontFace: 'Arial' });
+            slide.addText(new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }), { x: 0.5, y: 4.6, w: 4, h: 0.4, fontSize: 14, color: colors.white, fontFace: 'Arial' });
+            slide.addText('Généré par Findalyx', { x: 5.5, y: 4.6, w: 4, h: 0.4, fontSize: 12, color: 'a5b4fc', align: 'right', fontFace: 'Arial' });
             
             // ============ SLIDE 2: SOMMAIRE ============
             slide = pptx.addSlide();
@@ -12705,11 +12739,10 @@ td, th { mso-number-format:"\\@"; }
             slide = pptx.addSlide();
             slide.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: '100%', fill: { color: colors.primary } });
             slide.addText('Merci', { x: 0.5, y: 2, w: 9, h: 1, fontSize: 48, bold: true, color: colors.white, align: 'center', fontFace: 'Arial' });
-            slide.addText('Rapport généré par Findalyx', { x: 0.5, y: 3.2, w: 9, h: 0.5, fontSize: 18, color: 'a5b4fc', align: 'center', fontFace: 'Arial' });
-            slide.addText('www.findalyx.com', { x: 0.5, y: 4.5, w: 9, h: 0.4, fontSize: 14, color: 'a5b4fc', align: 'center', fontFace: 'Arial' });
+            slide.addText(`Généré par Findalyx le ${new Date().toLocaleDateString('fr-FR')}`, { x: 0.5, y: 3.2, w: 9, h: 0.5, fontSize: 16, color: 'a5b4fc', align: 'center', fontFace: 'Arial' });
             
             // Save
-            pptx.writeFile({ fileName: `Findalyx_Rapport_${companyName.replace(/[^a-zA-Z0-9]/g, '_')}_${currentYear}.pptx` });
+            pptx.writeFile({ fileName: `${companyName.replace(/[^a-zA-Z0-9]/g, '_')}_Rapport_${currentYear}.pptx` });
             showNotification('Présentation PowerPoint exportée avec succès !', 'success');
             toggleExportMenu();
         }
@@ -12827,7 +12860,21 @@ td, th { mso-number-format:"\\@"; }
             
             // Slide Title
             let slide = pptx.addSlide();
-            slide.addText('FINDALYX', { x: 0.5, y: 2, w: 9, h: 1, fontSize: 44, bold: true, color: '1e40af' });
+            
+            // Logo si disponible
+            const logoPreview = document.getElementById('companyLogoPreview');
+            const logoImg = logoPreview?.querySelector('img');
+            const logoSrc = logoImg?.src || null;
+            
+            if (logoSrc && !logoSrc.includes('data:image/svg')) {
+                try {
+                    slide.addImage({ data: logoSrc, x: 0.5, y: 0.5, w: 1.2, h: 1.2 });
+                } catch (e) {
+                    console.log('Logo non ajouté:', e);
+                }
+            }
+            
+            slide.addText(companyName.toUpperCase(), { x: 0.5, y: 2, w: 9, h: 1, fontSize: 40, bold: true, color: '1e40af' });
             
             const titles = {
                 pnl: 'Compte de Résultat',
@@ -12984,7 +13031,7 @@ td, th { mso-number-format:"\\@"; }
             }
             
             // Save
-            pptx.writeFile({ fileName: `Findalyx_${titles[pageType] || pageType}_${currentYear}.pptx` });
+            pptx.writeFile({ fileName: `${companyName.replace(/[^a-zA-Z0-9]/g, '_')}_${titles[pageType] || pageType}_${currentYear}.pptx` });
             showNotification('Présentation PowerPoint exportée', 'success');
         }
 
