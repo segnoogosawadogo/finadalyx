@@ -1641,6 +1641,200 @@
             justify-content: center;
             border: 2px solid white;
         }
+        
+        .icon-btn .badge.hidden {
+            display: none;
+        }
+
+        /* Search Results Dropdown */
+        .search-box {
+            position: relative;
+        }
+        
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid var(--slate-200);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            margin-top: 8px;
+        }
+        
+        .search-results.show {
+            display: block;
+        }
+        
+        .search-result-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .search-result-item:hover {
+            background: var(--slate-50);
+        }
+        
+        .search-result-item svg {
+            width: 20px;
+            height: 20px;
+            color: var(--slate-400);
+        }
+        
+        .search-result-item .result-text {
+            flex: 1;
+        }
+        
+        .search-result-item .result-title {
+            font-weight: 500;
+            color: var(--slate-700);
+        }
+        
+        .search-result-item .result-category {
+            font-size: 12px;
+            color: var(--slate-400);
+        }
+        
+        .search-no-results {
+            padding: 24px;
+            text-align: center;
+            color: var(--slate-400);
+        }
+
+        /* Notifications Dropdown */
+        .notifications-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 360px;
+            background: white;
+            border: 1px solid var(--slate-200);
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .notifications-dropdown.show {
+            display: block;
+        }
+        
+        .notifications-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--slate-100);
+        }
+        
+        .notifications-header span {
+            font-weight: 600;
+            color: var(--slate-700);
+        }
+        
+        .notifications-header button {
+            background: none;
+            border: none;
+            color: var(--blue-600);
+            font-size: 13px;
+            cursor: pointer;
+        }
+        
+        .notifications-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .notification-item {
+            display: flex;
+            gap: 12px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--slate-50);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .notification-item:hover {
+            background: var(--slate-50);
+        }
+        
+        .notification-item.unread {
+            background: var(--blue-50);
+        }
+        
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .notification-icon.info {
+            background: var(--blue-100);
+            color: var(--blue-600);
+        }
+        
+        .notification-icon.warning {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+        
+        .notification-icon.success {
+            background: var(--success-light);
+            color: var(--success);
+        }
+        
+        .notification-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-title {
+            font-weight: 500;
+            color: var(--slate-700);
+            margin-bottom: 4px;
+        }
+        
+        .notification-text {
+            font-size: 13px;
+            color: var(--slate-500);
+            line-height: 1.4;
+        }
+        
+        .notification-time {
+            font-size: 11px;
+            color: var(--slate-400);
+            margin-top: 6px;
+        }
+        
+        .notifications-empty {
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--slate-400);
+        }
+        
+        @media (max-width: 768px) {
+            .notifications-dropdown {
+                width: 300px;
+                right: -100px;
+            }
+        }
 
         /* Page Content */
         .page-content {
@@ -6240,19 +6434,27 @@
                 <span class="breadcrumb-current">Tableau de bord</span>
             </div>
             <div class="top-actions">
-                <div class="search-box">
+                <div class="search-box" id="globalSearchBox">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
-                    <input type="text" placeholder="Rechercher...">
+                    <input type="text" id="globalSearchInput" placeholder="Rechercher..." oninput="handleGlobalSearch(this.value)" onfocus="showSearchResults()" onblur="hideSearchResults()">
+                    <div class="search-results" id="searchResults"></div>
                 </div>
-                <button class="icon-btn">
+                <button class="icon-btn" id="notificationsBtn" onclick="toggleNotifications()">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
                     </svg>
-                    <span class="badge">3</span>
+                    <span class="badge" id="notificationsBadge">3</span>
+                    <div class="notifications-dropdown" id="notificationsDropdown">
+                        <div class="notifications-header">
+                            <span>Notifications</span>
+                            <button onclick="markAllNotificationsRead(event)">Tout marquer lu</button>
+                        </div>
+                        <div class="notifications-list" id="notificationsList"></div>
+                    </div>
                 </button>
-                <button class="icon-btn">
+                <button class="icon-btn" onclick="openModal('modalHelp')">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
@@ -12380,6 +12582,189 @@ td, th { mso-number-format:"\\@"; }
         }
 
         // =====================================================
+        // GLOBAL SEARCH FUNCTIONS
+        // =====================================================
+        
+        const searchableItems = [
+            { title: 'Tableau de bord', category: 'Pages', page: 'dashboard', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/>' },
+            { title: 'Compte de résultat', category: 'Pages', page: 'pnl', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>' },
+            { title: 'Bilan', category: 'Pages', page: 'bilan', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>' },
+            { title: 'Cash Flow', category: 'Pages', page: 'cashflow', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>' },
+            { title: 'Ratios financiers', category: 'Pages', page: 'ratios', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>' },
+            { title: 'Évolution', category: 'Pages', page: 'evolution', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>' },
+            { title: 'Importer données', category: 'Pages', page: 'import', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>' },
+            { title: 'Configuration', category: 'Pages', page: 'settings', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>' },
+            { title: 'Exporter PDF', category: 'Actions', action: 'exportAllToPDF', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>' },
+            { title: 'Exporter Excel', category: 'Actions', action: 'exportAllToExcel', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>' },
+            { title: 'Mon profil', category: 'Compte', action: 'showUserProfile', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>' },
+            { title: 'Abonnement', category: 'Compte', action: 'showSubscription', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>' },
+            { title: 'Aide & Support', category: 'Aide', action: 'showHelp', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>' },
+        ];
+        
+        function handleGlobalSearch(query) {
+            const resultsContainer = document.getElementById('searchResults');
+            if (!query.trim()) {
+                resultsContainer.innerHTML = '';
+                resultsContainer.classList.remove('show');
+                return;
+            }
+            
+            const filtered = searchableItems.filter(item => 
+                item.title.toLowerCase().includes(query.toLowerCase()) ||
+                item.category.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            if (filtered.length === 0) {
+                resultsContainer.innerHTML = '<div class="search-no-results">Aucun résultat trouvé</div>';
+            } else {
+                resultsContainer.innerHTML = filtered.map(item => `
+                    <div class="search-result-item" onclick="executeSearchResult('${item.page || ''}', '${item.action || ''}')">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">${item.icon}</svg>
+                        <div class="result-text">
+                            <div class="result-title">${item.title}</div>
+                            <div class="result-category">${item.category}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            resultsContainer.classList.add('show');
+        }
+        
+        function executeSearchResult(page, action) {
+            document.getElementById('searchResults').classList.remove('show');
+            document.getElementById('globalSearchInput').value = '';
+            
+            if (page) {
+                navigateTo(page);
+            } else if (action) {
+                window[action]();
+            }
+        }
+        
+        function showSearchResults() {
+            const query = document.getElementById('globalSearchInput').value;
+            if (query.trim()) {
+                document.getElementById('searchResults').classList.add('show');
+            }
+        }
+        
+        function hideSearchResults() {
+            setTimeout(() => {
+                document.getElementById('searchResults').classList.remove('show');
+            }, 200);
+        }
+
+        // =====================================================
+        // NOTIFICATIONS FUNCTIONS
+        // =====================================================
+        
+        let notifications = [];
+        
+        function initNotifications() {
+            // Générer des notifications dynamiques basées sur le contexte
+            notifications = [];
+            
+            // Notification d'essai
+            if (userPlan === 'basic_trial' || userPlan === 'basic') {
+                notifications.push({
+                    id: 1,
+                    type: 'warning',
+                    title: 'Essai gratuit',
+                    text: 'Votre période d\'essai de 7 jours est en cours. Passez à Pro pour continuer.',
+                    time: 'Maintenant',
+                    read: false
+                });
+            }
+            
+            // Notification de bienvenue
+            notifications.push({
+                id: 2,
+                type: 'info',
+                title: 'Bienvenue sur Findalyx !',
+                text: 'Importez votre première balance comptable pour commencer l\'analyse.',
+                time: 'Aujourd\'hui',
+                read: false
+            });
+            
+            // Notification nouvelle fonctionnalité
+            notifications.push({
+                id: 3,
+                type: 'success',
+                title: 'Nouvelle fonctionnalité',
+                text: 'Export PowerPoint maintenant disponible pour vos présentations.',
+                time: 'Il y a 2 jours',
+                read: true
+            });
+            
+            updateNotificationsBadge();
+            renderNotifications();
+        }
+        
+        function toggleNotifications() {
+            const dropdown = document.getElementById('notificationsDropdown');
+            dropdown.classList.toggle('show');
+            event.stopPropagation();
+        }
+        
+        function updateNotificationsBadge() {
+            const badge = document.getElementById('notificationsBadge');
+            const unreadCount = notifications.filter(n => !n.read).length;
+            badge.textContent = unreadCount;
+            badge.classList.toggle('hidden', unreadCount === 0);
+        }
+        
+        function renderNotifications() {
+            const list = document.getElementById('notificationsList');
+            
+            if (notifications.length === 0) {
+                list.innerHTML = '<div class="notifications-empty">Aucune notification</div>';
+                return;
+            }
+            
+            list.innerHTML = notifications.map(n => `
+                <div class="notification-item ${n.read ? '' : 'unread'}" onclick="markNotificationRead(${n.id})">
+                    <div class="notification-icon ${n.type}">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            ${n.type === 'warning' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>' : ''}
+                            ${n.type === 'info' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>' : ''}
+                            ${n.type === 'success' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>' : ''}
+                        </svg>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-title">${n.title}</div>
+                        <div class="notification-text">${n.text}</div>
+                        <div class="notification-time">${n.time}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function markNotificationRead(id) {
+            const notification = notifications.find(n => n.id === id);
+            if (notification) {
+                notification.read = true;
+                updateNotificationsBadge();
+                renderNotifications();
+            }
+        }
+        
+        function markAllNotificationsRead(event) {
+            event.stopPropagation();
+            notifications.forEach(n => n.read = true);
+            updateNotificationsBadge();
+            renderNotifications();
+        }
+        
+        // Fermer notifications quand on clique ailleurs
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('notificationsDropdown');
+            const btn = document.getElementById('notificationsBtn');
+            if (dropdown && !dropdown.contains(e.target) && !btn.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // =====================================================
         // USER MENU FUNCTIONS
         // =====================================================
         
@@ -14336,7 +14721,9 @@ ${userName}`;
                     }
                     
                     // Charger le reste en arrière-plan
-                    loadUserProfile().catch(console.error);
+                    loadUserProfile().then(() => {
+                        initNotifications(); // Initialiser les notifications après chargement du profil
+                    }).catch(console.error);
                 } else {
                     showAuth();
                     showLoading(false);
