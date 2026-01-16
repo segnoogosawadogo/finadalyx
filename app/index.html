@@ -2825,10 +2825,26 @@
             .ratios-category-grid {
                 grid-template-columns: 1fr !important;
             }
+            /* Scoring/AI/Previsions - chacun sur une ligne */
+            .scoring-insights-grid {
+                grid-template-columns: 1fr !important;
+            }
             /* Export buttons */
             .export-dropdown {
                 right: 0;
                 left: auto;
+            }
+            /* Scroll horizontal pour les tableaux */
+            .card-body {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .card-body table {
+                min-width: 500px;
+            }
+            /* Bilan sections */
+            .bilan-section .card-body table {
+                min-width: 350px;
             }
             /* Main content padding */
             .main-content {
@@ -12416,7 +12432,11 @@ td, th { mso-number-format:"\\@"; }
                         document.getElementById('profileLastName').value = lastName;
                         document.getElementById('profileEmail').value = profile.email || currentUser.email || '';
                         document.getElementById('profilePhone').value = profile.phone || '';
-                        document.getElementById('profileCompany').value = profile.company_name || '';
+                        
+                        // Prendre le nom d'entreprise depuis Configuration (localStorage) en priorité
+                        const companyFromConfig = document.getElementById('companyName')?.value || localStorage.getItem('findalyx_companyName') || '';
+                        document.getElementById('profileCompany').value = companyFromConfig || profile.company_name || 'Mon Entreprise';
+                        
                         document.getElementById('profileRole').value = profile.role || '';
                         
                         // Mettre à jour l'avatar preview
@@ -15362,6 +15382,15 @@ ${userName}`;
 
         // Initialize app on page load
         document.addEventListener('DOMContentLoaded', function() {
+            // Charger immédiatement le nom d'entreprise depuis localStorage
+            const savedCompanyName = localStorage.getItem('findalyx_companyName');
+            if (savedCompanyName) {
+                const companyNameDisplay = document.getElementById('companyNameDisplay');
+                const companyNameInput = document.getElementById('companyName');
+                if (companyNameDisplay) companyNameDisplay.textContent = savedCompanyName;
+                if (companyNameInput) companyNameInput.value = savedCompanyName;
+            }
+            
             loadMapping();
             loadObjectives();
             initApp();
