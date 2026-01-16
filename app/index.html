@@ -8004,7 +8004,7 @@
 
     <!-- Modal Abonnement -->
     <div class="modal-overlay" id="modalSubscription">
-        <div class="modal" style="max-width:700px;">
+        <div class="modal" style="max-width:750px;">
             <div class="modal-header">
                 <h2>
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -8019,64 +8019,127 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div style="background:linear-gradient(135deg, var(--blue-50), var(--slate-50));padding:20px;border-radius:12px;margin-bottom:24px;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                <!-- Plan actuel -->
+                <div id="currentPlanInfo" style="background:linear-gradient(135deg, var(--blue-50), var(--slate-50));padding:20px;border-radius:12px;margin-bottom:24px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
                         <div>
                             <div style="font-size:12px;color:var(--slate-500);margin-bottom:4px;">Plan actuel</div>
-                            <div style="font-size:20px;font-weight:700;color:var(--blue-600);">Pro Plan</div>
+                            <div style="font-size:20px;font-weight:700;color:var(--blue-600);" id="currentPlanName">Essai Gratuit</div>
                         </div>
                         <div style="text-align:right;">
-                            <div style="font-size:12px;color:var(--slate-500);margin-bottom:4px;">Prochain renouvellement</div>
-                            <div style="font-size:14px;font-weight:600;color:var(--slate-700);">15 Février 2026</div>
+                            <div style="font-size:12px;color:var(--slate-500);margin-bottom:4px;">Statut</div>
+                            <div style="font-size:14px;font-weight:600;" id="currentPlanStatus">-</div>
                         </div>
                     </div>
                 </div>
 
-                <h3 style="font-size:14px;font-weight:600;color:var(--slate-700);margin-bottom:16px;">Changer de plan</h3>
+                <h3 style="font-size:14px;font-weight:600;color:var(--slate-700);margin-bottom:16px;">Choisir un plan</h3>
                 
-                <div class="plan-cards">
-                    <div class="plan-card" onclick="selectPlan('free')">
-                        <div class="plan-name">Gratuit</div>
-                        <div class="plan-price">0<span>/mois</span></div>
-                        <ul class="plan-features">
-                            <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> 3 analyses/mois</li>
-                            <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Export PDF</li>
-                            <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Support email</li>
+                <div class="plan-cards" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:16px;margin-bottom:20px;">
+                    <div class="plan-card" id="planCardPro" onclick="selectPlanForUpgrade('pro')" style="cursor:pointer;border:2px solid var(--slate-200);border-radius:12px;padding:20px;transition:all 0.3s;position:relative;">
+                        <div style="font-size:12px;color:var(--blue-600);font-weight:600;margin-bottom:8px;">POPULAIRE</div>
+                        <div style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:4px;">Pro</div>
+                        <div style="font-size:28px;font-weight:800;color:var(--blue-600);margin-bottom:12px;">15 000<span style="font-size:14px;font-weight:500;color:var(--slate-500);"> FCFA/mois</span></div>
+                        <ul style="list-style:none;padding:0;margin:0;font-size:13px;color:var(--slate-600);">
+                            <li style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                                <svg width="16" height="16" fill="none" stroke="var(--green-500)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Analyses illimitées
+                            </li>
+                            <li style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                                <svg width="16" height="16" fill="none" stroke="var(--green-500)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Export PDF, Excel, PPT
+                            </li>
+                            <li style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                                <svg width="16" height="16" fill="none" stroke="var(--green-500)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Multi-années
+                            </li>
+                            <li style="display:flex;align-items:center;gap:8px;">
+                                <svg width="16" height="16" fill="none" stroke="var(--green-500)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Support prioritaire
+                            </li>
                         </ul>
+                        <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--slate-100);font-size:12px;color:var(--slate-500);">
+                            💰 <strong>150 000 FCFA/an</strong> (2 mois offerts)
+                        </div>
                     </div>
                     
-                    <div class="plan-card active recommended" onclick="selectPlan('pro')">
-                        <div class="plan-name">Pro</div>
-                        <div class="plan-price">25K<span>/mois</span></div>
-                        <ul class="plan-features">
-                            <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Analyses illimitées</li>
-                            <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Export PDF & Excel</li>
-                            <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Multi-années</li>
-                            <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Support prioritaire</li>
+                    <div class="plan-card" id="planCardBusiness" onclick="selectPlanForUpgrade('business')" style="cursor:pointer;border:2px solid var(--slate-200);border-radius:12px;padding:20px;transition:all 0.3s;">
+                        <div style="font-size:12px;color:var(--purple-600);font-weight:600;margin-bottom:8px;">ENTREPRISE</div>
+                        <div style="font-size:18px;font-weight:700;color:var(--slate-800);margin-bottom:4px;">Business</div>
+                        <div style="font-size:28px;font-weight:800;color:var(--purple-600);margin-bottom:12px;">30 000<span style="font-size:14px;font-weight:500;color:var(--slate-500);"> FCFA/mois</span></div>
+                        <ul style="list-style:none;padding:0;margin:0;font-size:13px;color:var(--slate-600);">
+                            <li style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                                <svg width="16" height="16" fill="none" stroke="var(--green-500)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Tout Pro inclus
+                            </li>
+                            <li style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                                <svg width="16" height="16" fill="none" stroke="var(--green-500)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Multi-entreprises (5)
+                            </li>
+                            <li style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                                <svg width="16" height="16" fill="none" stroke="var(--green-500)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Rapports personnalisés
+                            </li>
+                            <li style="display:flex;align-items:center;gap:8px;">
+                                <svg width="16" height="16" fill="none" stroke="var(--green-500)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Support dédié WhatsApp
+                            </li>
                         </ul>
+                        <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--slate-100);font-size:12px;color:var(--slate-500);">
+                            💰 <strong>300 000 FCFA/an</strong> (2 mois offerts)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instructions de paiement -->
+                <div id="paymentInstructions" style="display:none;background:linear-gradient(135deg, #f0fdf4, #ecfdf5);border:1px solid var(--green-200);padding:20px;border-radius:12px;margin-bottom:16px;">
+                    <h4 style="font-size:15px;font-weight:700;color:var(--green-700);margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Plan sélectionné : <span id="selectedPlanName">Pro</span>
+                    </h4>
+                    <p style="font-size:13px;color:var(--slate-600);margin-bottom:16px;">
+                        Pour activer votre abonnement, effectuez le paiement puis envoyez-nous le justificatif :
+                    </p>
+                    
+                    <div style="background:white;border-radius:10px;padding:16px;margin-bottom:16px;">
+                        <div style="font-size:13px;font-weight:600;color:var(--slate-700);margin-bottom:12px;">💳 Moyens de paiement :</div>
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));gap:10px;font-size:13px;color:var(--slate-600);">
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <span style="font-size:18px;">🟠</span> Orange Money: <strong>77 123 45 67</strong>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <span style="font-size:18px;">🔵</span> Wave: <strong>77 123 45 67</strong>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <span style="font-size:18px;">🏦</span> Virement bancaire
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="plan-card" onclick="selectPlan('enterprise')">
-                        <div class="plan-name">Entreprise</div>
-                        <div class="plan-price">Sur devis</div>
-                        <ul class="plan-features">
-                            <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Tout Pro +</li>
-                            <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> API access</li>
-                            <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Multi-utilisateurs</li>
-                            <li><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Support dédié</li>
-                        </ul>
+                    <div style="font-size:13px;color:var(--slate-600);margin-bottom:12px;">
+                        <strong>📋 Informations à inclure :</strong><br>
+                        • Votre email : <span id="userEmailForPayment" style="color:var(--blue-600);font-weight:600;">-</span><br>
+                        • Plan choisi : <span id="selectedPlanForPayment" style="color:var(--blue-600);font-weight:600;">-</span><br>
+                        • Capture d'écran du paiement
                     </div>
                 </div>
 
                 <div style="background:var(--slate-50);padding:16px;border-radius:10px;">
                     <div style="font-size:13px;color:var(--slate-600);">
-                        <strong>💳 Moyens de paiement acceptés:</strong> Orange Money, Wave, Carte bancaire, Virement
+                        <strong>⏱️ Activation rapide :</strong> Votre accès sera activé sous 24h après réception du justificatif.
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" style="flex-wrap:wrap;gap:10px;">
                 <button class="btn btn-secondary" onclick="closeModal('modalSubscription')">Fermer</button>
-                <button class="btn btn-primary" onclick="upgradePlan()">Mettre à niveau</button>
+                <button class="btn" id="btnSendWhatsApp" onclick="sendPaymentWhatsApp()" style="background:#25D366;color:white;display:none;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    Envoyer via WhatsApp
+                </button>
+                <button class="btn btn-primary" id="btnSendEmail" onclick="sendPaymentEmail()" style="display:none;">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    Envoyer par Email
+                </button>
             </div>
         </div>
     </div>
@@ -12230,6 +12293,7 @@ td, th { mso-number-format:"\\@"; }
 
         function showSubscription() {
             toggleUserMenu();
+            updateSubscriptionModal();
             openModal('modalSubscription');
         }
 
@@ -12317,12 +12381,142 @@ td, th { mso-number-format:"\\@"; }
         // Subscription Functions
         let selectedPlan = 'pro';
 
+        // Variable pour stocker le plan sélectionné pour upgrade
+        let selectedUpgradePlan = null;
+        
         function selectPlan(plan) {
             selectedPlan = plan;
             document.querySelectorAll('.plan-card').forEach(card => {
                 card.classList.remove('active');
             });
             event.currentTarget.classList.add('active');
+        }
+        
+        // Sélectionner un plan pour upgrade
+        function selectPlanForUpgrade(plan) {
+            selectedUpgradePlan = plan;
+            
+            // Mettre à jour les styles des cartes
+            document.getElementById('planCardPro').style.borderColor = plan === 'pro' ? 'var(--blue-500)' : 'var(--slate-200)';
+            document.getElementById('planCardPro').style.background = plan === 'pro' ? 'var(--blue-50)' : 'white';
+            document.getElementById('planCardBusiness').style.borderColor = plan === 'business' ? 'var(--purple-500)' : 'var(--slate-200)';
+            document.getElementById('planCardBusiness').style.background = plan === 'business' ? 'var(--purple-50)' : 'white';
+            
+            // Afficher les instructions de paiement
+            document.getElementById('paymentInstructions').style.display = 'block';
+            
+            // Mettre à jour le nom du plan sélectionné
+            const planNames = { pro: 'Pro (15 000 FCFA/mois)', business: 'Business (30 000 FCFA/mois)' };
+            document.getElementById('selectedPlanName').textContent = planNames[plan];
+            document.getElementById('selectedPlanForPayment').textContent = planNames[plan];
+            
+            // Mettre à jour l'email de l'utilisateur
+            const userEmail = currentUser?.email || 'votre-email@exemple.com';
+            document.getElementById('userEmailForPayment').textContent = userEmail;
+            
+            // Afficher les boutons WhatsApp et Email
+            document.getElementById('btnSendWhatsApp').style.display = 'inline-flex';
+            document.getElementById('btnSendEmail').style.display = 'inline-flex';
+        }
+        
+        // Envoyer via WhatsApp
+        function sendPaymentWhatsApp() {
+            if (!selectedUpgradePlan) {
+                showNotification('Veuillez sélectionner un plan', 'warning');
+                return;
+            }
+            
+            const userEmail = currentUser?.email || '';
+            const userName = currentUser?.user_metadata?.full_name || '';
+            const planNames = { pro: 'Pro (15 000 FCFA/mois)', business: 'Business (30 000 FCFA/mois)' };
+            const planName = planNames[selectedUpgradePlan];
+            
+            const message = `Bonjour Findalyx,
+
+Je souhaite souscrire à l'abonnement *${planName}*.
+
+📧 Email: ${userEmail}
+👤 Nom: ${userName}
+📋 Plan: ${planName}
+
+Je joins le justificatif de paiement.
+
+Merci !`;
+            
+            const whatsappNumber = '221771234567'; // Remplacer par ton numéro WhatsApp
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+            
+            window.open(whatsappUrl, '_blank');
+            showNotification('WhatsApp ouvert. Envoyez votre justificatif de paiement.', 'success');
+        }
+        
+        // Envoyer par Email
+        function sendPaymentEmail() {
+            if (!selectedUpgradePlan) {
+                showNotification('Veuillez sélectionner un plan', 'warning');
+                return;
+            }
+            
+            const userEmail = currentUser?.email || '';
+            const userName = currentUser?.user_metadata?.full_name || '';
+            const planNames = { pro: 'Pro (15 000 FCFA/mois)', business: 'Business (30 000 FCFA/mois)' };
+            const planName = planNames[selectedUpgradePlan];
+            
+            const subject = `Demande d'abonnement ${planName} - Findalyx`;
+            const body = `Bonjour Findalyx,
+
+Je souhaite souscrire à l'abonnement ${planName}.
+
+📧 Email: ${userEmail}
+👤 Nom: ${userName}
+📋 Plan: ${planName}
+
+Veuillez trouver ci-joint le justificatif de paiement.
+
+Cordialement,
+${userName}`;
+            
+            const mailtoUrl = `mailto:contact@findalyx.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            
+            window.location.href = mailtoUrl;
+            showNotification('Client email ouvert. N\'oubliez pas de joindre le justificatif.', 'success');
+        }
+        
+        // Mettre à jour les infos du plan actuel quand on ouvre le modal
+        function updateSubscriptionModal() {
+            const planNames = {
+                'basic': 'Essai Gratuit',
+                'basic_trial': 'Essai Gratuit',
+                'basic_expired': 'Essai Expiré',
+                'pro': 'Pro',
+                'business': 'Business',
+                'expired': 'Expiré'
+            };
+            
+            document.getElementById('currentPlanName').textContent = planNames[userPlan] || 'Essai Gratuit';
+            
+            // Statut
+            let statusHtml = '';
+            if (userPlan === 'basic_trial') {
+                statusHtml = '<span style="color:var(--orange-500);">⏳ Essai en cours</span>';
+            } else if (userPlan === 'basic_expired' || userPlan === 'expired') {
+                statusHtml = '<span style="color:var(--red-500);">❌ Expiré</span>';
+            } else if (userPlan === 'pro' || userPlan === 'business') {
+                statusHtml = '<span style="color:var(--green-500);">✅ Actif</span>';
+            } else {
+                statusHtml = '<span style="color:var(--slate-500);">-</span>';
+            }
+            document.getElementById('currentPlanStatus').innerHTML = statusHtml;
+            
+            // Réinitialiser la sélection
+            selectedUpgradePlan = null;
+            document.getElementById('paymentInstructions').style.display = 'none';
+            document.getElementById('btnSendWhatsApp').style.display = 'none';
+            document.getElementById('btnSendEmail').style.display = 'none';
+            document.getElementById('planCardPro').style.borderColor = 'var(--slate-200)';
+            document.getElementById('planCardPro').style.background = 'white';
+            document.getElementById('planCardBusiness').style.borderColor = 'var(--slate-200)';
+            document.getElementById('planCardBusiness').style.background = 'white';
         }
 
         function upgradePlan() {
