@@ -3904,11 +3904,11 @@
         .ratio-detail-card {
             background: white;
             border-radius: 16px;
-            padding: 20px;
+            padding: 24px;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 0;
             animation: scaleIn 0.4s ease-out forwards;
-            border: 1px solid var(--slate-100);
+            border: 1px solid var(--slate-200);
             position: relative;
             overflow: hidden;
         }
@@ -3918,26 +3918,27 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--slate-200);
-            transition: all 0.4s ease;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--blue-400), var(--blue-600));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .ratio-detail-card.status-good::before { background: linear-gradient(180deg, #34d399, #10b981); }
-        .ratio-detail-card.status-warning::before { background: linear-gradient(180deg, #fbbf24, #f59e0b); }
-        .ratio-detail-card.status-bad::before { background: linear-gradient(180deg, #f87171, #ef4444); }
+        .ratio-detail-card.status-good::before { background: linear-gradient(90deg, #34d399, #10b981); }
+        .ratio-detail-card.status-warning::before { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+        .ratio-detail-card.status-bad::before { background: linear-gradient(90deg, #f87171, #ef4444); }
 
         .ratio-detail-card::after {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -50%;
+            top: 0;
+            left: -100%;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
         }
 
         .ratio-detail-card:nth-child(1) { animation-delay: 0.15s; }
@@ -3947,17 +3948,17 @@
 
         .ratio-detail-card:hover {
             background: white;
-            box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
             transform: translateY(-6px) scale(1.02);
             border-color: var(--blue-200);
         }
 
         .ratio-detail-card:hover::before {
-            width: 6px;
+            transform: scaleX(1);
         }
 
         .ratio-detail-card:hover::after {
-            opacity: 1;
+            left: 100%;
         }
 
         .ratio-detail-header {
@@ -3969,13 +3970,60 @@
             z-index: 1;
         }
 
+        .ratio-detail-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .ratio-detail-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .ratio-detail-icon.blue {
+            background: linear-gradient(135deg, var(--blue-100) 0%, var(--blue-200) 100%);
+            color: var(--blue-600);
+        }
+
+        .ratio-detail-icon.green {
+            background: linear-gradient(135deg, var(--success-light) 0%, #a7f3d0 100%);
+            color: var(--success);
+        }
+
+        .ratio-detail-icon.orange {
+            background: linear-gradient(135deg, var(--warning-light) 0%, #fde68a 100%);
+            color: var(--warning);
+        }
+
+        .ratio-detail-icon.purple {
+            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+            color: #7c3aed;
+        }
+
+        .ratio-detail-icon.red {
+            background: linear-gradient(135deg, var(--danger-light) 0%, #fecaca 100%);
+            color: var(--danger);
+        }
+
+        .ratio-detail-card:hover .ratio-detail-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
         .ratio-detail-name {
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 12px;
+            font-weight: 500;
             color: var(--slate-500);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             transition: color 0.3s ease;
+            display: block;
+            margin-bottom: 4px;
         }
 
         .ratio-detail-card:hover .ratio-detail-name {
@@ -3983,11 +4031,11 @@
         }
 
         .ratio-detail-value {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 800;
             color: var(--slate-800);
             transition: all 0.3s ease;
-            line-height: 1;
+            line-height: 1.2;
             position: relative;
             z-index: 1;
         }
@@ -4001,33 +4049,34 @@
         .ratio-detail-value.neutral { color: var(--slate-800); }
 
         .ratio-detail-status {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
             transition: all 0.3s ease;
         }
 
         .ratio-detail-status.good {
-            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            background: var(--success-light);
             color: var(--success);
         }
 
         .ratio-detail-status.warning {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            background: var(--warning-light);
             color: var(--warning);
         }
 
         .ratio-detail-status.bad {
-            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            background: var(--danger-light);
             color: var(--danger);
         }
 
         .ratio-detail-status svg {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
         }
 
         .ratio-detail-card:hover .ratio-detail-status {
@@ -6497,79 +6546,55 @@
                         <div class="ratios-category-grid">
                             <div class="ratio-detail-card status-good">
                                 <div class="ratio-detail-header">
-                                    <div>
-                                        <span class="ratio-detail-name">Marge Brute</span>
-                                        <span class="ratio-detail-value" id="ratioMargeBruteDetail">0%</span>
+                                    <div class="ratio-detail-icon blue">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                                     </div>
                                     <div class="ratio-detail-status good" id="statusMargeBrute">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                 </div>
+                                <span class="ratio-detail-value" id="ratioMargeBruteDetail">0%</span>
+                                <span class="ratio-detail-name">Marge Brute</span>
                                 <div class="ratio-detail-bar"><div class="ratio-detail-fill blue" id="barMargeBrute" style="width: 0%"></div></div>
-                                <div class="ratio-detail-footer">
-                                    <p class="ratio-detail-desc">Marge Brute / CA</p>
-                                    <span class="ratio-detail-benchmark">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                                        Objectif: >20%
-                                    </span>
-                                </div>
                             </div>
                             <div class="ratio-detail-card status-good">
                                 <div class="ratio-detail-header">
-                                    <div>
-                                        <span class="ratio-detail-name">Marge EBITDA</span>
-                                        <span class="ratio-detail-value" id="ratioMargeEbitdaDetail">0%</span>
+                                    <div class="ratio-detail-icon green">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
                                     </div>
                                     <div class="ratio-detail-status good" id="statusMargeEbitda">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                 </div>
-                                <div class="ratio-detail-bar"><div class="ratio-detail-fill blue" id="barMargeEbitda" style="width: 0%"></div></div>
-                                <div class="ratio-detail-footer">
-                                    <p class="ratio-detail-desc">EBITDA / CA</p>
-                                    <span class="ratio-detail-benchmark">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                                        Objectif: >15%
-                                    </span>
-                                </div>
+                                <span class="ratio-detail-value" id="ratioMargeEbitdaDetail">0%</span>
+                                <span class="ratio-detail-name">Marge EBITDA</span>
+                                <div class="ratio-detail-bar"><div class="ratio-detail-fill green" id="barMargeEbitda" style="width: 0%"></div></div>
                             </div>
                             <div class="ratio-detail-card status-good">
                                 <div class="ratio-detail-header">
-                                    <div>
-                                        <span class="ratio-detail-name">Marge Opérationnelle</span>
-                                        <span class="ratio-detail-value" id="ratioMargeOpDetail">0%</span>
+                                    <div class="ratio-detail-icon purple">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                                     </div>
                                     <div class="ratio-detail-status good" id="statusMargeOp">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                 </div>
-                                <div class="ratio-detail-bar"><div class="ratio-detail-fill blue" id="barMargeOp" style="width: 0%"></div></div>
-                                <div class="ratio-detail-footer">
-                                    <p class="ratio-detail-desc">EBIT / CA</p>
-                                    <span class="ratio-detail-benchmark">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                                        Objectif: >10%
-                                    </span>
-                                </div>
+                                <span class="ratio-detail-value" id="ratioMargeOpDetail">0%</span>
+                                <span class="ratio-detail-name">Marge Opérationnelle</span>
+                                <div class="ratio-detail-bar"><div class="ratio-detail-fill purple" id="barMargeOp" style="width: 0%"></div></div>
                             </div>
                             <div class="ratio-detail-card status-good">
                                 <div class="ratio-detail-header">
-                                    <div>
-                                        <span class="ratio-detail-name">Marge Nette</span>
-                                        <span class="ratio-detail-value" id="ratioMargeNetteDetail">0%</span>
+                                    <div class="ratio-detail-icon orange">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                     </div>
                                     <div class="ratio-detail-status good" id="statusMargeNette">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                 </div>
-                                <div class="ratio-detail-bar"><div class="ratio-detail-fill blue" id="barMargeNette" style="width: 0%"></div></div>
-                                <div class="ratio-detail-footer">
-                                    <p class="ratio-detail-desc">Résultat Net / CA</p>
-                                    <span class="ratio-detail-benchmark">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                                        Objectif: >5%
-                                    </span>
-                                </div>
+                                <span class="ratio-detail-value" id="ratioMargeNetteDetail">0%</span>
+                                <span class="ratio-detail-name">Marge Nette</span>
+                                <div class="ratio-detail-bar"><div class="ratio-detail-fill orange" id="barMargeNette" style="width: 0%"></div></div>
                             </div>
                         </div>
                     </div>
@@ -6588,60 +6613,42 @@
                         <div class="ratios-category-grid">
                             <div class="ratio-detail-card status-good">
                                 <div class="ratio-detail-header">
-                                    <div>
-                                        <span class="ratio-detail-name">ROE</span>
-                                        <span class="ratio-detail-value" id="ratioROEDetail">0%</span>
+                                    <div class="ratio-detail-icon green">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                                     </div>
                                     <div class="ratio-detail-status good" id="statusROE">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                 </div>
+                                <span class="ratio-detail-value" id="ratioROEDetail">0%</span>
+                                <span class="ratio-detail-name">ROE - Return on Equity</span>
                                 <div class="ratio-detail-bar"><div class="ratio-detail-fill green" id="barROE" style="width: 0%"></div></div>
-                                <div class="ratio-detail-footer">
-                                    <p class="ratio-detail-desc">Résultat Net / Capitaux Propres</p>
-                                    <span class="ratio-detail-benchmark">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                                        Objectif: >15%
-                                    </span>
-                                </div>
                             </div>
                             <div class="ratio-detail-card status-good">
                                 <div class="ratio-detail-header">
-                                    <div>
-                                        <span class="ratio-detail-name">ROA</span>
-                                        <span class="ratio-detail-value" id="ratioROADetail">0%</span>
+                                    <div class="ratio-detail-icon blue">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                                     </div>
                                     <div class="ratio-detail-status good" id="statusROA">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                 </div>
-                                <div class="ratio-detail-bar"><div class="ratio-detail-fill green" id="barROA" style="width: 0%"></div></div>
-                                <div class="ratio-detail-footer">
-                                    <p class="ratio-detail-desc">Résultat Net / Total Actif</p>
-                                    <span class="ratio-detail-benchmark">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                                        Objectif: >5%
-                                    </span>
-                                </div>
+                                <span class="ratio-detail-value" id="ratioROADetail">0%</span>
+                                <span class="ratio-detail-name">ROA - Return on Assets</span>
+                                <div class="ratio-detail-bar"><div class="ratio-detail-fill blue" id="barROA" style="width: 0%"></div></div>
                             </div>
                             <div class="ratio-detail-card status-good">
                                 <div class="ratio-detail-header">
-                                    <div>
-                                        <span class="ratio-detail-name">ROCE</span>
-                                        <span class="ratio-detail-value" id="ratioROCEDetail">0%</span>
+                                    <div class="ratio-detail-icon purple">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                                     </div>
                                     <div class="ratio-detail-status good" id="statusROCE">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                 </div>
-                                <div class="ratio-detail-bar"><div class="ratio-detail-fill green" id="barROCE" style="width: 0%"></div></div>
-                                <div class="ratio-detail-footer">
-                                    <p class="ratio-detail-desc">EBIT / Capitaux Employés</p>
-                                    <span class="ratio-detail-benchmark">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                                        Objectif: >10%
-                                    </span>
-                                </div>
+                                <span class="ratio-detail-value" id="ratioROCEDetail">0%</span>
+                                <span class="ratio-detail-name">ROCE - Return on Capital Employed</span>
+                                <div class="ratio-detail-bar"><div class="ratio-detail-fill purple" id="barROCE" style="width: 0%"></div></div>
                             </div>
                         </div>
                     </div>
@@ -6660,60 +6667,42 @@
                         <div class="ratios-category-grid">
                             <div class="ratio-detail-card status-good">
                                 <div class="ratio-detail-header">
-                                    <div>
-                                        <span class="ratio-detail-name">Current Ratio</span>
-                                        <span class="ratio-detail-value" id="ratioCurrentDetail">0</span>
+                                    <div class="ratio-detail-icon purple">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                                     </div>
                                     <div class="ratio-detail-status good" id="statusCurrent">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                 </div>
+                                <span class="ratio-detail-value" id="ratioCurrentDetail">0</span>
+                                <span class="ratio-detail-name">Current Ratio</span>
                                 <div class="ratio-detail-bar"><div class="ratio-detail-fill purple" id="barCurrent" style="width: 0%"></div></div>
-                                <div class="ratio-detail-footer">
-                                    <p class="ratio-detail-desc">Actif Circulant / Passif Circulant</p>
-                                    <span class="ratio-detail-benchmark">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                                        Objectif: >1.5
-                                    </span>
-                                </div>
                             </div>
                             <div class="ratio-detail-card status-good">
                                 <div class="ratio-detail-header">
-                                    <div>
-                                        <span class="ratio-detail-name">Quick Ratio</span>
-                                        <span class="ratio-detail-value" id="ratioQuickDetail">0</span>
+                                    <div class="ratio-detail-icon blue">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                                     </div>
                                     <div class="ratio-detail-status good" id="statusQuick">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                 </div>
-                                <div class="ratio-detail-bar"><div class="ratio-detail-fill purple" id="barQuick" style="width: 0%"></div></div>
-                                <div class="ratio-detail-footer">
-                                    <p class="ratio-detail-desc">(Actif Circ. - Stocks) / Passif Circ.</p>
-                                    <span class="ratio-detail-benchmark">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                                        Objectif: >1
-                                    </span>
-                                </div>
+                                <span class="ratio-detail-value" id="ratioQuickDetail">0</span>
+                                <span class="ratio-detail-name">Quick Ratio</span>
+                                <div class="ratio-detail-bar"><div class="ratio-detail-fill blue" id="barQuick" style="width: 0%"></div></div>
                             </div>
                             <div class="ratio-detail-card status-good">
                                 <div class="ratio-detail-header">
-                                    <div>
-                                        <span class="ratio-detail-name">Cash Ratio</span>
-                                        <span class="ratio-detail-value" id="ratioCashDetail">0</span>
+                                    <div class="ratio-detail-icon green">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                                     </div>
                                     <div class="ratio-detail-status good" id="statusCash">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                 </div>
-                                <div class="ratio-detail-bar"><div class="ratio-detail-fill purple" id="barCash" style="width: 0%"></div></div>
-                                <div class="ratio-detail-footer">
-                                    <p class="ratio-detail-desc">Trésorerie / Passif Circulant</p>
-                                    <span class="ratio-detail-benchmark">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                                        Objectif: >0.2
-                                    </span>
-                                </div>
+                                <span class="ratio-detail-value" id="ratioCashDetail">0</span>
+                                <span class="ratio-detail-name">Cash Ratio</span>
+                                <div class="ratio-detail-bar"><div class="ratio-detail-fill green" id="barCash" style="width: 0%"></div></div>
                             </div>
                         </div>
                     </div>
@@ -6732,79 +6721,55 @@
                         <div class="ratios-category-grid">
                             <div class="ratio-detail-card status-warning">
                                 <div class="ratio-detail-header">
-                                    <div>
-                                        <span class="ratio-detail-name">Endettement</span>
-                                        <span class="ratio-detail-value" id="ratioEndettementDetail">0%</span>
+                                    <div class="ratio-detail-icon red">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                                     </div>
                                     <div class="ratio-detail-status warning" id="statusEndettement">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                                     </div>
                                 </div>
-                                <div class="ratio-detail-bar"><div class="ratio-detail-fill orange" id="barEndettement" style="width: 0%"></div></div>
-                                <div class="ratio-detail-footer">
-                                    <p class="ratio-detail-desc">Dettes Totales / Total Passif</p>
-                                    <span class="ratio-detail-benchmark">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>
-                                        Objectif: &lt;60%
-                                    </span>
-                                </div>
+                                <span class="ratio-detail-value" id="ratioEndettementDetail">0%</span>
+                                <span class="ratio-detail-name">Endettement</span>
+                                <div class="ratio-detail-bar"><div class="ratio-detail-fill red" id="barEndettement" style="width: 0%"></div></div>
                             </div>
                             <div class="ratio-detail-card status-good">
                                 <div class="ratio-detail-header">
-                                    <div>
-                                        <span class="ratio-detail-name">Gearing</span>
-                                        <span class="ratio-detail-value" id="ratioGearingDetail">0%</span>
+                                    <div class="ratio-detail-icon orange">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                     </div>
                                     <div class="ratio-detail-status good" id="statusGearing">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                 </div>
+                                <span class="ratio-detail-value" id="ratioGearingDetail">0%</span>
+                                <span class="ratio-detail-name">Gearing</span>
                                 <div class="ratio-detail-bar"><div class="ratio-detail-fill orange" id="barGearing" style="width: 0%"></div></div>
-                                <div class="ratio-detail-footer">
-                                    <p class="ratio-detail-desc">Dettes Fin. / Capitaux Propres</p>
-                                    <span class="ratio-detail-benchmark">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>
-                                        Objectif: &lt;100%
-                                    </span>
-                                </div>
                             </div>
                             <div class="ratio-detail-card status-good">
                                 <div class="ratio-detail-header">
-                                    <div>
-                                        <span class="ratio-detail-name">Net Debt / EBITDA</span>
-                                        <span class="ratio-detail-value" id="ratioNetDebtDetail">0x</span>
+                                    <div class="ratio-detail-icon purple">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                                     </div>
                                     <div class="ratio-detail-status good" id="statusNetDebt">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                 </div>
-                                <div class="ratio-detail-bar"><div class="ratio-detail-fill orange" id="barNetDebt" style="width: 0%"></div></div>
-                                <div class="ratio-detail-footer">
-                                    <p class="ratio-detail-desc">Dette Nette / EBITDA</p>
-                                    <span class="ratio-detail-benchmark">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>
-                                        Objectif: &lt;3x
-                                    </span>
-                                </div>
+                                <span class="ratio-detail-value" id="ratioNetDebtDetail">0x</span>
+                                <span class="ratio-detail-name">Net Debt / EBITDA</span>
+                                <div class="ratio-detail-bar"><div class="ratio-detail-fill purple" id="barNetDebt" style="width: 0%"></div></div>
                             </div>
                             <div class="ratio-detail-card status-good">
                                 <div class="ratio-detail-header">
-                                    <div>
-                                        <span class="ratio-detail-name">Autonomie Financière</span>
-                                        <span class="ratio-detail-value" id="ratioAutonomieDetail">0%</span>
+                                    <div class="ratio-detail-icon green">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                                     </div>
                                     <div class="ratio-detail-status good" id="statusAutonomie">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                 </div>
-                                <div class="ratio-detail-bar"><div class="ratio-detail-fill orange" id="barAutonomie" style="width: 0%"></div></div>
-                                <div class="ratio-detail-footer">
-                                    <p class="ratio-detail-desc">Capitaux Propres / Total Passif</p>
-                                    <span class="ratio-detail-benchmark">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                                        Objectif: >40%
-                                    </span>
-                                </div>
+                                <span class="ratio-detail-value" id="ratioAutonomieDetail">0%</span>
+                                <span class="ratio-detail-name">Autonomie Financière</span>
+                                <div class="ratio-detail-bar"><div class="ratio-detail-fill green" id="barAutonomie" style="width: 0%"></div></div>
                             </div>
                         </div>
                     </div>
