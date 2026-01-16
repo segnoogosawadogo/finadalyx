@@ -3961,6 +3961,93 @@
             left: 100%;
         }
 
+        /* Tooltip pour les ratios */
+        .ratio-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: var(--slate-800);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 12px;
+            line-height: 1.5;
+            width: max-content;
+            max-width: 280px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            pointer-events: none;
+        }
+
+        .ratio-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: var(--slate-800);
+        }
+
+        .ratio-detail-card:hover .ratio-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .ratio-tooltip-title {
+            font-weight: 600;
+            color: var(--blue-300);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ratio-tooltip-title svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .ratio-tooltip-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .ratio-tooltip-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .ratio-tooltip-label {
+            color: var(--slate-400);
+            font-size: 11px;
+            min-width: 55px;
+        }
+
+        .ratio-tooltip-value {
+            color: white;
+            font-weight: 500;
+        }
+
+        .ratio-tooltip-value.formula {
+            font-family: 'SF Mono', Monaco, monospace;
+            background: rgba(255,255,255,0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .ratio-tooltip-value.objective {
+            color: var(--success-light);
+            font-weight: 600;
+        }
+
         .ratio-detail-header {
             display: flex;
             justify-content: space-between;
@@ -6545,6 +6632,16 @@
                         </div>
                         <div class="ratios-category-grid">
                             <div class="ratio-detail-card status-good">
+                                <div class="ratio-tooltip">
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Formule</span>
+                                        <span class="ratio-tooltip-value formula">Marge Brute / CA × 100</span>
+                                    </div>
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Objectif</span>
+                                        <span class="ratio-tooltip-value objective">> 20%</span>
+                                    </div>
+                                </div>
                                 <div class="ratio-detail-header">
                                     <div class="ratio-detail-icon blue">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
@@ -6558,6 +6655,16 @@
                                 <div class="ratio-detail-bar"><div class="ratio-detail-fill blue" id="barMargeBrute" style="width: 0%"></div></div>
                             </div>
                             <div class="ratio-detail-card status-good">
+                                <div class="ratio-tooltip">
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Formule</span>
+                                        <span class="ratio-tooltip-value formula">EBITDA / CA × 100</span>
+                                    </div>
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Objectif</span>
+                                        <span class="ratio-tooltip-value objective">> 15%</span>
+                                    </div>
+                                </div>
                                 <div class="ratio-detail-header">
                                     <div class="ratio-detail-icon green">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
@@ -6571,6 +6678,16 @@
                                 <div class="ratio-detail-bar"><div class="ratio-detail-fill green" id="barMargeEbitda" style="width: 0%"></div></div>
                             </div>
                             <div class="ratio-detail-card status-good">
+                                <div class="ratio-tooltip">
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Formule</span>
+                                        <span class="ratio-tooltip-value formula">EBIT / CA × 100</span>
+                                    </div>
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Objectif</span>
+                                        <span class="ratio-tooltip-value objective">> 10%</span>
+                                    </div>
+                                </div>
                                 <div class="ratio-detail-header">
                                     <div class="ratio-detail-icon purple">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
@@ -6584,6 +6701,16 @@
                                 <div class="ratio-detail-bar"><div class="ratio-detail-fill purple" id="barMargeOp" style="width: 0%"></div></div>
                             </div>
                             <div class="ratio-detail-card status-good">
+                                <div class="ratio-tooltip">
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Formule</span>
+                                        <span class="ratio-tooltip-value formula">Résultat Net / CA × 100</span>
+                                    </div>
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Objectif</span>
+                                        <span class="ratio-tooltip-value objective">> 5%</span>
+                                    </div>
+                                </div>
                                 <div class="ratio-detail-header">
                                     <div class="ratio-detail-icon orange">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -6612,6 +6739,16 @@
                         </div>
                         <div class="ratios-category-grid">
                             <div class="ratio-detail-card status-good">
+                                <div class="ratio-tooltip">
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Formule</span>
+                                        <span class="ratio-tooltip-value formula">Résultat Net / Capitaux Propres × 100</span>
+                                    </div>
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Objectif</span>
+                                        <span class="ratio-tooltip-value objective">> 15%</span>
+                                    </div>
+                                </div>
                                 <div class="ratio-detail-header">
                                     <div class="ratio-detail-icon green">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
@@ -6625,6 +6762,16 @@
                                 <div class="ratio-detail-bar"><div class="ratio-detail-fill green" id="barROE" style="width: 0%"></div></div>
                             </div>
                             <div class="ratio-detail-card status-good">
+                                <div class="ratio-tooltip">
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Formule</span>
+                                        <span class="ratio-tooltip-value formula">Résultat Net / Total Actif × 100</span>
+                                    </div>
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Objectif</span>
+                                        <span class="ratio-tooltip-value objective">> 5%</span>
+                                    </div>
+                                </div>
                                 <div class="ratio-detail-header">
                                     <div class="ratio-detail-icon blue">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
@@ -6638,6 +6785,16 @@
                                 <div class="ratio-detail-bar"><div class="ratio-detail-fill blue" id="barROA" style="width: 0%"></div></div>
                             </div>
                             <div class="ratio-detail-card status-good">
+                                <div class="ratio-tooltip">
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Formule</span>
+                                        <span class="ratio-tooltip-value formula">EBIT / Capitaux Employés × 100</span>
+                                    </div>
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Objectif</span>
+                                        <span class="ratio-tooltip-value objective">> 10%</span>
+                                    </div>
+                                </div>
                                 <div class="ratio-detail-header">
                                     <div class="ratio-detail-icon purple">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
@@ -6666,6 +6823,16 @@
                         </div>
                         <div class="ratios-category-grid">
                             <div class="ratio-detail-card status-good">
+                                <div class="ratio-tooltip">
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Formule</span>
+                                        <span class="ratio-tooltip-value formula">Actif Circulant / Passif Circulant</span>
+                                    </div>
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Objectif</span>
+                                        <span class="ratio-tooltip-value objective">> 1.5</span>
+                                    </div>
+                                </div>
                                 <div class="ratio-detail-header">
                                     <div class="ratio-detail-icon purple">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
@@ -6679,6 +6846,16 @@
                                 <div class="ratio-detail-bar"><div class="ratio-detail-fill purple" id="barCurrent" style="width: 0%"></div></div>
                             </div>
                             <div class="ratio-detail-card status-good">
+                                <div class="ratio-tooltip">
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Formule</span>
+                                        <span class="ratio-tooltip-value formula">(Actif Circ. - Stocks) / Passif Circ.</span>
+                                    </div>
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Objectif</span>
+                                        <span class="ratio-tooltip-value objective">> 1</span>
+                                    </div>
+                                </div>
                                 <div class="ratio-detail-header">
                                     <div class="ratio-detail-icon blue">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
@@ -6692,6 +6869,16 @@
                                 <div class="ratio-detail-bar"><div class="ratio-detail-fill blue" id="barQuick" style="width: 0%"></div></div>
                             </div>
                             <div class="ratio-detail-card status-good">
+                                <div class="ratio-tooltip">
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Formule</span>
+                                        <span class="ratio-tooltip-value formula">Trésorerie / Passif Circulant</span>
+                                    </div>
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Objectif</span>
+                                        <span class="ratio-tooltip-value objective">> 0.2</span>
+                                    </div>
+                                </div>
                                 <div class="ratio-detail-header">
                                     <div class="ratio-detail-icon green">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
@@ -6720,6 +6907,16 @@
                         </div>
                         <div class="ratios-category-grid">
                             <div class="ratio-detail-card status-warning">
+                                <div class="ratio-tooltip">
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Formule</span>
+                                        <span class="ratio-tooltip-value formula">Dettes Totales / Total Passif × 100</span>
+                                    </div>
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Objectif</span>
+                                        <span class="ratio-tooltip-value objective">< 60%</span>
+                                    </div>
+                                </div>
                                 <div class="ratio-detail-header">
                                     <div class="ratio-detail-icon red">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
@@ -6733,6 +6930,16 @@
                                 <div class="ratio-detail-bar"><div class="ratio-detail-fill red" id="barEndettement" style="width: 0%"></div></div>
                             </div>
                             <div class="ratio-detail-card status-good">
+                                <div class="ratio-tooltip">
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Formule</span>
+                                        <span class="ratio-tooltip-value formula">Dettes Fin. / Capitaux Propres × 100</span>
+                                    </div>
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Objectif</span>
+                                        <span class="ratio-tooltip-value objective">< 100%</span>
+                                    </div>
+                                </div>
                                 <div class="ratio-detail-header">
                                     <div class="ratio-detail-icon orange">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
@@ -6746,6 +6953,16 @@
                                 <div class="ratio-detail-bar"><div class="ratio-detail-fill orange" id="barGearing" style="width: 0%"></div></div>
                             </div>
                             <div class="ratio-detail-card status-good">
+                                <div class="ratio-tooltip">
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Formule</span>
+                                        <span class="ratio-tooltip-value formula">Dette Nette / EBITDA</span>
+                                    </div>
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Objectif</span>
+                                        <span class="ratio-tooltip-value objective">< 3x</span>
+                                    </div>
+                                </div>
                                 <div class="ratio-detail-header">
                                     <div class="ratio-detail-icon purple">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
@@ -6759,6 +6976,16 @@
                                 <div class="ratio-detail-bar"><div class="ratio-detail-fill purple" id="barNetDebt" style="width: 0%"></div></div>
                             </div>
                             <div class="ratio-detail-card status-good">
+                                <div class="ratio-tooltip">
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Formule</span>
+                                        <span class="ratio-tooltip-value formula">Capitaux Propres / Total Passif × 100</span>
+                                    </div>
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Objectif</span>
+                                        <span class="ratio-tooltip-value objective">> 40%</span>
+                                    </div>
+                                </div>
                                 <div class="ratio-detail-header">
                                     <div class="ratio-detail-icon green">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
@@ -6787,80 +7014,96 @@
                         </div>
                         <div class="ratios-category-grid">
                             <div class="ratio-detail-card status-good">
+                                <div class="ratio-tooltip">
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Formule</span>
+                                        <span class="ratio-tooltip-value formula">BFR / (CA / 365)</span>
+                                    </div>
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Objectif</span>
+                                        <span class="ratio-tooltip-value objective">< 45 jours</span>
+                                    </div>
+                                </div>
                                 <div class="ratio-detail-header">
-                                    <div>
-                                        <span class="ratio-detail-name">BFR en jours</span>
-                                        <span class="ratio-detail-value" id="ratioBFRDetail">0 j</span>
+                                    <div class="ratio-detail-icon blue">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                                     </div>
                                     <div class="ratio-detail-status good" id="statusBFR">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                 </div>
-                                <div class="ratio-detail-bar"><div class="ratio-detail-fill red" id="barBFR" style="width: 0%"></div></div>
-                                <div class="ratio-detail-footer">
-                                    <p class="ratio-detail-desc">BFR / (CA/365)</p>
-                                    <span class="ratio-detail-benchmark">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>
-                                        Objectif: &lt;45j
-                                    </span>
-                                </div>
+                                <span class="ratio-detail-value" id="ratioBFRDetail">0 j</span>
+                                <span class="ratio-detail-name">BFR en jours</span>
+                                <div class="ratio-detail-bar"><div class="ratio-detail-fill blue" id="barBFR" style="width: 0%"></div></div>
                             </div>
                             <div class="ratio-detail-card status-good">
+                                <div class="ratio-tooltip">
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Formule</span>
+                                        <span class="ratio-tooltip-value formula">Stocks / (Achats / 365)</span>
+                                    </div>
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Objectif</span>
+                                        <span class="ratio-tooltip-value objective">< 60 jours</span>
+                                    </div>
+                                </div>
                                 <div class="ratio-detail-header">
-                                    <div>
-                                        <span class="ratio-detail-name">Rotation Stocks</span>
-                                        <span class="ratio-detail-value" id="ratioRotationStocksDetail">0 j</span>
+                                    <div class="ratio-detail-icon orange">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
                                     </div>
                                     <div class="ratio-detail-status good" id="statusRotationStocks">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                 </div>
-                                <div class="ratio-detail-bar"><div class="ratio-detail-fill red" id="barRotationStocks" style="width: 0%"></div></div>
-                                <div class="ratio-detail-footer">
-                                    <p class="ratio-detail-desc">Stocks / (Achats/365)</p>
-                                    <span class="ratio-detail-benchmark">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>
-                                        Objectif: &lt;60j
-                                    </span>
-                                </div>
+                                <span class="ratio-detail-value" id="ratioRotationStocksDetail">0 j</span>
+                                <span class="ratio-detail-name">Rotation Stocks</span>
+                                <div class="ratio-detail-bar"><div class="ratio-detail-fill orange" id="barRotationStocks" style="width: 0%"></div></div>
                             </div>
                             <div class="ratio-detail-card status-warning">
+                                <div class="ratio-tooltip">
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Formule</span>
+                                        <span class="ratio-tooltip-value formula">Créances Clients / (CA / 365)</span>
+                                    </div>
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Objectif</span>
+                                        <span class="ratio-tooltip-value objective">< 45 jours</span>
+                                    </div>
+                                </div>
                                 <div class="ratio-detail-header">
-                                    <div>
-                                        <span class="ratio-detail-name">Délai Clients</span>
-                                        <span class="ratio-detail-value" id="ratioDelaiClientsDetail">0 j</span>
+                                    <div class="ratio-detail-icon purple">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                                     </div>
                                     <div class="ratio-detail-status warning" id="statusDelaiClients">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                                     </div>
                                 </div>
-                                <div class="ratio-detail-bar"><div class="ratio-detail-fill red" id="barDelaiClients" style="width: 0%"></div></div>
-                                <div class="ratio-detail-footer">
-                                    <p class="ratio-detail-desc">Créances Clients / (CA/365)</p>
-                                    <span class="ratio-detail-benchmark">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>
-                                        Objectif: &lt;45j
-                                    </span>
-                                </div>
+                                <span class="ratio-detail-value" id="ratioDelaiClientsDetail">0 j</span>
+                                <span class="ratio-detail-name">Délai Clients</span>
+                                <div class="ratio-detail-bar"><div class="ratio-detail-fill purple" id="barDelaiClients" style="width: 0%"></div></div>
                             </div>
                             <div class="ratio-detail-card status-good">
+                                <div class="ratio-tooltip">
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Formule</span>
+                                        <span class="ratio-tooltip-value formula">Dettes Fourn. / (Achats / 365)</span>
+                                    </div>
+                                    <div class="ratio-tooltip-row">
+                                        <span class="ratio-tooltip-label">Objectif</span>
+                                        <span class="ratio-tooltip-value objective">30 - 60 jours</span>
+                                    </div>
+                                </div>
                                 <div class="ratio-detail-header">
-                                    <div>
-                                        <span class="ratio-detail-name">Délai Fournisseurs</span>
-                                        <span class="ratio-detail-value" id="ratioDelaiFournDetail">0 j</span>
+                                    <div class="ratio-detail-icon green">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                                     </div>
                                     <div class="ratio-detail-status good" id="statusDelaiFourn">
                                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                 </div>
-                                <div class="ratio-detail-bar"><div class="ratio-detail-fill red" id="barDelaiFourn" style="width: 0%"></div></div>
-                                <div class="ratio-detail-footer">
-                                    <p class="ratio-detail-desc">Dettes Fourn. / (Achats/365)</p>
-                                    <span class="ratio-detail-benchmark">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                                        Objectif: 30-60j
-                                    </span>
-                                </div>
+                                <span class="ratio-detail-value" id="ratioDelaiFournDetail">0 j</span>
+                                <span class="ratio-detail-name">Délai Fournisseurs</span>
+                                <div class="ratio-detail-bar"><div class="ratio-detail-fill green" id="barDelaiFourn" style="width: 0%"></div></div>
                             </div>
                         </div>
                     </div>
