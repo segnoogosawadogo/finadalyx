@@ -14372,15 +14372,23 @@ td, th { mso-number-format:"\\@"; }
                 
                 if (error) throw error;
                 
-                // Update profile with company name
+                // Créer ou mettre à jour le profil dans la table profiles
                 if (data.user) {
-                    await supabaseClient
+                    const { error: profileError } = await supabaseClient
                         .from('profiles')
-                        .update({ 
+                        .upsert({ 
+                            id: data.user.id,
+                            email: email,
                             full_name: name,
-                            company_name: company 
-                        })
-                        .eq('id', data.user.id);
+                            company_name: company,
+                            plan: 'basic',
+                            plan_period: 'monthly',
+                            created_at: new Date().toISOString()
+                        }, { onConflict: 'id' });
+                    
+                    if (profileError) {
+                        console.error('Profile creation error:', profileError);
+                    }
                 }
                 
                 showNotification('Compte créé ! Vérifiez votre email.', 'success');
