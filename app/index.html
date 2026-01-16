@@ -6901,8 +6901,8 @@
                 <!-- Hidden File Input (Global) -->
                 <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" hidden onchange="handleFileUpload(event)">
 
-                <!-- Assistant de Démarrage (Onboarding) -->
-                <div class="onboarding-section" id="onboardingSection">
+                <!-- Assistant de Démarrage (Onboarding) - caché par défaut, affiché après connexion -->
+                <div class="onboarding-section" id="onboardingSection" style="display:none;">
                     <div class="onboarding-card">
                         <div class="onboarding-header">
                             <div class="onboarding-icon">
@@ -13115,15 +13115,20 @@ td, th { mso-number-format:"\\@"; }
         }
         
         function checkOnboardingStatus() {
+            // Ne rien faire si pas connecté
+            if (!currentUser) return;
+            
             const hasData = Object.keys(yearsData).length > 0;
             const onboardingClosed = localStorage.getItem('findalyx_onboarding_closed');
             const onboarding = document.getElementById('onboardingSection');
             const uploadSection = document.getElementById('uploadSection');
+            const dashboardContent = document.getElementById('dashboardContent');
             
             if (hasData) {
-                // Si données présentes, cacher onboarding et upload
+                // Si données présentes, cacher onboarding et upload, afficher dashboard
                 if (onboarding) onboarding.style.display = 'none';
                 if (uploadSection) uploadSection.style.display = 'none';
+                if (dashboardContent) dashboardContent.style.display = 'block';
                 // Afficher le bouton rapport express
                 const expressBtn = document.getElementById('expressReportBtn');
                 if (expressBtn) expressBtn.style.display = 'inline-flex';
@@ -13131,10 +13136,12 @@ td, th { mso-number-format:"\\@"; }
                 // Si onboarding fermé mais pas de données, afficher upload
                 if (onboarding) onboarding.style.display = 'none';
                 if (uploadSection) uploadSection.style.display = 'block';
+                if (dashboardContent) dashboardContent.style.display = 'none';
             } else {
-                // Première visite, afficher onboarding
+                // Première visite après connexion, afficher onboarding
                 if (onboarding) onboarding.style.display = 'block';
                 if (uploadSection) uploadSection.style.display = 'none';
+                if (dashboardContent) dashboardContent.style.display = 'none';
             }
         }
         
@@ -16544,6 +16551,15 @@ ${userName}`;
             if (authContainer) authContainer.style.display = 'none';
             if (appContainer) appContainer.style.display = 'flex';
             applyPlanRestrictions();
+            
+            // Vérifier l'onboarding après connexion
+            setTimeout(() => {
+                checkOnboardingStatus();
+                // Si plusieurs années, afficher le panel de comparaison
+                if (Object.keys(yearsData).length >= 2) {
+                    showComparisonPanel();
+                }
+            }, 300);
         }
         
         function showLoading(show) {
