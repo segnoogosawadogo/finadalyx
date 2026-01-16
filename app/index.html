@@ -12666,40 +12666,100 @@ td, th { mso-number-format:"\\@"; }
             // Générer des notifications dynamiques basées sur le contexte
             notifications = [];
             
-            // Notification d'essai
-            if (userPlan === 'basic_trial' || userPlan === 'basic') {
+            const now = new Date();
+            const trialEnd = userTrialEnd ? new Date(userTrialEnd) : null;
+            const daysLeft = trialEnd ? Math.ceil((trialEnd - now) / (1000 * 60 * 60 * 24)) : 0;
+            
+            // Notification d'essai gratuit
+            if (userPlan === 'basic_trial' && daysLeft > 0) {
                 notifications.push({
                     id: 1,
                     type: 'warning',
                     title: 'Essai gratuit',
-                    text: 'Votre période d\'essai de 7 jours est en cours. Passez à Pro pour continuer.',
+                    text: `Il vous reste ${daysLeft} jour${daysLeft > 1 ? 's' : ''} d'essai. Passez à Pro pour continuer.`,
                     time: 'Maintenant',
-                    read: false
+                    read: false,
+                    action: 'openUpgradeModal'
+                });
+            } else if (userPlan === 'basic_expired') {
+                notifications.push({
+                    id: 1,
+                    type: 'warning',
+                    title: 'Essai expiré',
+                    text: 'Votre période d\'essai est terminée. Passez à Pro pour continuer à utiliser Findalyx.',
+                    time: 'Maintenant',
+                    read: false,
+                    action: 'openUpgradeModal'
                 });
             }
             
-            // Notification de bienvenue
-            notifications.push({
-                id: 2,
-                type: 'info',
-                title: 'Bienvenue sur Findalyx !',
-                text: 'Importez votre première balance comptable pour commencer l\'analyse.',
-                time: 'Aujourd\'hui',
-                read: false
-            });
+            // Notification si aucune donnée importée
+            const hasData = Object.keys(yearsData).length > 0;
+            if (!hasData) {
+                notifications.push({
+                    id: 2,
+                    type: 'info',
+                    title: 'Commencez votre analyse',
+                    text: 'Importez votre première balance comptable pour découvrir vos indicateurs financiers.',
+                    time: 'Conseil',
+                    read: false,
+                    action: 'goToImport'
+                });
+            }
             
-            // Notification nouvelle fonctionnalité
-            notifications.push({
-                id: 3,
-                type: 'success',
-                title: 'Nouvelle fonctionnalité',
-                text: 'Export PowerPoint maintenant disponible pour vos présentations.',
-                time: 'Il y a 2 jours',
-                read: true
-            });
+            // Notification de bienvenue (si première connexion récente)
+            const welcomeShown = localStorage.getItem('findalyx_welcome_shown');
+            if (!welcomeShown) {
+                notifications.push({
+                    id: 3,
+                    type: 'success',
+                    title: 'Bienvenue sur Findalyx ! 🎉',
+                    text: 'Votre plateforme d\'analyse financière SYSCOHADA est prête.',
+                    time: 'Nouveau',
+                    read: false,
+                    action: null
+                });
+                localStorage.setItem('findalyx_welcome_shown', 'true');
+            }
+            
+            // Notification export disponible si données présentes
+            if (hasData && (userPlan === 'pro' || userPlan === 'business')) {
+                notifications.push({
+                    id: 4,
+                    type: 'info',
+                    title: 'Exports disponibles',
+                    text: 'Générez vos rapports PDF, Excel et PowerPoint en un clic.',
+                    time: 'Astuce',
+                    read: true,
+                    action: null
+                });
+            }
             
             updateNotificationsBadge();
             renderNotifications();
+        }
+        
+        // Fonction pour ajouter une notification dynamiquement
+        function addNotification(type, title, text, action = null) {
+            const id = Date.now();
+            notifications.unshift({
+                id,
+                type,
+                title,
+                text,
+                time: 'À l\'instant',
+                read: false,
+                action
+            });
+            updateNotificationsBadge();
+            renderNotifications();
+            return id;
+        }
+        
+        // Navigation vers import
+        function goToImport() {
+            navigateTo('import');
+            document.getElementById('notificationsDropdown').classList.remove('show');
         }
         
         function toggleNotifications(event) {
@@ -12710,13 +12770,15 @@ td, th { mso-number-format:"\\@"; }
         
         function updateNotificationsBadge() {
             const badge = document.getElementById('notificationsBadge');
+            if (!badge) return;
             const unreadCount = notifications.filter(n => !n.read).length;
             badge.textContent = unreadCount;
-            badge.classList.toggle('hidden', unreadCount === 0);
+            badge.style.display = unreadCount === 0 ? 'none' : 'flex';
         }
         
         function renderNotifications() {
             const list = document.getElementById('notificationsList');
+            if (!list) return;
             
             if (notifications.length === 0) {
                 list.innerHTML = '<div class="notifications-empty">Aucune notification</div>';
@@ -12724,7 +12786,7 @@ td, th { mso-number-format:"\\@"; }
             }
             
             list.innerHTML = notifications.map(n => `
-                <div class="notification-item ${n.read ? '' : 'unread'}" onclick="markNotificationRead(${n.id})">
+                <div class="notification-item ${n.read ? '' : 'unread'}" onclick="handleNotificationClick(${n.id}, ${n.action ? `'${n.action}'` : 'null'})">
                     <div class="notification-icon ${n.type}">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             ${n.type === 'warning' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>' : ''}
@@ -12737,8 +12799,25 @@ td, th { mso-number-format:"\\@"; }
                         <div class="notification-text">${n.text}</div>
                         <div class="notification-time">${n.time}</div>
                     </div>
+                    ${n.action ? '<svg class="notification-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:16px;height:16px;color:var(--slate-400);flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>' : ''}
                 </div>
             `).join('');
+        }
+        
+        function handleNotificationClick(id, action) {
+            // Marquer comme lu
+            const notification = notifications.find(n => n.id === id);
+            if (notification) {
+                notification.read = true;
+                updateNotificationsBadge();
+                renderNotifications();
+            }
+            
+            // Exécuter l'action si présente
+            if (action && typeof window[action] === 'function') {
+                document.getElementById('notificationsDropdown').classList.remove('show');
+                window[action]();
+            }
         }
         
         function markNotificationRead(id) {
@@ -13921,30 +14000,76 @@ ${userName}`;
                 valign: 'middle'
             });
             
-            // ============ SLIDE 8: RECOMMANDATIONS ============
-            if (insights.length > 0) {
-                slide = pptx.addSlide();
-                slide.addText('06  Recommandations & Points d\'Attention', { x: 0.5, y: 0.3, w: 9, h: 0.7, fontSize: 28, bold: true, color: colors.dark, fontFace: 'Arial' });
-                slide.addShape(pptx.ShapeType.rect, { x: 0.5, y: 0.95, w: 2, h: 0.05, fill: { color: colors.primary } });
-                
-                const typeColors = { positive: colors.success, negative: colors.danger, warning: colors.warning, neutral: colors.purple };
-                const typeIcons = { positive: '✓', negative: '!', warning: '⚠', neutral: 'ℹ' };
-                
-                insights.slice(0, 4).forEach((insight, i) => {
-                    const y = 1.3 + i * 1.1;
-                    const iconColor = typeColors[insight.type] || colors.gray;
-                    
-                    // Icon circle
-                    slide.addShape(pptx.ShapeType.ellipse, { x: 0.5, y: y + 0.1, w: 0.5, h: 0.5, fill: { color: iconColor } });
-                    slide.addText(typeIcons[insight.type] || '•', { x: 0.5, y: y + 0.1, w: 0.5, h: 0.5, fontSize: 14, bold: true, align: 'center', valign: 'middle', color: colors.white, fontFace: 'Arial' });
-                    
-                    // Content
-                    slide.addText(insight.title, { x: 1.2, y, w: 8.3, h: 0.4, fontSize: 14, bold: true, color: colors.dark, fontFace: 'Arial' });
-                    slide.addText(insight.text, { x: 1.2, y: y + 0.45, w: 8.3, h: 0.5, fontSize: 11, color: colors.gray, fontFace: 'Arial' });
-                });
-            }
+            // ============ SLIDE 8: ANALYSE EXECUTIVE DÉTAILLÉE ============
+            slide = pptx.addSlide();
+            slide.addText('06  Analyse Executive & Recommandations', { x: 0.5, y: 0.3, w: 9, h: 0.7, fontSize: 28, bold: true, color: colors.dark, fontFace: 'Arial' });
+            slide.addShape(pptx.ShapeType.rect, { x: 0.5, y: 0.95, w: 2, h: 0.05, fill: { color: colors.primary } });
             
-            // ============ SLIDE 9: FIN ============
+            // Générer une analyse executive complète
+            const analysis = generateExecutiveAnalysis(data, score);
+            
+            // Points Forts
+            slide.addText('✓ Points Forts', { x: 0.5, y: 1.2, w: 4.3, h: 0.4, fontSize: 14, bold: true, color: colors.success, fontFace: 'Arial' });
+            analysis.strengths.forEach((item, i) => {
+                slide.addText('• ' + item, { x: 0.5, y: 1.6 + i * 0.35, w: 4.3, h: 0.35, fontSize: 10, color: colors.dark, fontFace: 'Arial' });
+            });
+            
+            // Points d'Attention
+            slide.addText('⚠ Points d\'Attention', { x: 5.2, y: 1.2, w: 4.3, h: 0.4, fontSize: 14, bold: true, color: colors.warning, fontFace: 'Arial' });
+            analysis.weaknesses.forEach((item, i) => {
+                slide.addText('• ' + item, { x: 5.2, y: 1.6 + i * 0.35, w: 4.3, h: 0.35, fontSize: 10, color: colors.dark, fontFace: 'Arial' });
+            });
+            
+            // Recommandations Stratégiques
+            const recoY = Math.max(1.6 + analysis.strengths.length * 0.35, 1.6 + analysis.weaknesses.length * 0.35) + 0.3;
+            slide.addShape(pptx.ShapeType.rect, { x: 0.5, y: recoY, w: 9, h: 0.02, fill: { color: 'e2e8f0' } });
+            slide.addText('📋 Recommandations Stratégiques', { x: 0.5, y: recoY + 0.15, w: 9, h: 0.4, fontSize: 14, bold: true, color: colors.primary, fontFace: 'Arial' });
+            
+            analysis.recommendations.forEach((item, i) => {
+                const y = recoY + 0.55 + i * 0.45;
+                slide.addShape(pptx.ShapeType.roundRect, { x: 0.5, y: y, w: 0.25, h: 0.25, fill: { color: colors.primary }, rounding: 0.1 });
+                slide.addText(`${i + 1}`, { x: 0.5, y: y, w: 0.25, h: 0.25, fontSize: 10, bold: true, align: 'center', valign: 'middle', color: colors.white, fontFace: 'Arial' });
+                slide.addText(item, { x: 0.9, y: y, w: 8.6, h: 0.4, fontSize: 11, color: colors.dark, fontFace: 'Arial' });
+            });
+            
+            // ============ SLIDE 9: SYNTHÈSE FINANCIÈRE ============
+            slide = pptx.addSlide();
+            slide.addText('Synthèse de la Performance Financière', { x: 0.5, y: 0.3, w: 9, h: 0.7, fontSize: 28, bold: true, color: colors.dark, fontFace: 'Arial' });
+            slide.addShape(pptx.ShapeType.rect, { x: 0.5, y: 0.95, w: 2, h: 0.05, fill: { color: colors.primary } });
+            
+            // Verdict global
+            const verdict = score && score.global >= 70 ? 'SOLIDE' : score && score.global >= 50 ? 'CORRECTE' : score && score.global >= 30 ? 'FRAGILE' : 'CRITIQUE';
+            const verdictColor = score && score.global >= 70 ? colors.success : score && score.global >= 50 ? colors.warning : colors.danger;
+            
+            slide.addShape(pptx.ShapeType.roundRect, { x: 0.5, y: 1.2, w: 9, h: 1.2, fill: { color: colors.bgLight }, line: { color: verdictColor, pt: 2 }, rounding: 0.1 });
+            slide.addText(`SITUATION FINANCIÈRE : ${verdict}`, { x: 0.7, y: 1.35, w: 8.6, h: 0.4, fontSize: 16, bold: true, color: verdictColor, fontFace: 'Arial' });
+            slide.addText(analysis.summary, { x: 0.7, y: 1.75, w: 8.6, h: 0.5, fontSize: 11, color: colors.gray, fontFace: 'Arial' });
+            
+            // Indicateurs clés avec verdict
+            const keyIndicators = [
+                { label: 'Rentabilité', value: data.resultatNet > 0 ? 'Profitable' : 'Déficitaire', status: data.resultatNet > 0 },
+                { label: 'Liquidité', value: (data.currentRatio || 0) >= 1 ? 'Suffisante' : 'Insuffisante', status: (data.currentRatio || 0) >= 1 },
+                { label: 'Solvabilité', value: (data.ratioEndettement || 0) <= 70 ? 'Maîtrisée' : 'Tendue', status: (data.ratioEndettement || 0) <= 70 },
+                { label: 'Trésorerie', value: (data.tresorerieNette || 0) >= 0 ? 'Positive' : 'Négative', status: (data.tresorerieNette || 0) >= 0 }
+            ];
+            
+            keyIndicators.forEach((ind, i) => {
+                const x = 0.5 + (i % 2) * 4.7;
+                const y = 2.6 + Math.floor(i / 2) * 0.9;
+                slide.addShape(pptx.ShapeType.roundRect, { x, y, w: 4.2, h: 0.7, fill: { color: colors.white }, line: { color: ind.status ? colors.success : colors.danger, pt: 1 }, rounding: 0.05 });
+                slide.addText(ind.label, { x: x + 0.2, y: y + 0.1, w: 2.5, h: 0.25, fontSize: 11, color: colors.gray, fontFace: 'Arial' });
+                slide.addText(ind.value, { x: x + 0.2, y: y + 0.35, w: 2.5, h: 0.3, fontSize: 14, bold: true, color: ind.status ? colors.success : colors.danger, fontFace: 'Arial' });
+                slide.addText(ind.status ? '✓' : '✗', { x: x + 3.5, y: y + 0.15, w: 0.5, h: 0.4, fontSize: 20, align: 'center', color: ind.status ? colors.success : colors.danger, fontFace: 'Arial' });
+            });
+            
+            // Prochaines étapes
+            slide.addText('Prochaines Étapes Suggérées :', { x: 0.5, y: 4.3, w: 9, h: 0.35, fontSize: 12, bold: true, color: colors.dark, fontFace: 'Arial' });
+            const nextSteps = analysis.nextSteps || ['Suivi mensuel des KPIs', 'Revue trimestrielle des objectifs', 'Analyse comparative sectorielle'];
+            nextSteps.forEach((step, i) => {
+                slide.addText(`${i + 1}. ${step}`, { x: 0.5, y: 4.65 + i * 0.3, w: 9, h: 0.3, fontSize: 10, color: colors.gray, fontFace: 'Arial' });
+            });
+            
+            // ============ SLIDE 10: FIN ============
             slide = pptx.addSlide();
             slide.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: '100%', fill: { color: colors.primary } });
             slide.addText('Merci', { x: 0.5, y: 2, w: 9, h: 1, fontSize: 48, bold: true, color: colors.white, align: 'center', fontFace: 'Arial' });
@@ -13954,6 +14079,132 @@ ${userName}`;
             pptx.writeFile({ fileName: `${companyName.replace(/[^a-zA-Z0-9]/g, '_')}_Rapport_${currentYear}.pptx` });
             showNotification('Présentation PowerPoint exportée avec succès !', 'success');
             toggleExportMenu();
+        }
+        
+        // Fonction pour générer une analyse executive complète
+        function generateExecutiveAnalysis(data, score) {
+            const strengths = [];
+            const weaknesses = [];
+            const recommendations = [];
+            let summary = '';
+            const nextSteps = [];
+            
+            const fmtMrd = n => new Intl.NumberFormat('fr-FR', {maximumFractionDigits: 1}).format((n || 0) / 1000000000);
+            const margeEBITDA = data.ca > 0 ? (data.ebitda / data.ca) * 100 : 0;
+            const margeNette = data.ca > 0 ? (data.resultatNet / data.ca) * 100 : 0;
+            
+            // Analyse des points forts
+            if (data.ca > 50000000000) {
+                strengths.push(`Chiffre d'affaires significatif de ${fmtMrd(data.ca)} Mrd FCFA`);
+            }
+            if (margeEBITDA >= 15) {
+                strengths.push(`Excellente marge EBITDA de ${margeEBITDA.toFixed(1)}%`);
+            } else if (margeEBITDA >= 10) {
+                strengths.push(`Marge EBITDA solide de ${margeEBITDA.toFixed(1)}%`);
+            }
+            if (data.resultatNet > 0) {
+                strengths.push(`Entreprise profitable (RN: ${fmtMrd(data.resultatNet)} Mrd)`);
+            }
+            if ((data.currentRatio || 0) >= 1.5) {
+                strengths.push('Liquidité confortable (Current Ratio > 1.5)');
+            }
+            if ((data.ratioEndettement || 0) <= 50) {
+                strengths.push('Niveau d\'endettement maîtrisé');
+            }
+            if ((data.tresorerieNette || 0) > 0) {
+                strengths.push(`Trésorerie nette positive (${fmtMrd(data.tresorerieNette)} Mrd)`);
+            }
+            if (score && score.global >= 70) {
+                strengths.push('Score de santé financière excellent');
+            }
+            
+            // Si pas assez de points forts, ajouter des génériques
+            if (strengths.length < 3) {
+                if (data.ca > 0) strengths.push('Activité commerciale opérationnelle');
+                if (data.margeBrute > 0) strengths.push('Marge brute positive sur l\'activité');
+            }
+            
+            // Analyse des points d'attention
+            if (margeEBITDA < 8 && margeEBITDA > 0) {
+                weaknesses.push(`Marge EBITDA faible (${margeEBITDA.toFixed(1)}%), optimiser les coûts`);
+            } else if (margeEBITDA <= 0) {
+                weaknesses.push('EBITDA négatif, exploitation déficitaire');
+            }
+            if (data.resultatNet < 0) {
+                weaknesses.push(`Résultat net déficitaire (${fmtMrd(data.resultatNet)} Mrd)`);
+            }
+            if ((data.currentRatio || 0) < 1) {
+                weaknesses.push('Liquidité insuffisante (Current Ratio < 1)');
+            }
+            if ((data.ratioEndettement || 0) > 70) {
+                weaknesses.push(`Endettement élevé (${(data.ratioEndettement || 0).toFixed(0)}%)`);
+            }
+            if ((data.tresorerieNette || 0) < 0) {
+                weaknesses.push('Trésorerie nette négative');
+            }
+            if ((data.bfrJours || 0) > 90) {
+                weaknesses.push(`BFR élevé (${data.bfrJours} jours de CA)`);
+            }
+            if (score && score.global < 50) {
+                weaknesses.push('Score de santé financière préoccupant');
+            }
+            
+            // Si pas assez de points faibles, mentionner les axes d'amélioration
+            if (weaknesses.length < 2) {
+                if (margeNette < 5 && data.resultatNet > 0) weaknesses.push('Marge nette à améliorer (< 5%)');
+                weaknesses.push('Pas de données N-1 pour analyse des tendances');
+            }
+            
+            // Recommandations stratégiques basées sur l'analyse
+            if (margeEBITDA < 10) {
+                recommendations.push('Lancer un programme d\'optimisation des coûts opérationnels pour améliorer la marge EBITDA');
+            }
+            if ((data.currentRatio || 0) < 1.2) {
+                recommendations.push('Renforcer la gestion du BFR : réduire les délais clients, négocier les délais fournisseurs');
+            }
+            if ((data.ratioEndettement || 0) > 60) {
+                recommendations.push('Envisager un désendettement progressif ou une augmentation des fonds propres');
+            }
+            if (data.resultatNet < 0) {
+                recommendations.push('Établir un plan de redressement avec objectifs de retour à la rentabilité sous 12-18 mois');
+            }
+            if (data.resultatNet > 0 && margeNette < 3) {
+                recommendations.push('Analyser la structure des charges financières et exceptionnelles pour améliorer la marge nette');
+            }
+            
+            // Recommandations générales
+            if (recommendations.length < 3) {
+                recommendations.push('Mettre en place un reporting mensuel de suivi des KPIs financiers');
+                recommendations.push('Réaliser un benchmark sectoriel pour identifier les leviers de performance');
+            }
+            
+            // Synthèse
+            if (score && score.global >= 70) {
+                summary = `L'entreprise présente une situation financière solide avec un score de ${score.global}/100. La rentabilité et la structure financière sont satisfaisantes. Focus recommandé sur l'optimisation continue et la croissance.`;
+            } else if (score && score.global >= 50) {
+                summary = `La situation financière est correcte mais présente des axes d'amélioration. Score de ${score.global}/100. Des actions ciblées sur les points faibles permettraient d'améliorer significativement les performances.`;
+            } else if (score) {
+                summary = `La situation financière nécessite une attention particulière avec un score de ${score.global}/100. Des mesures correctives sont recommandées pour renforcer la solidité financière de l'entreprise.`;
+            } else {
+                summary = `Analyse basée sur les données de l'exercice ${currentYear}. Une comparaison avec N-1 permettrait d'affiner le diagnostic.`;
+            }
+            
+            // Prochaines étapes
+            nextSteps.push('Valider les hypothèses et objectifs avec la direction');
+            nextSteps.push('Mettre en place le suivi mensuel des indicateurs clés');
+            if (weaknesses.some(w => w.includes('BFR') || w.includes('Liquidité'))) {
+                nextSteps.push('Prioriser l\'amélioration de la gestion du cash');
+            } else {
+                nextSteps.push('Préparer le budget prévisionnel N+1');
+            }
+            
+            return {
+                strengths: strengths.slice(0, 5),
+                weaknesses: weaknesses.slice(0, 5),
+                recommendations: recommendations.slice(0, 4),
+                summary,
+                nextSteps: nextSteps.slice(0, 3)
+            };
         }
 
         function exportAllToExcel() {
