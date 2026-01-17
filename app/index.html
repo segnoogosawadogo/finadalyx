@@ -2453,6 +2453,283 @@
             line-height: 1.4;
         }
         
+        /* ==================== ADMIN BENCHMARKS ==================== */
+        .benchmark-admin-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-box {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border: 1px solid var(--slate-200);
+        }
+        
+        .stat-box .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .stat-box .stat-icon svg {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+        
+        .stat-box .stat-icon.blue { background: linear-gradient(135deg, var(--blue-500), var(--blue-600)); }
+        .stat-box .stat-icon.green { background: linear-gradient(135deg, var(--success), #059669); }
+        .stat-box .stat-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .stat-box .stat-icon.orange { background: linear-gradient(135deg, var(--warning), #d97706); }
+        
+        .stat-box .stat-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .stat-box .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--slate-800);
+        }
+        
+        .stat-box .stat-label {
+            font-size: 12px;
+            color: var(--slate-500);
+        }
+        
+        .benchmark-upload-zone {
+            border: 2px dashed var(--slate-300);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--slate-50);
+        }
+        
+        .benchmark-upload-zone:hover {
+            border-color: var(--blue-400);
+            background: var(--blue-50);
+        }
+        
+        .benchmark-upload-zone.dragover {
+            border-color: var(--blue-500);
+            background: var(--blue-100);
+        }
+        
+        .benchmark-ratios-preview {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        
+        .benchmark-form-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        
+        .benchmark-form-grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .form-hint {
+            display: block;
+            font-size: 10px;
+            color: var(--slate-400);
+            margin-top: 4px;
+            font-style: italic;
+        }
+        
+        .benchmark-form-grid .form-group label,
+        .benchmark-form-grid-2col .form-group label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--slate-600);
+            margin-bottom: 6px;
+            display: block;
+        }
+        
+        .benchmark-form-grid .form-group input,
+        .benchmark-form-grid-2col .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--slate-200);
+            border-radius: 8px;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        
+        .benchmark-form-grid .form-group input:focus,
+        .benchmark-form-grid-2col .form-group input:focus {
+            outline: none;
+            border-color: var(--blue-400);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .benchmark-form-grid .form-group input:not(:placeholder-shown) {
+            background: var(--blue-50);
+            border-color: var(--blue-200);
+        }
+        
+        .benchmark-ratio-item {
+            background: var(--slate-50);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .benchmark-ratio-item .label {
+            font-size: 11px;
+            color: var(--slate-500);
+            margin-bottom: 4px;
+        }
+        
+        .benchmark-ratio-item .value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--slate-800);
+        }
+        
+        .benchmark-table-container {
+            overflow-x: auto;
+        }
+        
+        .benchmark-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        
+        .benchmark-table th {
+            background: var(--slate-50);
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--slate-600);
+            border-bottom: 1px solid var(--slate-200);
+        }
+        
+        .benchmark-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--slate-100);
+        }
+        
+        .benchmark-table tr:hover td {
+            background: var(--slate-50);
+        }
+        
+        .benchmark-table .actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .benchmark-table .btn-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .benchmark-table .btn-icon.edit {
+            background: var(--blue-100);
+            color: var(--blue-600);
+        }
+        
+        .benchmark-table .btn-icon.delete {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+        
+        .benchmark-table .btn-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .sector-averages-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        
+        .sector-average-card {
+            background: linear-gradient(135deg, var(--slate-50) 0%, white 100%);
+            border: 1px solid var(--slate-200);
+            border-radius: 12px;
+            padding: 16px;
+        }
+        
+        .sector-average-card h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--slate-700);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .sector-average-card .count {
+            font-size: 11px;
+            background: var(--blue-100);
+            color: var(--blue-600);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        
+        .sector-average-card .ratios {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        
+        .sector-average-card .ratio {
+            font-size: 12px;
+        }
+        
+        .sector-average-card .ratio .label {
+            color: var(--slate-500);
+        }
+        
+        .sector-average-card .ratio .value {
+            font-weight: 600;
+            color: var(--slate-800);
+        }
+        
+        @media (max-width: 992px) {
+            .benchmark-admin-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .benchmark-ratios-preview,
+            .sector-averages-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .benchmark-admin-stats,
+            .benchmark-ratios-preview,
+            .sector-averages-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
         /* ==================== BENCHMARK PANEL ==================== */
         .benchmark-panel {
             background: white;
@@ -6996,6 +7273,14 @@
                     </svg>
                     <span>Configuration</span>
                 </div>
+                <!-- Admin Benchmarks - visible only for admins -->
+                <div class="nav-item nav-item-admin" data-page="adminBenchmarks" id="adminBenchmarksNav" style="display: none;">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    <span>Benchmarks</span>
+                    <span style="background:var(--danger);color:white;font-size:9px;padding:2px 6px;border-radius:4px;margin-left:auto;">ADMIN</span>
+                </div>
                 <!-- Admin link - visible only for admins -->
                 <a href="/admin" class="nav-item nav-item-admin" id="adminNavLink" style="display: none; text-decoration: none; color: inherit;">
                     <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -8958,6 +9243,383 @@
                                     Appliquer et recalculer
                                 </button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== PAGE: Admin Benchmarks ========== -->
+            <div id="pageAdminBenchmarks" class="page-section" style="display: none;">
+                <div class="page-header">
+                    <div class="page-title-section">
+                        <h1>🔒 Gestion des Benchmarks Sectoriels</h1>
+                        <p>Alimentez la base de données de référence avec des états financiers d'entreprises</p>
+                    </div>
+                </div>
+
+                <!-- Statistiques des benchmarks -->
+                <div class="benchmark-admin-stats">
+                    <div class="stat-box">
+                        <div class="stat-icon blue"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg></div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="benchmarkCompanyCount">0</span>
+                            <span class="stat-label">Entreprises</span>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon green"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="benchmarkSectorCount">0</span>
+                            <span class="stat-label">Secteurs couverts</span>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon purple"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="benchmarkDataPoints">0</span>
+                            <span class="stat-label">Points de données</span>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon orange"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="benchmarkLastUpdate">--</span>
+                            <span class="stat-label">Dernière MAJ</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload Section -->
+                <div class="card" style="margin-bottom:24px;">
+                    <div class="card-header">
+                        <h3 class="card-title">📤 Ajouter une entreprise de référence</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Informations générales -->
+                        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px; margin-bottom:20px;">
+                            <div class="form-group">
+                                <label>Nom de l'entreprise *</label>
+                                <input type="text" id="benchmarkCompanyName" placeholder="Ex: SONATEL SA">
+                            </div>
+                            <div class="form-group">
+                                <label>Secteur *</label>
+                                <select id="benchmarkSector" onchange="updateSubsectors()">
+                                    <option value="">-- Sélectionner --</option>
+                                    <option value="agriculture">Agriculture & Agroalimentaire</option>
+                                    <option value="banque">Banque & Finance</option>
+                                    <option value="commerce">Commerce & Distribution</option>
+                                    <option value="energie">Énergie & Utilities</option>
+                                    <option value="immobilier">Immobilier & Construction</option>
+                                    <option value="industrie">Industrie & Manufacturing</option>
+                                    <option value="services">Services & Conseil</option>
+                                    <option value="telecom">Télécommunications</option>
+                                    <option value="transport">Transport & Logistique</option>
+                                    <option value="sante">Santé & Pharmacie</option>
+                                    <option value="tech">Technologie & IT</option>
+                                    <option value="hotellerie">Hôtellerie & Tourisme</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Sous-secteur</label>
+                                <select id="benchmarkSubsector">
+                                    <option value="">-- Sélectionner d'abord un secteur --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap:16px; margin-bottom:24px;">
+                            <div class="form-group">
+                                <label>Pays *</label>
+                                <select id="benchmarkCountry">
+                                    <option value="SN">Sénégal</option>
+                                    <option value="CI">Côte d'Ivoire</option>
+                                    <option value="ML">Mali</option>
+                                    <option value="BF">Burkina Faso</option>
+                                    <option value="BJ">Bénin</option>
+                                    <option value="TG">Togo</option>
+                                    <option value="NE">Niger</option>
+                                    <option value="GN">Guinée</option>
+                                    <option value="CM">Cameroun</option>
+                                    <option value="GA">Gabon</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Année *</label>
+                                <select id="benchmarkYear">
+                                    <option value="2024">2024</option>
+                                    <option value="2023" selected>2023</option>
+                                    <option value="2022">2022</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2020">2020</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Source *</label>
+                                <select id="benchmarkSource">
+                                    <option value="brvm">BRVM (rapport annuel)</option>
+                                    <option value="rapport">Rapport annuel entreprise</option>
+                                    <option value="bceao">Centrale des Bilans BCEAO</option>
+                                    <option value="autre">Autre source vérifiée</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Cotée BRVM ?</label>
+                                <select id="benchmarkListed">
+                                    <option value="yes">Oui</option>
+                                    <option value="no">Non</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <hr style="border:none;border-top:1px solid var(--slate-200);margin:24px 0;">
+                        
+                        <!-- Données du Compte de Résultat -->
+                        <h4 style="font-size:14px;font-weight:600;color:var(--slate-700);margin-bottom:16px;display:flex;align-items:center;gap:8px;">
+                            <span style="background:var(--blue-100);color:var(--blue-600);padding:4px 8px;border-radius:6px;">📊</span>
+                            Compte de Résultat (en milliers FCFA)
+                        </h4>
+                        <div class="benchmark-form-grid">
+                            <div class="form-group">
+                                <label>Chiffre d'Affaires (CA) *</label>
+                                <input type="number" id="bfCA" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                            </div>
+                            <div class="form-group">
+                                <label>Achats consommés</label>
+                                <input type="number" id="bfAchats" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                            </div>
+                            <div class="form-group">
+                                <label>Marge Brute</label>
+                                <input type="number" id="bfMargeBrute" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                                <span class="form-hint">= CA - Achats (ou saisir directement)</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Valeur Ajoutée</label>
+                                <input type="number" id="bfVA" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                            </div>
+                            <div class="form-group">
+                                <label>EBE (Excédent Brut d'Exploitation) *</label>
+                                <input type="number" id="bfEBE" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                                <span class="form-hint">≈ EBITDA</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Résultat d'Exploitation *</label>
+                                <input type="number" id="bfREX" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                                <span class="form-hint">≈ EBIT</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Résultat Financier</label>
+                                <input type="number" id="bfRF" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                            </div>
+                            <div class="form-group">
+                                <label>Résultat Net *</label>
+                                <input type="number" id="bfRN" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                            </div>
+                        </div>
+                        
+                        <hr style="border:none;border-top:1px solid var(--slate-200);margin:24px 0;">
+                        
+                        <!-- Données du Bilan -->
+                        <h4 style="font-size:14px;font-weight:600;color:var(--slate-700);margin-bottom:16px;display:flex;align-items:center;gap:8px;">
+                            <span style="background:var(--green-100);color:var(--success);padding:4px 8px;border-radius:6px;">📋</span>
+                            Bilan (en milliers FCFA)
+                        </h4>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+                            <!-- ACTIF -->
+                            <div>
+                                <h5 style="font-size:13px;font-weight:600;color:var(--blue-600);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--blue-200);">ACTIF</h5>
+                                <div class="benchmark-form-grid-2col">
+                                    <div class="form-group">
+                                        <label>Actif Immobilisé Net</label>
+                                        <input type="number" id="bfActifImmo" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Stocks</label>
+                                        <input type="number" id="bfStocks" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Créances Clients</label>
+                                        <input type="number" id="bfClients" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Autres Créances</label>
+                                        <input type="number" id="bfAutresCreances" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Trésorerie Actif</label>
+                                        <input type="number" id="bfTresoActif" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Total Actif *</label>
+                                        <input type="number" id="bfTotalActif" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- PASSIF -->
+                            <div>
+                                <h5 style="font-size:13px;font-weight:600;color:var(--success);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #a7f3d0;">PASSIF</h5>
+                                <div class="benchmark-form-grid-2col">
+                                    <div class="form-group">
+                                        <label>Capitaux Propres *</label>
+                                        <input type="number" id="bfCP" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Dettes Financières LT</label>
+                                        <input type="number" id="bfDettesLT" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Dettes Fournisseurs</label>
+                                        <input type="number" id="bfFournisseurs" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Autres Dettes CT</label>
+                                        <input type="number" id="bfAutresDettes" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Trésorerie Passif</label>
+                                        <input type="number" id="bfTresoPassif" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Total Passif *</label>
+                                        <input type="number" id="bfTotalPassif" placeholder="0" onchange="calculateBenchmarkRatiosFromForm()">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr style="border:none;border-top:1px solid var(--slate-200);margin:24px 0;">
+                        
+                        <!-- Ratios calculés automatiquement -->
+                        <h4 style="font-size:14px;font-weight:600;color:var(--slate-700);margin-bottom:16px;display:flex;align-items:center;gap:8px;">
+                            <span style="background:var(--purple-100);color:#7c3aed;padding:4px 8px;border-radius:6px;">🧮</span>
+                            Ratios calculés automatiquement
+                        </h4>
+                        <div class="benchmark-ratios-preview" id="benchmarkRatiosGrid">
+                            <div class="benchmark-ratio-item">
+                                <div class="label">Marge Brute</div>
+                                <div class="value" id="calcMargeBrute">--%</div>
+                            </div>
+                            <div class="benchmark-ratio-item">
+                                <div class="label">Marge EBE (≈EBITDA)</div>
+                                <div class="value" id="calcMargeEBE">--%</div>
+                            </div>
+                            <div class="benchmark-ratio-item">
+                                <div class="label">Marge d'Exploitation</div>
+                                <div class="value" id="calcMargeREX">--%</div>
+                            </div>
+                            <div class="benchmark-ratio-item">
+                                <div class="label">Marge Nette</div>
+                                <div class="value" id="calcMargeNette">--%</div>
+                            </div>
+                            <div class="benchmark-ratio-item">
+                                <div class="label">Current Ratio</div>
+                                <div class="value" id="calcCurrentRatio">--</div>
+                            </div>
+                            <div class="benchmark-ratio-item">
+                                <div class="label">Quick Ratio</div>
+                                <div class="value" id="calcQuickRatio">--</div>
+                            </div>
+                            <div class="benchmark-ratio-item">
+                                <div class="label">ROE</div>
+                                <div class="value" id="calcROE">--%</div>
+                            </div>
+                            <div class="benchmark-ratio-item">
+                                <div class="label">ROA</div>
+                                <div class="value" id="calcROA">--%</div>
+                            </div>
+                            <div class="benchmark-ratio-item">
+                                <div class="label">Endettement</div>
+                                <div class="value" id="calcEndettement">--%</div>
+                            </div>
+                            <div class="benchmark-ratio-item">
+                                <div class="label">Autonomie Financière</div>
+                                <div class="value" id="calcAutonomie">--%</div>
+                            </div>
+                            <div class="benchmark-ratio-item">
+                                <div class="label">Gearing</div>
+                                <div class="value" id="calcGearing">--</div>
+                            </div>
+                            <div class="benchmark-ratio-item">
+                                <div class="label">Délai Clients (j)</div>
+                                <div class="value" id="calcDelaiClients">-- j</div>
+                            </div>
+                        </div>
+                        
+                        <div style="display:flex;gap:12px;margin-top:24px;justify-content:flex-end;">
+                            <button class="btn btn-secondary" onclick="resetBenchmarkForm()">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:18px;height:18px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                Réinitialiser
+                            </button>
+                            <button class="btn btn-primary" onclick="saveBenchmarkFromForm()">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:18px;height:18px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Enregistrer dans la base
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Liste des entreprises de référence -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📋 Entreprises de référence</h3>
+                        <div style="display:flex;gap:12px;">
+                            <select id="filterBenchmarkSector" onchange="filterBenchmarkList()" style="padding:8px 12px;border:1px solid var(--slate-200);border-radius:8px;font-size:13px;">
+                                <option value="">Tous les secteurs</option>
+                                <option value="agriculture">Agriculture</option>
+                                <option value="banque">Banque & Finance</option>
+                                <option value="commerce">Commerce</option>
+                                <option value="industrie">Industrie</option>
+                                <option value="telecom">Télécommunications</option>
+                                <option value="services">Services</option>
+                            </select>
+                            <button class="btn btn-secondary btn-sm" onclick="exportBenchmarkDatabase()">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:16px;height:16px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                Exporter
+                            </button>
+                            <button class="btn btn-primary btn-sm" onclick="recalculateSectorAverages()">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:16px;height:16px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                Recalculer moyennes
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="benchmark-table-container">
+                            <table class="benchmark-table" id="benchmarkTable">
+                                <thead>
+                                    <tr>
+                                        <th>Entreprise</th>
+                                        <th>Secteur</th>
+                                        <th>Pays</th>
+                                        <th>Année</th>
+                                        <th>CA (Mrd)</th>
+                                        <th>Marge EBITDA</th>
+                                        <th>ROE</th>
+                                        <th>Current Ratio</th>
+                                        <th>Source</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="benchmarkTableBody">
+                                    <tr>
+                                        <td colspan="10" style="text-align:center;padding:40px;color:var(--slate-400);">
+                                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:48px;height:48px;margin-bottom:12px;opacity:0.5;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                                            <p>Aucune entreprise de référence pour le moment</p>
+                                            <p style="font-size:12px;">Uploadez des états financiers ci-dessus pour alimenter la base</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Moyennes sectorielles calculées -->
+                <div class="card" style="margin-top:24px;">
+                    <div class="card-header">
+                        <h3 class="card-title">📈 Moyennes sectorielles calculées</h3>
+                        <span style="font-size:12px;color:var(--slate-400);">Basées sur les entreprises de référence</span>
+                    </div>
+                    <div class="card-body">
+                        <div id="sectorAveragesGrid" class="sector-averages-grid">
+                            <p style="text-align:center;color:var(--slate-400);padding:20px;">Les moyennes seront calculées automatiquement après l'ajout d'entreprises</p>
                         </div>
                     </div>
                 </div>
@@ -10948,7 +11610,8 @@
             'ratios': 'Ratios financiers',
             'evolution': 'Évolution',
             'import': 'Importer données',
-            'settings': 'Configuration'
+            'settings': 'Configuration',
+            'adminBenchmarks': 'Admin Benchmarks'
         };
 
         const pageMapping = {
@@ -10959,7 +11622,8 @@
             'ratios': 'pageRatios',
             'evolution': 'pageEvolution',
             'import': 'pageImport',
-            'settings': 'pageSettings'
+            'settings': 'pageSettings',
+            'adminBenchmarks': 'pageAdminBenchmarks'
         };
 
         function navigateTo(page) {
@@ -14079,6 +14743,911 @@ td, th { mso-number-format:"\\@"; }
         }
 
         // =====================================================
+        // ADMIN BENCHMARKS MANAGEMENT
+        // =====================================================
+        
+        // Sous-secteurs par secteur
+        const subsectorsBysSector = {
+            agriculture: ['Cultures vivrières', 'Cultures d\'exportation', 'Élevage', 'Pêche', 'Agroalimentaire', 'Boissons'],
+            banque: ['Banque commerciale', 'Microfinance', 'Assurance', 'Leasing', 'Gestion d\'actifs'],
+            commerce: ['Grande distribution', 'Commerce de gros', 'Commerce de détail', 'Import/Export', 'E-commerce'],
+            energie: ['Production électrique', 'Distribution électrique', 'Hydrocarbures', 'Énergies renouvelables'],
+            immobilier: ['Promotion immobilière', 'BTP', 'Matériaux de construction', 'Gestion immobilière'],
+            industrie: ['Métallurgie', 'Chimie', 'Plastique', 'Textile', 'Ciment', 'Automobile', 'Électronique'],
+            services: ['Conseil', 'Audit & Expertise', 'Formation', 'Nettoyage', 'Sécurité', 'Publicité'],
+            telecom: ['Opérateur mobile', 'Internet & Data', 'Infrastructure télécom', 'Services numériques'],
+            transport: ['Transport routier', 'Transport maritime', 'Transport aérien', 'Logistique', 'Manutention'],
+            sante: ['Cliniques & Hôpitaux', 'Pharmacie', 'Distribution pharmaceutique', 'Laboratoires'],
+            tech: ['Développement logiciel', 'Intégration IT', 'Services cloud', 'Fintech'],
+            hotellerie: ['Hôtellerie', 'Restauration', 'Tourisme', 'Loisirs']
+        };
+        
+        // Base de données locale des benchmarks (sera synchronisée avec Supabase)
+        let benchmarkDatabase = [];
+        let pendingBenchmarkData = null;
+        
+        function updateSubsectors() {
+            const sector = document.getElementById('benchmarkSector').value;
+            const subsectorSelect = document.getElementById('benchmarkSubsector');
+            subsectorSelect.innerHTML = '<option value="">-- Sélectionner --</option>';
+            
+            if (sector && subsectorsBysSector[sector]) {
+                subsectorsBysSector[sector].forEach(sub => {
+                    const option = document.createElement('option');
+                    option.value = sub.toLowerCase().replace(/[^a-z0-9]/g, '_');
+                    option.textContent = sub;
+                    subsectorSelect.appendChild(option);
+                });
+            }
+        }
+        
+        // Récupérer une valeur numérique d'un champ (en milliers FCFA)
+        function getBfValue(id) {
+            const el = document.getElementById(id);
+            return el ? parseFloat(el.value) || 0 : 0;
+        }
+        
+        // Calculer les ratios depuis le formulaire de saisie
+        function calculateBenchmarkRatiosFromForm() {
+            // Récupérer les valeurs du compte de résultat (en milliers FCFA)
+            const ca = getBfValue('bfCA');
+            const achats = getBfValue('bfAchats');
+            let margeBrute = getBfValue('bfMargeBrute');
+            const va = getBfValue('bfVA');
+            const ebe = getBfValue('bfEBE'); // ≈ EBITDA
+            const rex = getBfValue('bfREX'); // ≈ EBIT
+            const rf = getBfValue('bfRF');
+            const rn = getBfValue('bfRN');
+            
+            // Récupérer les valeurs du bilan (en milliers FCFA)
+            const actifImmo = getBfValue('bfActifImmo');
+            const stocks = getBfValue('bfStocks');
+            const clients = getBfValue('bfClients');
+            const autresCreances = getBfValue('bfAutresCreances');
+            const tresoActif = getBfValue('bfTresoActif');
+            const totalActif = getBfValue('bfTotalActif');
+            
+            const cp = getBfValue('bfCP');
+            const dettesLT = getBfValue('bfDettesLT');
+            const fournisseurs = getBfValue('bfFournisseurs');
+            const autresDettes = getBfValue('bfAutresDettes');
+            const tresoPassif = getBfValue('bfTresoPassif');
+            const totalPassif = getBfValue('bfTotalPassif');
+            
+            // Calculs dérivés
+            if (!margeBrute && ca > 0 && achats > 0) {
+                margeBrute = ca - achats;
+                document.getElementById('bfMargeBrute').value = margeBrute;
+            }
+            
+            const actifCirculant = stocks + clients + autresCreances + tresoActif;
+            const dettesCT = fournisseurs + autresDettes + tresoPassif;
+            const dettesTotal = dettesLT + dettesCT;
+            
+            // Calculer les ratios
+            const ratios = {
+                margeBrute: ca > 0 ? (margeBrute / ca) * 100 : 0,
+                margeEBE: ca > 0 ? (ebe / ca) * 100 : 0,
+                margeREX: ca > 0 ? (rex / ca) * 100 : 0,
+                margeNette: ca > 0 ? (rn / ca) * 100 : 0,
+                currentRatio: dettesCT > 0 ? actifCirculant / dettesCT : 0,
+                quickRatio: dettesCT > 0 ? (actifCirculant - stocks) / dettesCT : 0,
+                roe: cp > 0 ? (rn / cp) * 100 : 0,
+                roa: totalActif > 0 ? (rn / totalActif) * 100 : 0,
+                endettement: totalActif > 0 ? (dettesTotal / totalActif) * 100 : 0,
+                autonomie: totalActif > 0 ? (cp / totalActif) * 100 : 0,
+                gearing: cp > 0 ? dettesTotal / cp : 0,
+                delaiClients: ca > 0 ? (clients / ca) * 365 : 0
+            };
+            
+            // Mettre à jour l'affichage
+            const fmtPct = (n) => n !== 0 ? n.toFixed(1) + '%' : '--%';
+            const fmtRatio = (n) => n !== 0 ? n.toFixed(2) : '--';
+            const fmtJours = (n) => n !== 0 ? Math.round(n) + ' j' : '-- j';
+            
+            document.getElementById('calcMargeBrute').textContent = fmtPct(ratios.margeBrute);
+            document.getElementById('calcMargeEBE').textContent = fmtPct(ratios.margeEBE);
+            document.getElementById('calcMargeREX').textContent = fmtPct(ratios.margeREX);
+            document.getElementById('calcMargeNette').textContent = fmtPct(ratios.margeNette);
+            document.getElementById('calcCurrentRatio').textContent = fmtRatio(ratios.currentRatio);
+            document.getElementById('calcQuickRatio').textContent = fmtRatio(ratios.quickRatio);
+            document.getElementById('calcROE').textContent = fmtPct(ratios.roe);
+            document.getElementById('calcROA').textContent = fmtPct(ratios.roa);
+            document.getElementById('calcEndettement').textContent = fmtPct(ratios.endettement);
+            document.getElementById('calcAutonomie').textContent = fmtPct(ratios.autonomie);
+            document.getElementById('calcGearing').textContent = fmtRatio(ratios.gearing);
+            document.getElementById('calcDelaiClients').textContent = fmtJours(ratios.delaiClients);
+            
+            // Colorer les ratios (vert si bon, rouge si mauvais)
+            colorRatioValue('calcMargeEBE', ratios.margeEBE, 10, 5);
+            colorRatioValue('calcMargeNette', ratios.margeNette, 5, 2);
+            colorRatioValue('calcCurrentRatio', ratios.currentRatio, 1.5, 1, false);
+            colorRatioValue('calcROE', ratios.roe, 15, 8);
+            colorRatioValue('calcEndettement', ratios.endettement, 50, 70, true); // inversé
+            
+            return ratios;
+        }
+        
+        function colorRatioValue(elementId, value, goodThreshold, badThreshold, inverse = false) {
+            const el = document.getElementById(elementId);
+            if (!el || value === 0) return;
+            
+            el.classList.remove('ratio-good', 'ratio-warning', 'ratio-bad');
+            
+            if (inverse) {
+                if (value <= goodThreshold) el.style.color = 'var(--success)';
+                else if (value <= badThreshold) el.style.color = 'var(--warning)';
+                else el.style.color = 'var(--danger)';
+            } else {
+                if (value >= goodThreshold) el.style.color = 'var(--success)';
+                else if (value >= badThreshold) el.style.color = 'var(--warning)';
+                else el.style.color = 'var(--danger)';
+            }
+        }
+        
+        function resetBenchmarkForm() {
+            // Reset les champs d'information
+            document.getElementById('benchmarkCompanyName').value = '';
+            document.getElementById('benchmarkSector').value = '';
+            document.getElementById('benchmarkSubsector').innerHTML = '<option value="">-- Sélectionner d\'abord un secteur --</option>';
+            
+            // Reset les champs financiers
+            const fieldIds = [
+                'bfCA', 'bfAchats', 'bfMargeBrute', 'bfVA', 'bfEBE', 'bfREX', 'bfRF', 'bfRN',
+                'bfActifImmo', 'bfStocks', 'bfClients', 'bfAutresCreances', 'bfTresoActif', 'bfTotalActif',
+                'bfCP', 'bfDettesLT', 'bfFournisseurs', 'bfAutresDettes', 'bfTresoPassif', 'bfTotalPassif'
+            ];
+            
+            fieldIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            
+            // Reset l'affichage des ratios
+            const ratioIds = [
+                'calcMargeBrute', 'calcMargeEBE', 'calcMargeREX', 'calcMargeNette',
+                'calcCurrentRatio', 'calcQuickRatio', 'calcROE', 'calcROA',
+                'calcEndettement', 'calcAutonomie', 'calcGearing', 'calcDelaiClients'
+            ];
+            
+            ratioIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.textContent = id.includes('Ratio') || id.includes('Gearing') ? '--' : '--%';
+                    if (id === 'calcDelaiClients') el.textContent = '-- j';
+                    el.style.color = '';
+                }
+            });
+        }
+        
+        function saveBenchmarkFromForm() {
+            // Validation
+            const companyName = document.getElementById('benchmarkCompanyName').value.trim();
+            const sector = document.getElementById('benchmarkSector').value;
+            const ca = getBfValue('bfCA');
+            const ebe = getBfValue('bfEBE');
+            const rn = getBfValue('bfRN');
+            const totalActif = getBfValue('bfTotalActif');
+            const cp = getBfValue('bfCP');
+            
+            if (!companyName) {
+                showNotification('Veuillez saisir le nom de l\'entreprise', 'warning');
+                return;
+            }
+            if (!sector) {
+                showNotification('Veuillez sélectionner un secteur', 'warning');
+                return;
+            }
+            if (ca <= 0) {
+                showNotification('Veuillez saisir le Chiffre d\'Affaires', 'warning');
+                return;
+            }
+            
+            // Calculer les ratios finaux
+            const ratios = calculateBenchmarkRatiosFromForm();
+            
+            // Préparer les données financières (convertir en FCFA depuis milliers)
+            const financials = {
+                ca: ca * 1000,
+                achats: getBfValue('bfAchats') * 1000,
+                margeBrute: getBfValue('bfMargeBrute') * 1000,
+                valeurAjoutee: getBfValue('bfVA') * 1000,
+                ebe: ebe * 1000,
+                resultatExploitation: getBfValue('bfREX') * 1000,
+                resultatFinancier: getBfValue('bfRF') * 1000,
+                resultatNet: rn * 1000,
+                actifImmobilise: getBfValue('bfActifImmo') * 1000,
+                stocks: getBfValue('bfStocks') * 1000,
+                clients: getBfValue('bfClients') * 1000,
+                autresCreances: getBfValue('bfAutresCreances') * 1000,
+                tresorerieActif: getBfValue('bfTresoActif') * 1000,
+                totalActif: totalActif * 1000,
+                capitauxPropres: cp * 1000,
+                dettesLT: getBfValue('bfDettesLT') * 1000,
+                fournisseurs: getBfValue('bfFournisseurs') * 1000,
+                autresDettes: getBfValue('bfAutresDettes') * 1000,
+                tresoreriePassif: getBfValue('bfTresoPassif') * 1000,
+                totalPassif: getBfValue('bfTotalPassif') * 1000
+            };
+            
+            // Mapper les ratios pour compatibilité avec le système existant
+            const mappedRatios = {
+                margeBrute: ratios.margeBrute,
+                margeEbitda: ratios.margeEBE,
+                margeNette: ratios.margeNette,
+                currentRatio: ratios.currentRatio,
+                quickRatio: ratios.quickRatio,
+                roe: ratios.roe,
+                roa: ratios.roa,
+                endettement: ratios.endettement,
+                autonomie: ratios.autonomie,
+                gearing: ratios.gearing,
+                delaiClients: ratios.delaiClients
+            };
+            
+            // Créer l'entrée
+            const data = {
+                id: Date.now().toString(),
+                companyName,
+                sector,
+                subsector: document.getElementById('benchmarkSubsector').value,
+                country: document.getElementById('benchmarkCountry').value,
+                year: document.getElementById('benchmarkYear').value,
+                source: document.getElementById('benchmarkSource').value,
+                listed: document.getElementById('benchmarkListed').value === 'yes',
+                financials,
+                ratios: mappedRatios,
+                createdAt: new Date().toISOString(),
+                createdBy: currentUser?.email || 'admin'
+            };
+            
+            // Ajouter à la base locale
+            benchmarkDatabase.push(data);
+            
+            // Sauvegarder
+            saveBenchmarkDatabase();
+            
+            // Mettre à jour l'affichage
+            renderBenchmarkTable();
+            updateBenchmarkStats();
+            recalculateSectorAverages();
+            
+            // Reset le formulaire
+            resetBenchmarkForm();
+            
+            showNotification(`${companyName} (${data.year}) ajoutée à la base de benchmarks !`, 'success');
+        }
+        
+        async function handleBenchmarkUpload(event) {
+            // Cette fonction est gardée pour compatibilité mais n'est plus utilisée
+            showNotification('Veuillez utiliser le formulaire de saisie manuelle', 'info');
+        }
+        
+        function calculateBenchmarkRatios(data) {
+            // Fonction de compatibilité - utilise maintenant calculateBenchmarkRatiosFromForm
+            return calculateBenchmarkRatiosFromForm();
+        }
+        
+        function displayBenchmarkPreview(ratios, financials) {
+            // Plus utilisé avec le nouveau formulaire
+        }
+        
+        function cancelBenchmarkUpload() {
+            resetBenchmarkForm();
+        }
+        
+        async function saveBenchmarkData() {
+            if (!pendingBenchmarkData) {
+                showNotification('Aucune donnée à sauvegarder', 'warning');
+                return;
+            }
+            
+            const data = {
+                id: Date.now().toString(),
+                ...pendingBenchmarkData,
+                createdAt: new Date().toISOString(),
+                createdBy: currentUser?.email || 'admin'
+            };
+            
+            // Ajouter à la base locale
+            benchmarkDatabase.push(data);
+            
+            // Sauvegarder dans localStorage (et Supabase si configuré)
+            saveBenchmarkDatabase();
+            
+            // Mettre à jour l'affichage
+            renderBenchmarkTable();
+            updateBenchmarkStats();
+            recalculateSectorAverages();
+            
+            // Reset le formulaire
+            cancelBenchmarkUpload();
+            document.getElementById('benchmarkCompanyName').value = '';
+            document.getElementById('benchmarkSector').value = '';
+            document.getElementById('benchmarkSubsector').innerHTML = '<option value="">-- Sélectionner d\'abord un secteur --</option>';
+            
+            showNotification(`${data.companyName} ajoutée à la base de benchmarks !`, 'success');
+        }
+        
+        function saveBenchmarkDatabase() {
+            localStorage.setItem('findalyx_benchmarkDatabase', JSON.stringify(benchmarkDatabase));
+            
+            // Synchroniser avec Supabase en arrière-plan
+            syncBenchmarksToSupabase();
+        }
+        
+        function loadBenchmarkDatabase() {
+            // D'abord charger depuis localStorage (instantané)
+            const saved = localStorage.getItem('findalyx_benchmarkDatabase');
+            if (saved) {
+                benchmarkDatabase = JSON.parse(saved);
+                renderBenchmarkTable();
+                updateBenchmarkStats();
+                recalculateSectorAverages();
+            }
+            
+            // Puis synchroniser depuis Supabase (en arrière-plan)
+            loadBenchmarksFromSupabase();
+        }
+        
+        // =====================================================
+        // SYNCHRONISATION SUPABASE - BENCHMARKS
+        // =====================================================
+        
+        async function syncBenchmarksToSupabase() {
+            if (!supabaseClient || !currentUser) {
+                console.log('Supabase not available, skipping sync');
+                return;
+            }
+            
+            try {
+                // Pour chaque entreprise dans la base locale qui n'a pas d'UUID Supabase
+                for (const company of benchmarkDatabase) {
+                    if (!company.supabaseId) {
+                        await saveBenchmarkCompanyToSupabase(company);
+                    }
+                }
+                console.log('Benchmarks synced to Supabase');
+            } catch (error) {
+                console.error('Error syncing benchmarks to Supabase:', error);
+            }
+        }
+        
+        async function saveBenchmarkCompanyToSupabase(company) {
+            if (!supabaseClient || !currentUser) return null;
+            
+            try {
+                // 1. Insérer l'entreprise
+                const { data: companyData, error: companyError } = await supabaseClient
+                    .from('benchmark_companies')
+                    .insert({
+                        company_name: company.companyName,
+                        sector: company.sector,
+                        subsector: company.subsector || null,
+                        country: company.country,
+                        year: parseInt(company.year),
+                        source: company.source,
+                        is_listed: company.listed,
+                        created_by: currentUser.id
+                    })
+                    .select()
+                    .single();
+                
+                if (companyError) {
+                    console.error('Error inserting company:', companyError);
+                    return null;
+                }
+                
+                const companyId = companyData.id;
+                
+                // 2. Insérer les données financières
+                const fin = company.financials;
+                const { error: finError } = await supabaseClient
+                    .from('benchmark_financials')
+                    .insert({
+                        company_id: companyId,
+                        ca: fin.ca || 0,
+                        achats: fin.achats || 0,
+                        marge_brute: fin.margeBrute || 0,
+                        valeur_ajoutee: fin.valeurAjoutee || 0,
+                        ebe: fin.ebe || 0,
+                        resultat_exploitation: fin.resultatExploitation || 0,
+                        resultat_financier: fin.resultatFinancier || 0,
+                        resultat_net: fin.resultatNet || 0,
+                        actif_immobilise: fin.actifImmobilise || 0,
+                        stocks: fin.stocks || 0,
+                        clients: fin.clients || 0,
+                        autres_creances: fin.autresCreances || 0,
+                        tresorerie_actif: fin.tresorerieActif || 0,
+                        total_actif: fin.totalActif || 0,
+                        capitaux_propres: fin.capitauxPropres || 0,
+                        dettes_lt: fin.dettesLT || 0,
+                        fournisseurs: fin.fournisseurs || 0,
+                        autres_dettes: fin.autresDettes || 0,
+                        tresorerie_passif: fin.tresoreriePassif || 0,
+                        total_passif: fin.totalPassif || 0
+                    });
+                
+                if (finError) {
+                    console.error('Error inserting financials:', finError);
+                }
+                
+                // 3. Insérer les ratios
+                const rat = company.ratios;
+                const { error: ratError } = await supabaseClient
+                    .from('benchmark_ratios')
+                    .insert({
+                        company_id: companyId,
+                        marge_brute: rat.margeBrute || 0,
+                        marge_ebitda: rat.margeEbitda || 0,
+                        marge_nette: rat.margeNette || 0,
+                        current_ratio: rat.currentRatio || 0,
+                        quick_ratio: rat.quickRatio || 0,
+                        roe: rat.roe || 0,
+                        roa: rat.roa || 0,
+                        endettement: rat.endettement || 0,
+                        autonomie: rat.autonomie || 0,
+                        gearing: rat.gearing || 0,
+                        delai_clients: rat.delaiClients || 0
+                    });
+                
+                if (ratError) {
+                    console.error('Error inserting ratios:', ratError);
+                }
+                
+                // 4. Mettre à jour l'ID Supabase dans la base locale
+                company.supabaseId = companyId;
+                localStorage.setItem('findalyx_benchmarkDatabase', JSON.stringify(benchmarkDatabase));
+                
+                console.log(`Company ${company.companyName} saved to Supabase with ID: ${companyId}`);
+                return companyId;
+                
+            } catch (error) {
+                console.error('Error saving benchmark to Supabase:', error);
+                return null;
+            }
+        }
+        
+        async function loadBenchmarksFromSupabase() {
+            if (!supabaseClient || !currentUser) return;
+            
+            try {
+                // Charger toutes les entreprises avec leurs données
+                const { data, error } = await supabaseClient
+                    .from('v_benchmark_full')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error) {
+                    // La vue n'existe peut-être pas encore, essayer sans
+                    console.log('View not available, trying direct query...');
+                    await loadBenchmarksFromSupabaseDirect();
+                    return;
+                }
+                
+                if (data && data.length > 0) {
+                    // Convertir les données Supabase au format local
+                    const supabaseCompanies = data.map(row => ({
+                        id: row.id,
+                        supabaseId: row.id,
+                        companyName: row.company_name,
+                        sector: row.sector,
+                        subsector: row.subsector,
+                        country: row.country,
+                        year: row.year.toString(),
+                        source: row.source,
+                        listed: row.is_listed,
+                        createdAt: row.created_at,
+                        financials: {
+                            ca: row.ca,
+                            margeBrute: row.marge_brute_montant,
+                            ebe: row.ebe,
+                            resultatNet: row.resultat_net,
+                            totalActif: row.total_actif,
+                            capitauxPropres: row.capitaux_propres
+                        },
+                        ratios: {
+                            margeBrute: parseFloat(row.marge_brute) || 0,
+                            margeEbitda: parseFloat(row.marge_ebitda) || 0,
+                            margeNette: parseFloat(row.marge_nette) || 0,
+                            currentRatio: parseFloat(row.current_ratio) || 0,
+                            quickRatio: parseFloat(row.quick_ratio) || 0,
+                            roe: parseFloat(row.roe) || 0,
+                            roa: parseFloat(row.roa) || 0,
+                            endettement: parseFloat(row.endettement) || 0,
+                            autonomie: parseFloat(row.autonomie) || 0,
+                            gearing: parseFloat(row.gearing) || 0,
+                            delaiClients: parseFloat(row.delai_clients) || 0
+                        }
+                    }));
+                    
+                    // Fusionner avec les données locales (éviter les doublons)
+                    const localIds = new Set(benchmarkDatabase.filter(c => c.supabaseId).map(c => c.supabaseId));
+                    const newFromSupabase = supabaseCompanies.filter(c => !localIds.has(c.supabaseId));
+                    
+                    if (newFromSupabase.length > 0) {
+                        benchmarkDatabase = [...benchmarkDatabase, ...newFromSupabase];
+                        localStorage.setItem('findalyx_benchmarkDatabase', JSON.stringify(benchmarkDatabase));
+                        
+                        // Mettre à jour l'affichage
+                        renderBenchmarkTable();
+                        updateBenchmarkStats();
+                        recalculateSectorAverages();
+                        
+                        console.log(`Loaded ${newFromSupabase.length} new companies from Supabase`);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading benchmarks from Supabase:', error);
+            }
+        }
+        
+        async function loadBenchmarksFromSupabaseDirect() {
+            if (!supabaseClient) return;
+            
+            try {
+                // Charger les entreprises
+                const { data: companies, error } = await supabaseClient
+                    .from('benchmark_companies')
+                    .select(`
+                        *,
+                        benchmark_financials(*),
+                        benchmark_ratios(*)
+                    `)
+                    .order('created_at', { ascending: false });
+                
+                if (error) {
+                    console.error('Error loading companies:', error);
+                    return;
+                }
+                
+                if (companies && companies.length > 0) {
+                    const supabaseCompanies = companies.map(c => {
+                        const fin = c.benchmark_financials?.[0] || {};
+                        const rat = c.benchmark_ratios?.[0] || {};
+                        
+                        return {
+                            id: c.id,
+                            supabaseId: c.id,
+                            companyName: c.company_name,
+                            sector: c.sector,
+                            subsector: c.subsector,
+                            country: c.country,
+                            year: c.year.toString(),
+                            source: c.source,
+                            listed: c.is_listed,
+                            createdAt: c.created_at,
+                            financials: {
+                                ca: fin.ca || 0,
+                                achats: fin.achats || 0,
+                                margeBrute: fin.marge_brute || 0,
+                                ebe: fin.ebe || 0,
+                                resultatNet: fin.resultat_net || 0,
+                                totalActif: fin.total_actif || 0,
+                                capitauxPropres: fin.capitaux_propres || 0
+                            },
+                            ratios: {
+                                margeBrute: parseFloat(rat.marge_brute) || 0,
+                                margeEbitda: parseFloat(rat.marge_ebitda) || 0,
+                                margeNette: parseFloat(rat.marge_nette) || 0,
+                                currentRatio: parseFloat(rat.current_ratio) || 0,
+                                quickRatio: parseFloat(rat.quick_ratio) || 0,
+                                roe: parseFloat(rat.roe) || 0,
+                                roa: parseFloat(rat.roa) || 0,
+                                endettement: parseFloat(rat.endettement) || 0,
+                                autonomie: parseFloat(rat.autonomie) || 0,
+                                gearing: parseFloat(rat.gearing) || 0,
+                                delaiClients: parseFloat(rat.delai_clients) || 0
+                            }
+                        };
+                    });
+                    
+                    // Remplacer la base locale par les données Supabase
+                    benchmarkDatabase = supabaseCompanies;
+                    localStorage.setItem('findalyx_benchmarkDatabase', JSON.stringify(benchmarkDatabase));
+                    
+                    renderBenchmarkTable();
+                    updateBenchmarkStats();
+                    recalculateSectorAverages();
+                    
+                    console.log(`Loaded ${companies.length} companies from Supabase`);
+                }
+            } catch (error) {
+                console.error('Error in direct Supabase load:', error);
+            }
+        }
+        
+        async function deleteBenchmarkFromSupabase(supabaseId) {
+            if (!supabaseClient || !supabaseId) return;
+            
+            try {
+                // La suppression en cascade supprimera aussi financials et ratios
+                const { error } = await supabaseClient
+                    .from('benchmark_companies')
+                    .delete()
+                    .eq('id', supabaseId);
+                
+                if (error) {
+                    console.error('Error deleting from Supabase:', error);
+                } else {
+                    console.log(`Company ${supabaseId} deleted from Supabase`);
+                }
+            } catch (error) {
+                console.error('Error deleting benchmark from Supabase:', error);
+            }
+        }
+        
+        async function loadSectorAveragesFromSupabase() {
+            if (!supabaseClient) return null;
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('benchmark_sector_averages')
+                    .select('*');
+                
+                if (error) {
+                    console.error('Error loading sector averages:', error);
+                    return null;
+                }
+                
+                // Convertir en format utilisable par le frontend
+                const averages = {};
+                data.forEach(row => {
+                    averages[row.sector] = {
+                        name: getSectorName(row.sector),
+                        count: row.company_count,
+                        margeBrute: { min: row.min_marge_brute, avg: row.avg_marge_brute, max: row.max_marge_brute },
+                        margeEbitda: { min: row.min_marge_ebitda, avg: row.avg_marge_ebitda, max: row.max_marge_ebitda },
+                        margeNette: { min: row.min_marge_nette, avg: row.avg_marge_nette, max: row.max_marge_nette },
+                        currentRatio: { min: row.min_current_ratio, avg: row.avg_current_ratio, max: row.max_current_ratio },
+                        roe: { min: row.min_roe, avg: row.avg_roe, max: row.max_roe },
+                        endettement: { min: row.min_endettement, avg: row.avg_endettement, max: row.max_endettement }
+                    };
+                });
+                
+                return averages;
+            } catch (error) {
+                console.error('Error loading sector averages:', error);
+                return null;
+            }
+        }
+        
+        async function triggerSupabaseRecalculation() {
+            if (!supabaseClient) return;
+            
+            try {
+                // Appeler la fonction PostgreSQL pour recalculer les moyennes
+                const { error } = await supabaseClient.rpc('recalculate_sector_averages');
+                
+                if (error) {
+                    console.error('Error recalculating sector averages:', error);
+                } else {
+                    console.log('Sector averages recalculated in Supabase');
+                    // Recharger les moyennes
+                    const averages = await loadSectorAveragesFromSupabase();
+                    if (averages) {
+                        // Mettre à jour les benchmarks globaux
+                        Object.assign(sectorBenchmarks, averages);
+                    }
+                }
+            } catch (error) {
+                console.error('Error triggering recalculation:', error);
+            }
+        }
+        
+        function renderBenchmarkTable() {
+            const tbody = document.getElementById('benchmarkTableBody');
+            if (!tbody) return;
+            
+            if (benchmarkDatabase.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="10" style="text-align:center;padding:40px;color:var(--slate-400);">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:48px;height:48px;margin-bottom:12px;opacity:0.5;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                            <p>Aucune entreprise de référence pour le moment</p>
+                            <p style="font-size:12px;">Uploadez des états financiers ci-dessus pour alimenter la base</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            const fmtMrd = n => ((n || 0) / 1000000000).toFixed(1);
+            const fmtPct = n => (n || 0).toFixed(1) + '%';
+            
+            tbody.innerHTML = benchmarkDatabase.map(company => `
+                <tr>
+                    <td><strong>${company.companyName}</strong>${company.listed ? ' <span style="font-size:10px;background:var(--blue-100);color:var(--blue-600);padding:2px 6px;border-radius:4px;">BRVM</span>' : ''}</td>
+                    <td>${getSectorName(company.sector)}</td>
+                    <td>${company.country}</td>
+                    <td>${company.year}</td>
+                    <td>${fmtMrd(company.financials?.ca)}</td>
+                    <td>${fmtPct(company.ratios?.margeEbitda)}</td>
+                    <td>${fmtPct(company.ratios?.roe)}</td>
+                    <td>${(company.ratios?.currentRatio || 0).toFixed(2)}</td>
+                    <td><span style="font-size:11px;color:var(--slate-500);">${company.source}</span></td>
+                    <td class="actions">
+                        <button class="btn-icon edit" onclick="editBenchmarkCompany('${company.id}')" title="Modifier">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                        </button>
+                        <button class="btn-icon delete" onclick="deleteBenchmarkCompany('${company.id}')" title="Supprimer">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        function getSectorName(sectorKey) {
+            const names = {
+                agriculture: 'Agriculture',
+                banque: 'Banque & Finance',
+                commerce: 'Commerce',
+                energie: 'Énergie',
+                immobilier: 'Immobilier',
+                industrie: 'Industrie',
+                services: 'Services',
+                telecom: 'Télécommunications',
+                transport: 'Transport',
+                sante: 'Santé',
+                tech: 'Tech & IT',
+                hotellerie: 'Hôtellerie'
+            };
+            return names[sectorKey] || sectorKey;
+        }
+        
+        function updateBenchmarkStats() {
+            const companyCount = document.getElementById('benchmarkCompanyCount');
+            const sectorCount = document.getElementById('benchmarkSectorCount');
+            const dataPoints = document.getElementById('benchmarkDataPoints');
+            const lastUpdate = document.getElementById('benchmarkLastUpdate');
+            
+            if (companyCount) companyCount.textContent = benchmarkDatabase.length;
+            if (sectorCount) {
+                const sectors = [...new Set(benchmarkDatabase.map(c => c.sector))];
+                sectorCount.textContent = sectors.length;
+            }
+            if (dataPoints) dataPoints.textContent = benchmarkDatabase.length * 9; // 9 ratios par entreprise
+            if (lastUpdate && benchmarkDatabase.length > 0) {
+                const latest = benchmarkDatabase.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+                lastUpdate.textContent = new Date(latest.createdAt).toLocaleDateString('fr-FR');
+            }
+        }
+        
+        function recalculateSectorAverages() {
+            const grid = document.getElementById('sectorAveragesGrid');
+            if (!grid) return;
+            
+            // Grouper par secteur
+            const bySector = {};
+            benchmarkDatabase.forEach(company => {
+                if (!bySector[company.sector]) {
+                    bySector[company.sector] = [];
+                }
+                bySector[company.sector].push(company);
+            });
+            
+            if (Object.keys(bySector).length === 0) {
+                grid.innerHTML = '<p style="text-align:center;color:var(--slate-400);padding:20px;">Les moyennes seront calculées automatiquement après l\'ajout d\'entreprises</p>';
+                return;
+            }
+            
+            // Calculer les moyennes par secteur
+            const sectorAverages = {};
+            Object.entries(bySector).forEach(([sector, companies]) => {
+                const avg = {
+                    count: companies.length,
+                    margeBrute: { min: Infinity, avg: 0, max: -Infinity },
+                    margeEbitda: { min: Infinity, avg: 0, max: -Infinity },
+                    margeNette: { min: Infinity, avg: 0, max: -Infinity },
+                    currentRatio: { min: Infinity, avg: 0, max: -Infinity },
+                    endettement: { min: Infinity, avg: 0, max: -Infinity },
+                    roe: { min: Infinity, avg: 0, max: -Infinity }
+                };
+                
+                const ratioKeys = ['margeBrute', 'margeEbitda', 'margeNette', 'currentRatio', 'endettement', 'roe'];
+                
+                companies.forEach(c => {
+                    ratioKeys.forEach(key => {
+                        const val = c.ratios?.[key] || 0;
+                        avg[key].min = Math.min(avg[key].min, val);
+                        avg[key].max = Math.max(avg[key].max, val);
+                        avg[key].avg += val;
+                    });
+                });
+                
+                ratioKeys.forEach(key => {
+                    avg[key].avg = avg[key].avg / companies.length;
+                    if (avg[key].min === Infinity) avg[key].min = 0;
+                    if (avg[key].max === -Infinity) avg[key].max = 0;
+                });
+                
+                sectorAverages[sector] = avg;
+            });
+            
+            // Mettre à jour les benchmarks globaux
+            updateGlobalBenchmarks(sectorAverages);
+            
+            // Afficher les cartes
+            grid.innerHTML = Object.entries(sectorAverages).map(([sector, avg]) => `
+                <div class="sector-average-card">
+                    <h4>${getSectorName(sector)} <span class="count">${avg.count} entreprises</span></h4>
+                    <div class="ratios">
+                        <div class="ratio"><span class="label">Marge EBITDA:</span> <span class="value">${avg.margeEbitda.avg.toFixed(1)}%</span></div>
+                        <div class="ratio"><span class="label">Marge Nette:</span> <span class="value">${avg.margeNette.avg.toFixed(1)}%</span></div>
+                        <div class="ratio"><span class="label">Current Ratio:</span> <span class="value">${avg.currentRatio.avg.toFixed(2)}</span></div>
+                        <div class="ratio"><span class="label">ROE:</span> <span class="value">${avg.roe.avg.toFixed(1)}%</span></div>
+                        <div class="ratio"><span class="label">Endettement:</span> <span class="value">${avg.endettement.avg.toFixed(1)}%</span></div>
+                        <div class="ratio"><span class="label">Marge Brute:</span> <span class="value">${avg.margeBrute.avg.toFixed(1)}%</span></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function updateGlobalBenchmarks(sectorAverages) {
+            // Mettre à jour l'objet sectorBenchmarks avec les données calculées
+            Object.entries(sectorAverages).forEach(([sector, avg]) => {
+                if (sectorBenchmarks[sector]) {
+                    sectorBenchmarks[sector] = {
+                        ...sectorBenchmarks[sector],
+                        margeBrute: { min: avg.margeBrute.min, avg: avg.margeBrute.avg, max: avg.margeBrute.max },
+                        margeEbitda: { min: avg.margeEbitda.min, avg: avg.margeEbitda.avg, max: avg.margeEbitda.max },
+                        margeNette: { min: avg.margeNette.min, avg: avg.margeNette.avg, max: avg.margeNette.max },
+                        currentRatio: { min: avg.currentRatio.min, avg: avg.currentRatio.avg, max: avg.currentRatio.max },
+                        endettement: { min: avg.endettement.min, avg: avg.endettement.avg, max: avg.endettement.max },
+                        roe: { min: avg.roe.min, avg: avg.roe.avg, max: avg.roe.max }
+                    };
+                }
+            });
+            
+            console.log('Benchmarks mis à jour avec les données réelles:', sectorBenchmarks);
+        }
+        
+        function deleteBenchmarkCompany(id) {
+            if (!confirm('Supprimer cette entreprise de la base de benchmarks ?')) return;
+            
+            // Trouver l'entreprise pour récupérer son ID Supabase
+            const company = benchmarkDatabase.find(c => c.id === id);
+            
+            // Supprimer de Supabase si elle a un ID Supabase
+            if (company && company.supabaseId) {
+                deleteBenchmarkFromSupabase(company.supabaseId);
+            }
+            
+            // Supprimer de la base locale
+            benchmarkDatabase = benchmarkDatabase.filter(c => c.id !== id);
+            saveBenchmarkDatabase();
+            renderBenchmarkTable();
+            updateBenchmarkStats();
+            recalculateSectorAverages();
+            
+            showNotification('Entreprise supprimée', 'success');
+        }
+        
+        function editBenchmarkCompany(id) {
+            // TODO: Ouvrir un modal d'édition
+            showNotification('Fonctionnalité d\'édition à venir', 'info');
+        }
+        
+        function filterBenchmarkList() {
+            const sector = document.getElementById('filterBenchmarkSector').value;
+            // TODO: Filtrer la liste
+        }
+        
+        function exportBenchmarkDatabase() {
+            const dataStr = JSON.stringify(benchmarkDatabase, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `findalyx_benchmarks_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showNotification('Base de benchmarks exportée', 'success');
+        }
+
+        // =====================================================
         // NOTIFICATIONS FUNCTIONS
         // =====================================================
         
@@ -16370,10 +17939,19 @@ ${userName}`;
         // Check if current user is admin
         function checkAdminAccess() {
             const adminLink = document.getElementById('adminNavLink');
-            if (adminLink && currentUser && ADMIN_EMAILS.includes(currentUser.email)) {
-                adminLink.style.display = 'flex';
-            } else if (adminLink) {
-                adminLink.style.display = 'none';
+            const adminBenchmarksNav = document.getElementById('adminBenchmarksNav');
+            const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email);
+            
+            if (adminLink) {
+                adminLink.style.display = isAdmin ? 'flex' : 'none';
+            }
+            if (adminBenchmarksNav) {
+                adminBenchmarksNav.style.display = isAdmin ? 'flex' : 'none';
+            }
+            
+            // Charger la base de benchmarks pour les admins
+            if (isAdmin) {
+                loadBenchmarkDatabase();
             }
         }
         
