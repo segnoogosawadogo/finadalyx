@@ -9382,6 +9382,11 @@
                     updateYearsBadges();
                     updateEvolutionChart();
                     
+                    // Mettre à jour scoring, insights, benchmarks et alertes
+                    if (typeof updateDashboardEnhanced === 'function') {
+                        updateDashboardEnhanced();
+                    }
+                    
                     // Sauvegarder le fichier si checkbox cochée
                     const saveCheckbox = document.getElementById('saveFileCheckbox');
                     if (saveCheckbox && saveCheckbox.checked && currentUser) {
@@ -13605,8 +13610,10 @@ td, th { mso-number-format:"\\@"; }
             loadFinancialData(demoData2024);
             updateYearsBadges();
             
-            // Afficher le panel de comparaison
-            updateKPIVariations();
+            // Mettre à jour scoring, insights, benchmarks et alertes
+            if (typeof updateDashboardEnhanced === 'function') {
+                updateDashboardEnhanced();
+            }
             
             showNotification('Données de démonstration chargées ! Explorez le tableau de bord.', 'success');
             
@@ -14030,30 +14037,31 @@ td, th { mso-number-format:"\\@"; }
             if (existingBenchmark) existingBenchmark.remove();
             if (existingAlerts) existingAlerts.remove();
             
-            // Insérer après la grille scoring-insights
+            // Insérer après la grille scoring-insights ou stats-grid
             const scoringGrid = document.querySelector('#pageDashboard .scoring-insights-grid');
-            const kpiGrid = document.querySelector('#pageDashboard .kpi-stats-grid');
+            const statsGrid = document.querySelector('#pageDashboard .stats-grid');
+            const targetElement = scoringGrid || statsGrid;
             
-            if (scoringGrid) {
-                if (benchmarkHTML) scoringGrid.insertAdjacentHTML('afterend', benchmarkHTML);
+            console.log('Benchmark - Target element found:', !!targetElement);
+            console.log('Benchmark - Sector selected:', !!benchmark);
+            console.log('Benchmark - Alerts count:', alerts.length);
+            
+            if (targetElement) {
+                if (benchmarkHTML) {
+                    targetElement.insertAdjacentHTML('afterend', benchmarkHTML);
+                    console.log('Benchmark panel inserted');
+                }
                 if (alertsHTML) {
                     const benchmarkPanel = document.getElementById('benchmarkPanel');
                     if (benchmarkPanel) {
                         benchmarkPanel.insertAdjacentHTML('afterend', alertsHTML);
                     } else {
-                        scoringGrid.insertAdjacentHTML('afterend', alertsHTML);
+                        targetElement.insertAdjacentHTML('afterend', alertsHTML);
                     }
+                    console.log('Alerts panel inserted');
                 }
-            } else if (kpiGrid) {
-                if (benchmarkHTML) kpiGrid.insertAdjacentHTML('afterend', benchmarkHTML);
-                if (alertsHTML) {
-                    const benchmarkPanel = document.getElementById('benchmarkPanel');
-                    if (benchmarkPanel) {
-                        benchmarkPanel.insertAdjacentHTML('afterend', alertsHTML);
-                    } else {
-                        kpiGrid.insertAdjacentHTML('afterend', alertsHTML);
-                    }
-                }
+            } else {
+                console.log('No target element found for benchmark/alerts');
             }
         }
         
@@ -16448,6 +16456,11 @@ ${userName}`;
                         if (uploadSection) uploadSection.style.display = 'none';
                         if (dashboardContent) dashboardContent.style.display = 'block';
                         console.log('Dashboard displayed from localStorage');
+                        
+                        // Mettre à jour scoring, insights, benchmarks et alertes
+                        if (typeof updateDashboardEnhanced === 'function') {
+                            updateDashboardEnhanced();
+                        }
                     }
                     
                     // Charger le reste en arrière-plan
@@ -16508,6 +16521,11 @@ ${userName}`;
                     const dashboardContent = document.getElementById('dashboardContent');
                     if (uploadSection) uploadSection.style.display = 'none';
                     if (dashboardContent) dashboardContent.style.display = 'block';
+                    
+                    // Mettre à jour scoring, insights, benchmarks et alertes
+                    if (typeof updateDashboardEnhanced === 'function') {
+                        updateDashboardEnhanced();
+                    }
                     
                     console.log('Data loaded from localStorage, years:', Object.keys(yearsData));
                 }
