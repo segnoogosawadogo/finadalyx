@@ -2238,6 +2238,220 @@
                 padding: 14px 16px;
             }
         }
+        
+        /* ==================== TOOLTIPS ==================== */
+        .tooltip-trigger {
+            position: relative;
+            cursor: help;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .tooltip-icon {
+            width: 16px;
+            height: 16px;
+            background: var(--slate-200);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: var(--slate-500);
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .tooltip-trigger:hover .tooltip-icon {
+            background: var(--blue-500);
+            color: white;
+        }
+        
+        .tooltip-content {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--slate-800);
+            color: white;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            line-height: 1.5;
+            width: 240px;
+            text-align: left;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        .tooltip-content::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: var(--slate-800);
+        }
+        
+        .tooltip-trigger:hover .tooltip-content {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* ==================== BENCHMARK INDICATORS ==================== */
+        .benchmark-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        
+        .benchmark-indicator.excellent {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+        }
+        
+        .benchmark-indicator.good {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            color: #1e40af;
+        }
+        
+        .benchmark-indicator.average {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #92400e;
+        }
+        
+        .benchmark-indicator.poor {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #991b1b;
+        }
+        
+        .benchmark-indicator svg {
+            width: 12px;
+            height: 12px;
+        }
+        
+        /* ==================== ALERTS PANEL ==================== */
+        .alerts-panel {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid var(--slate-200);
+        }
+        
+        .alerts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .alerts-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--slate-700);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .alert-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+        
+        .alert-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .alert-item.critical {
+            background: #fef2f2;
+            border-left: 3px solid var(--danger);
+        }
+        
+        .alert-item.warning {
+            background: #fffbeb;
+            border-left: 3px solid var(--warning);
+        }
+        
+        .alert-item.info {
+            background: #eff6ff;
+            border-left: 3px solid var(--blue-500);
+        }
+        
+        .alert-item.success {
+            background: #f0fdf4;
+            border-left: 3px solid var(--success);
+        }
+        
+        .alert-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .alert-item.critical .alert-icon {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .alert-item.warning .alert-icon {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .alert-item.info .alert-icon {
+            background: var(--blue-500);
+            color: white;
+        }
+        
+        .alert-item.success .alert-icon {
+            background: var(--success);
+            color: white;
+        }
+        
+        .alert-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .alert-content {
+            flex: 1;
+        }
+        
+        .alert-title {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+        
+        .alert-item.critical .alert-title { color: #991b1b; }
+        .alert-item.warning .alert-title { color: #92400e; }
+        .alert-item.info .alert-title { color: #1e40af; }
+        .alert-item.success .alert-title { color: #065f46; }
+        
+        .alert-text {
+            font-size: 12px;
+            color: var(--slate-600);
+            line-height: 1.4;
+        }
 
         /* ==================== UPLOAD SECTION ==================== */
         .upload-section {
@@ -8143,7 +8357,21 @@
                                 </div>
                                 <div>
                                     <label style="display: block; font-size: 14px; font-weight: 500; color: var(--slate-700); margin-bottom: 8px;">Secteur d'activité</label>
-                                    <input type="text" id="companySector" placeholder="Ex: Commerce, Industrie..." style="width: 100%; padding: 12px; border: 1px solid var(--slate-200); border-radius: 10px; font-size: 14px; font-family: inherit;" onchange="saveCompanyInfo();">
+                                    <select id="companySector" style="width: 100%; padding: 12px; border: 1px solid var(--slate-200); border-radius: 10px; font-size: 14px; font-family: inherit;" onchange="saveCompanyInfo(); updateBenchmarks();">
+                                        <option value="">-- Sélectionner --</option>
+                                        <option value="commerce">Commerce & Distribution</option>
+                                        <option value="industrie">Industrie & Manufacturing</option>
+                                        <option value="services">Services & Conseil</option>
+                                        <option value="banque">Banque & Finance</option>
+                                        <option value="telecom">Télécommunications</option>
+                                        <option value="energie">Énergie & Utilities</option>
+                                        <option value="immobilier">Immobilier & Construction</option>
+                                        <option value="agriculture">Agriculture & Agroalimentaire</option>
+                                        <option value="transport">Transport & Logistique</option>
+                                        <option value="sante">Santé & Pharmacie</option>
+                                        <option value="tech">Technologie & IT</option>
+                                        <option value="hotellerie">Hôtellerie & Tourisme</option>
+                                    </select>
                                 </div>
                                 <div>
                                     <label style="display: block; font-size: 14px; font-weight: 500; color: var(--slate-700); margin-bottom: 8px;">Pays</label>
@@ -13251,6 +13479,319 @@ td, th { mso-number-format:"\\@"; }
             console.log(`Comparaison disponible: ${years[years.length - 2]} → ${years[years.length - 1]}`);
         }
         
+        // =====================================================
+        // BENCHMARKS SECTORIELS
+        // =====================================================
+        
+        const sectorBenchmarks = {
+            commerce: {
+                name: 'Commerce & Distribution',
+                margeBrute: { min: 20, avg: 28, max: 40 },
+                margeEbitda: { min: 3, avg: 6, max: 12 },
+                margeNette: { min: 1, avg: 3, max: 6 },
+                currentRatio: { min: 1.0, avg: 1.3, max: 2.0 },
+                endettement: { min: 30, avg: 55, max: 75 },
+                roe: { min: 8, avg: 15, max: 25 }
+            },
+            industrie: {
+                name: 'Industrie & Manufacturing',
+                margeBrute: { min: 25, avg: 35, max: 50 },
+                margeEbitda: { min: 8, avg: 14, max: 22 },
+                margeNette: { min: 3, avg: 7, max: 12 },
+                currentRatio: { min: 1.2, avg: 1.6, max: 2.5 },
+                endettement: { min: 35, avg: 50, max: 70 },
+                roe: { min: 10, avg: 16, max: 24 }
+            },
+            services: {
+                name: 'Services & Conseil',
+                margeBrute: { min: 40, avg: 55, max: 75 },
+                margeEbitda: { min: 10, avg: 18, max: 30 },
+                margeNette: { min: 5, avg: 12, max: 20 },
+                currentRatio: { min: 1.3, avg: 1.8, max: 3.0 },
+                endettement: { min: 20, avg: 40, max: 60 },
+                roe: { min: 15, avg: 25, max: 40 }
+            },
+            banque: {
+                name: 'Banque & Finance',
+                margeBrute: { min: 50, avg: 65, max: 80 },
+                margeEbitda: { min: 25, avg: 40, max: 55 },
+                margeNette: { min: 15, avg: 25, max: 35 },
+                currentRatio: { min: 0.8, avg: 1.1, max: 1.5 },
+                endettement: { min: 70, avg: 85, max: 95 },
+                roe: { min: 12, avg: 18, max: 25 }
+            },
+            telecom: {
+                name: 'Télécommunications',
+                margeBrute: { min: 45, avg: 58, max: 70 },
+                margeEbitda: { min: 25, avg: 38, max: 50 },
+                margeNette: { min: 8, avg: 15, max: 22 },
+                currentRatio: { min: 0.8, avg: 1.2, max: 1.8 },
+                endettement: { min: 40, avg: 55, max: 70 },
+                roe: { min: 15, avg: 22, max: 30 }
+            },
+            energie: {
+                name: 'Énergie & Utilities',
+                margeBrute: { min: 30, avg: 42, max: 55 },
+                margeEbitda: { min: 18, avg: 28, max: 40 },
+                margeNette: { min: 6, avg: 12, max: 18 },
+                currentRatio: { min: 0.9, avg: 1.2, max: 1.6 },
+                endettement: { min: 45, avg: 60, max: 75 },
+                roe: { min: 8, avg: 12, max: 18 }
+            },
+            immobilier: {
+                name: 'Immobilier & Construction',
+                margeBrute: { min: 20, avg: 30, max: 45 },
+                margeEbitda: { min: 12, avg: 20, max: 30 },
+                margeNette: { min: 5, avg: 10, max: 18 },
+                currentRatio: { min: 1.0, avg: 1.4, max: 2.2 },
+                endettement: { min: 50, avg: 65, max: 80 },
+                roe: { min: 10, avg: 15, max: 22 }
+            },
+            agriculture: {
+                name: 'Agriculture & Agroalimentaire',
+                margeBrute: { min: 18, avg: 28, max: 42 },
+                margeEbitda: { min: 6, avg: 12, max: 20 },
+                margeNette: { min: 2, avg: 5, max: 10 },
+                currentRatio: { min: 1.0, avg: 1.5, max: 2.5 },
+                endettement: { min: 35, avg: 50, max: 70 },
+                roe: { min: 6, avg: 12, max: 20 }
+            },
+            transport: {
+                name: 'Transport & Logistique',
+                margeBrute: { min: 25, avg: 35, max: 48 },
+                margeEbitda: { min: 8, avg: 14, max: 22 },
+                margeNette: { min: 2, avg: 5, max: 10 },
+                currentRatio: { min: 0.9, avg: 1.2, max: 1.8 },
+                endettement: { min: 45, avg: 60, max: 80 },
+                roe: { min: 8, avg: 14, max: 22 }
+            },
+            sante: {
+                name: 'Santé & Pharmacie',
+                margeBrute: { min: 35, avg: 48, max: 65 },
+                margeEbitda: { min: 12, avg: 20, max: 32 },
+                margeNette: { min: 6, avg: 12, max: 20 },
+                currentRatio: { min: 1.2, avg: 1.8, max: 2.8 },
+                endettement: { min: 25, avg: 40, max: 60 },
+                roe: { min: 12, avg: 20, max: 30 }
+            },
+            tech: {
+                name: 'Technologie & IT',
+                margeBrute: { min: 50, avg: 65, max: 85 },
+                margeEbitda: { min: 15, avg: 28, max: 45 },
+                margeNette: { min: 8, avg: 18, max: 30 },
+                currentRatio: { min: 1.5, avg: 2.2, max: 4.0 },
+                endettement: { min: 15, avg: 30, max: 50 },
+                roe: { min: 18, avg: 28, max: 45 }
+            },
+            hotellerie: {
+                name: 'Hôtellerie & Tourisme',
+                margeBrute: { min: 55, avg: 68, max: 80 },
+                margeEbitda: { min: 15, avg: 25, max: 38 },
+                margeNette: { min: 4, avg: 10, max: 18 },
+                currentRatio: { min: 0.8, avg: 1.1, max: 1.6 },
+                endettement: { min: 50, avg: 65, max: 85 },
+                roe: { min: 8, avg: 14, max: 22 }
+            }
+        };
+        
+        function getBenchmarkLevel(value, benchmark, isReverse = false) {
+            // isReverse = true pour les métriques où "moins c'est mieux" (ex: endettement)
+            if (isReverse) {
+                if (value <= benchmark.min) return { level: 'excellent', label: 'Excellent', icon: '★' };
+                if (value <= benchmark.avg) return { level: 'good', label: 'Bon', icon: '✓' };
+                if (value <= benchmark.max) return { level: 'average', label: 'Moyen', icon: '~' };
+                return { level: 'poor', label: 'À améliorer', icon: '!' };
+            } else {
+                if (value >= benchmark.max) return { level: 'excellent', label: 'Excellent', icon: '★' };
+                if (value >= benchmark.avg) return { level: 'good', label: 'Bon', icon: '✓' };
+                if (value >= benchmark.min) return { level: 'average', label: 'Moyen', icon: '~' };
+                return { level: 'poor', label: 'À améliorer', icon: '!' };
+            }
+        }
+        
+        function getSectorBenchmark() {
+            const sector = localStorage.getItem('findalyx_companySector') || '';
+            return sectorBenchmarks[sector] || null;
+        }
+        
+        function updateBenchmarks() {
+            const sector = document.getElementById('companySector')?.value || '';
+            localStorage.setItem('findalyx_companySector', sector);
+            
+            // Mettre à jour l'affichage si des données sont présentes
+            if (currentYear && yearsData[currentYear]) {
+                updateBenchmarkDisplay(yearsData[currentYear]);
+            }
+        }
+        
+        function updateBenchmarkDisplay(data) {
+            const benchmark = getSectorBenchmark();
+            if (!benchmark) return;
+            
+            // Mettre à jour les indicateurs de benchmark sur les ratios
+            const benchmarkElements = {
+                'margeBruteBenchmark': { value: data.margeBrutePct || 0, benchmark: benchmark.margeBrute },
+                'margeEbitdaBenchmark': { value: data.margeEbitda || 0, benchmark: benchmark.margeEbitda },
+                'margeNetteBenchmark': { value: data.margeNette || 0, benchmark: benchmark.margeNette },
+                'currentRatioBenchmark': { value: data.currentRatio || 0, benchmark: benchmark.currentRatio },
+                'endettementBenchmark': { value: data.ratioEndettement || 0, benchmark: benchmark.endettement, reverse: true },
+                'roeBenchmark': { value: data.roe || 0, benchmark: benchmark.roe }
+            };
+            
+            for (const [id, config] of Object.entries(benchmarkElements)) {
+                const el = document.getElementById(id);
+                if (el) {
+                    const result = getBenchmarkLevel(config.value, config.benchmark, config.reverse);
+                    el.className = `benchmark-indicator ${result.level}`;
+                    el.innerHTML = `<span>${result.icon}</span> ${result.label} vs ${benchmark.name}`;
+                }
+            }
+        }
+        
+        // =====================================================
+        // ALERTES INTELLIGENTES
+        // =====================================================
+        
+        function generateFinancialAlerts(data) {
+            const alerts = [];
+            const benchmark = getSectorBenchmark();
+            
+            // Alerte liquidité critique
+            if ((data.currentRatio || 0) < 0.8) {
+                alerts.push({
+                    type: 'critical',
+                    title: 'Liquidité critique',
+                    text: `Current Ratio de ${(data.currentRatio || 0).toFixed(2)} - Risque de ne pas pouvoir honorer les dettes à court terme.`
+                });
+            } else if ((data.currentRatio || 0) < 1) {
+                alerts.push({
+                    type: 'warning',
+                    title: 'Liquidité tendue',
+                    text: `Current Ratio de ${(data.currentRatio || 0).toFixed(2)} - Les actifs circulants ne couvrent pas entièrement les dettes CT.`
+                });
+            }
+            
+            // Alerte endettement
+            if ((data.ratioEndettement || 0) > 80) {
+                alerts.push({
+                    type: 'critical',
+                    title: 'Surendettement',
+                    text: `Taux d'endettement de ${(data.ratioEndettement || 0).toFixed(0)}% - Capacité d'emprunt épuisée, risque de défaut.`
+                });
+            } else if ((data.ratioEndettement || 0) > 65) {
+                alerts.push({
+                    type: 'warning',
+                    title: 'Endettement élevé',
+                    text: `Taux d'endettement de ${(data.ratioEndettement || 0).toFixed(0)}% - Surveiller la capacité de remboursement.`
+                });
+            }
+            
+            // Alerte résultat net négatif
+            if ((data.resultatNet || 0) < 0) {
+                alerts.push({
+                    type: 'critical',
+                    title: 'Résultat déficitaire',
+                    text: `L'entreprise génère des pertes. Analyser les causes et établir un plan de redressement.`
+                });
+            }
+            
+            // Alerte marge EBITDA faible
+            const margeEbitda = data.ca > 0 ? (data.ebitda / data.ca) * 100 : 0;
+            if (margeEbitda < 5 && margeEbitda > 0) {
+                alerts.push({
+                    type: 'warning',
+                    title: 'Marge opérationnelle faible',
+                    text: `Marge EBITDA de ${margeEbitda.toFixed(1)}% - Faible résilience aux aléas conjoncturels.`
+                });
+            } else if (margeEbitda <= 0) {
+                alerts.push({
+                    type: 'critical',
+                    title: 'EBITDA négatif',
+                    text: `L'exploitation ne génère pas de cash. Mesures urgentes requises.`
+                });
+            }
+            
+            // Alerte trésorerie négative
+            if ((data.tresorerieNette || 0) < 0) {
+                alerts.push({
+                    type: 'warning',
+                    title: 'Trésorerie négative',
+                    text: `Position de trésorerie déficitaire - Dépendance aux concours bancaires.`
+                });
+            }
+            
+            // Alerte BFR élevé
+            if ((data.bfrJours || 0) > 90) {
+                alerts.push({
+                    type: 'info',
+                    title: 'BFR important',
+                    text: `BFR de ${data.bfrJours} jours de CA - Optimiser le cycle clients/fournisseurs/stocks.`
+                });
+            }
+            
+            // Messages positifs si tout va bien
+            if (alerts.length === 0) {
+                if ((data.currentRatio || 0) >= 1.5 && (data.ratioEndettement || 0) <= 50 && (data.resultatNet || 0) > 0) {
+                    alerts.push({
+                        type: 'success',
+                        title: 'Santé financière solide',
+                        text: `Les indicateurs clés sont au vert. Continuez à surveiller les performances.`
+                    });
+                }
+            }
+            
+            return alerts;
+        }
+        
+        function displayFinancialAlerts(data) {
+            const alerts = generateFinancialAlerts(data);
+            
+            // Chercher ou créer le conteneur d'alertes
+            let alertsPanel = document.getElementById('alertsPanel');
+            
+            if (alerts.length === 0) {
+                if (alertsPanel) alertsPanel.remove();
+                return;
+            }
+            
+            const alertsHTML = `
+                <div class="alerts-panel" id="alertsPanel">
+                    <div class="alerts-header">
+                        <h3>
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:20px;height:20px;color:var(--warning);">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                            Points d'attention (${alerts.length})
+                        </h3>
+                    </div>
+                    ${alerts.map(alert => `
+                        <div class="alert-item ${alert.type}">
+                            <div class="alert-icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    ${alert.type === 'critical' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>' : ''}
+                                    ${alert.type === 'warning' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>' : ''}
+                                    ${alert.type === 'info' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>' : ''}
+                                    ${alert.type === 'success' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>' : ''}
+                                </svg>
+                            </div>
+                            <div class="alert-content">
+                                <div class="alert-title">${alert.title}</div>
+                                <div class="alert-text">${alert.text}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            // Insérer après les KPIs
+            const kpiGrid = document.querySelector('#pageDashboard .kpi-grid');
+            if (alertsPanel) {
+                alertsPanel.outerHTML = alertsHTML;
+            } else if (kpiGrid) {
+                kpiGrid.insertAdjacentHTML('afterend', alertsHTML);
+            }
+        }
+        
         // Rapport Express en 1 clic (PDF complet)
         async function generateExpressReport() {
             if (!currentYear || !yearsData[currentYear]) {
@@ -14941,16 +15482,23 @@ ${userName}`;
             
             // Update scoring
             if (currentYear && yearsData[currentYear]) {
-                const score = calculateFinancialScore(yearsData[currentYear]);
+                const data = yearsData[currentYear];
+                const score = calculateFinancialScore(data);
                 updateScoringDisplay(score);
                 
                 // Update AI insights
-                const insights = generateAIInsights(yearsData[currentYear]);
+                const insights = generateAIInsights(data);
                 updateAIInsightsDisplay(insights);
                 
                 // Update forecasts
                 const forecasts = calculateForecasts(yearsData);
                 updateForecastDisplay(forecasts);
+                
+                // Update benchmark indicators
+                updateBenchmarkDisplay(data);
+                
+                // Display financial alerts
+                displayFinancialAlerts(data);
             }
         }
 
@@ -16702,6 +17250,13 @@ ${userName}`;
                 const companyNameInput = document.getElementById('companyName');
                 if (companyNameDisplay) companyNameDisplay.textContent = savedCompanyName;
                 if (companyNameInput) companyNameInput.value = savedCompanyName;
+            }
+            
+            // Charger le secteur depuis localStorage
+            const savedSector = localStorage.getItem('findalyx_companySector');
+            if (savedSector) {
+                const sectorSelect = document.getElementById('companySector');
+                if (sectorSelect) sectorSelect.value = savedSector;
             }
             
             loadMapping();
