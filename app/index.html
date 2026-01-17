@@ -2452,6 +2452,154 @@
             color: var(--slate-600);
             line-height: 1.4;
         }
+        
+        /* ==================== BENCHMARK PANEL ==================== */
+        .benchmark-panel {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid var(--slate-200);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .benchmark-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .benchmark-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--slate-700);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+        }
+        
+        .benchmark-sector {
+            background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .benchmark-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .benchmark-item {
+            background: var(--slate-50);
+            border-radius: 12px;
+            padding: 16px;
+        }
+        
+        .benchmark-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .benchmark-item-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--slate-600);
+        }
+        
+        .benchmark-item-value {
+            font-size: 16px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 8px;
+        }
+        
+        .benchmark-item-value.excellent {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .benchmark-item-value.good {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .benchmark-item-value.average {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .benchmark-item-value.poor {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .benchmark-bar {
+            position: relative;
+            height: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .benchmark-bar-bg {
+            display: flex;
+            height: 100%;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .benchmark-zone {
+            height: 100%;
+        }
+        
+        .benchmark-zone.poor {
+            background: linear-gradient(90deg, #fecaca 0%, #fde68a 100%);
+        }
+        
+        .benchmark-zone.average {
+            background: linear-gradient(90deg, #fde68a 0%, #bfdbfe 100%);
+        }
+        
+        .benchmark-zone.good {
+            background: linear-gradient(90deg, #bfdbfe 0%, #a7f3d0 100%);
+        }
+        
+        .benchmark-marker {
+            position: absolute;
+            top: -4px;
+            width: 16px;
+            height: 16px;
+            background: var(--slate-700);
+            border: 3px solid white;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        
+        .benchmark-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: var(--slate-400);
+        }
+        
+        @media (max-width: 992px) {
+            .benchmark-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .benchmark-grid {
+                grid-template-columns: 1fr;
+            }
+        }
 
         /* ==================== UPLOAD SECTION ==================== */
         .upload-section {
@@ -13745,50 +13893,167 @@ td, th { mso-number-format:"\\@"; }
         
         function displayFinancialAlerts(data) {
             const alerts = generateFinancialAlerts(data);
+            const benchmark = getSectorBenchmark();
             
-            // Chercher ou créer le conteneur d'alertes
-            let alertsPanel = document.getElementById('alertsPanel');
-            
-            if (alerts.length === 0) {
-                if (alertsPanel) alertsPanel.remove();
-                return;
+            // Générer le panel de benchmark si un secteur est sélectionné
+            let benchmarkHTML = '';
+            if (benchmark) {
+                const margeEbitda = data.ca > 0 ? (data.ebitda / data.ca) * 100 : 0;
+                const margeNette = data.ca > 0 ? (data.resultatNet / data.ca) * 100 : 0;
+                const margeBrute = data.margeBrutePct || (data.ca > 0 ? ((data.margeBrute || 0) / data.ca) * 100 : 0);
+                
+                const benchmarkItems = [
+                    { 
+                        name: 'Marge Brute', 
+                        value: margeBrute, 
+                        benchmark: benchmark.margeBrute, 
+                        unit: '%',
+                        reverse: false 
+                    },
+                    { 
+                        name: 'Marge EBITDA', 
+                        value: margeEbitda, 
+                        benchmark: benchmark.margeEbitda, 
+                        unit: '%',
+                        reverse: false 
+                    },
+                    { 
+                        name: 'Marge Nette', 
+                        value: margeNette, 
+                        benchmark: benchmark.margeNette, 
+                        unit: '%',
+                        reverse: false 
+                    },
+                    { 
+                        name: 'Current Ratio', 
+                        value: data.currentRatio || 0, 
+                        benchmark: benchmark.currentRatio, 
+                        unit: '',
+                        reverse: false 
+                    },
+                    { 
+                        name: 'Endettement', 
+                        value: data.ratioEndettement || 0, 
+                        benchmark: benchmark.endettement, 
+                        unit: '%',
+                        reverse: true 
+                    },
+                    { 
+                        name: 'ROE', 
+                        value: data.roe || 0, 
+                        benchmark: benchmark.roe, 
+                        unit: '%',
+                        reverse: false 
+                    }
+                ];
+                
+                benchmarkHTML = `
+                    <div class="benchmark-panel" id="benchmarkPanel">
+                        <div class="benchmark-header">
+                            <h3>
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:20px;height:20px;color:var(--blue-500);">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                </svg>
+                                Benchmark Sectoriel
+                            </h3>
+                            <span class="benchmark-sector">${benchmark.name}</span>
+                        </div>
+                        <div class="benchmark-grid">
+                            ${benchmarkItems.map(item => {
+                                const result = getBenchmarkLevel(item.value, item.benchmark, item.reverse);
+                                const position = item.reverse 
+                                    ? Math.max(0, Math.min(100, 100 - ((item.value - item.benchmark.min) / (item.benchmark.max - item.benchmark.min)) * 100))
+                                    : Math.max(0, Math.min(100, ((item.value - item.benchmark.min) / (item.benchmark.max - item.benchmark.min)) * 100));
+                                return `
+                                    <div class="benchmark-item">
+                                        <div class="benchmark-item-header">
+                                            <span class="benchmark-item-name">${item.name}</span>
+                                            <span class="benchmark-item-value ${result.level}">${item.value.toFixed(1)}${item.unit}</span>
+                                        </div>
+                                        <div class="benchmark-bar">
+                                            <div class="benchmark-bar-bg">
+                                                <div class="benchmark-zone poor" style="width:33%"></div>
+                                                <div class="benchmark-zone average" style="width:34%"></div>
+                                                <div class="benchmark-zone good" style="width:33%"></div>
+                                            </div>
+                                            <div class="benchmark-marker" style="left:${position}%"></div>
+                                        </div>
+                                        <div class="benchmark-labels">
+                                            <span>${item.benchmark.min}${item.unit}</span>
+                                            <span>${item.benchmark.avg}${item.unit}</span>
+                                            <span>${item.benchmark.max}${item.unit}</span>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
             }
             
-            const alertsHTML = `
-                <div class="alerts-panel" id="alertsPanel">
-                    <div class="alerts-header">
-                        <h3>
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:20px;height:20px;color:var(--warning);">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                            </svg>
-                            Points d'attention (${alerts.length})
-                        </h3>
-                    </div>
-                    ${alerts.map(alert => `
-                        <div class="alert-item ${alert.type}">
-                            <div class="alert-icon">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    ${alert.type === 'critical' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>' : ''}
-                                    ${alert.type === 'warning' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>' : ''}
-                                    ${alert.type === 'info' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>' : ''}
-                                    ${alert.type === 'success' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>' : ''}
+            // Générer le panel d'alertes
+            let alertsHTML = '';
+            if (alerts.length > 0) {
+                alertsHTML = `
+                    <div class="alerts-panel" id="alertsPanel">
+                        <div class="alerts-header">
+                            <h3>
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:20px;height:20px;color:var(--warning);">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                                 </svg>
-                            </div>
-                            <div class="alert-content">
-                                <div class="alert-title">${alert.title}</div>
-                                <div class="alert-text">${alert.text}</div>
-                            </div>
+                                Points d'attention (${alerts.length})
+                            </h3>
                         </div>
-                    `).join('')}
-                </div>
-            `;
+                        ${alerts.map(alert => `
+                            <div class="alert-item ${alert.type}">
+                                <div class="alert-icon">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        ${alert.type === 'critical' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>' : ''}
+                                        ${alert.type === 'warning' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>' : ''}
+                                        ${alert.type === 'info' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>' : ''}
+                                        ${alert.type === 'success' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>' : ''}
+                                    </svg>
+                                </div>
+                                <div class="alert-content">
+                                    <div class="alert-title">${alert.title}</div>
+                                    <div class="alert-text">${alert.text}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
             
-            // Insérer après les KPIs
-            const kpiGrid = document.querySelector('#pageDashboard .kpi-grid');
-            if (alertsPanel) {
-                alertsPanel.outerHTML = alertsHTML;
+            // Supprimer les anciens panels
+            const existingBenchmark = document.getElementById('benchmarkPanel');
+            const existingAlerts = document.getElementById('alertsPanel');
+            if (existingBenchmark) existingBenchmark.remove();
+            if (existingAlerts) existingAlerts.remove();
+            
+            // Insérer après la grille scoring-insights
+            const scoringGrid = document.querySelector('#pageDashboard .scoring-insights-grid');
+            const kpiGrid = document.querySelector('#pageDashboard .kpi-stats-grid');
+            
+            if (scoringGrid) {
+                if (benchmarkHTML) scoringGrid.insertAdjacentHTML('afterend', benchmarkHTML);
+                if (alertsHTML) {
+                    const benchmarkPanel = document.getElementById('benchmarkPanel');
+                    if (benchmarkPanel) {
+                        benchmarkPanel.insertAdjacentHTML('afterend', alertsHTML);
+                    } else {
+                        scoringGrid.insertAdjacentHTML('afterend', alertsHTML);
+                    }
+                }
             } else if (kpiGrid) {
-                kpiGrid.insertAdjacentHTML('afterend', alertsHTML);
+                if (benchmarkHTML) kpiGrid.insertAdjacentHTML('afterend', benchmarkHTML);
+                if (alertsHTML) {
+                    const benchmarkPanel = document.getElementById('benchmarkPanel');
+                    if (benchmarkPanel) {
+                        benchmarkPanel.insertAdjacentHTML('afterend', alertsHTML);
+                    } else {
+                        kpiGrid.insertAdjacentHTML('afterend', alertsHTML);
+                    }
+                }
             }
         }
         
